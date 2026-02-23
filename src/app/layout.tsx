@@ -5,7 +5,7 @@ import AuthProvider from "@/components/providers/AuthProvider";
 import AppProvider from "@/components/providers/AppProvider";
 
 import { Nunito_Sans } from "next/font/google";
-import DashboardHeader from "./(dashboard)/_components/dashboard-header";
+// import DashboardHeader from "./(participants)/_components/dashboard-header";
 
 const nunito = Nunito_Sans({
   subsets: ["latin"],
@@ -24,7 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`font-nunito antialiased`}>
         <AuthProvider>
           <AppProvider>
-            <DashboardHeader/>
+            {/* <DashboardHeader/> */}
 
             {children}
             <Toaster />

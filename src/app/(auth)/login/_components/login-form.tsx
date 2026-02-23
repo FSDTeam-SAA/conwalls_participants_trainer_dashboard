@@ -88,7 +88,7 @@ const LoginForm = () => {
       }
 
       toast.success("Login successful!");
-      router.push("/");
+      router.push("/participants");
     } catch (error) {
       console.error("Login failed:", error);
       toast.error("Login failed. Please try again.");

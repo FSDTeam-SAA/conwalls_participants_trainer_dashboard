@@ -1,12 +1,8 @@
 "use client";
 import {
-  LayoutDashboard,
   LogOut,
   Settings,
-  Mail,
   Users,
-  CircleDollarSign,
-  CreditCard
 } from "lucide-react";
 
 import {
@@ -27,29 +23,9 @@ import { signOut } from "next-auth/react";
 
 const items = [
   {
-    title: "Dashboard Overview",
-    url: "/",
-    icon: LayoutDashboard,
-  },
-  {
     title: "User Management",
     url: "/user-management",
     icon: Users,
-  },
-  {
-    title: "Contact Management",
-    url: "/contact-management",
-    icon: Mail  ,
-  },
-  {
-    title: "Pricing & Payment",
-    url: "/pricing-and-payment",
-    icon: CreditCard ,
-  },
-   {
-    title: "Revenue",
-    url: "/revenue",
-    icon: CircleDollarSign ,
   },
   {
     title: "Settings",
@@ -64,7 +40,7 @@ export function DashboardSidebar() {
 
   return (
     <Sidebar className="border-none w-[320px]">
-      <SidebarContent className="bg-white scrollbar-hide">
+      <SidebarContent className="bg-primary scrollbar-hide">
         <SidebarGroup className="p-0">
           <div className="flex flex-col justify-between min-h-screen pb-5">
             <div>
