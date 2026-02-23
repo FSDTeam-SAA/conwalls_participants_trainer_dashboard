@@ -27,7 +27,7 @@ export async function middleware(request: NextRequest) {
   // console.log("token +++++++++++++++++=", token);
   // console.log( "role------------------", token?.role);
 
-  if (!token || token?.role !== "admin") {
+  if (!token || (token?.role !== "PARTICIPANT" && token?.role !== "TRAINER")) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 

@@ -72,7 +72,7 @@ export default function OtpForm() {
   const { mutate, isPending } = useMutation({
     mutationKey: ["verify-otp"],
     mutationFn: (values: { otp: string; email: string }) =>
-      fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/verify-email`, {
+      fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/verify-code`, {
         method: "POST",
         headers: {
           "content-type": "application/json",
@@ -80,7 +80,7 @@ export default function OtpForm() {
         body: JSON.stringify(values),
       }).then((res) => res.json()),
     onSuccess: (data) => {
-      if (!data?.success) {
+      if (!data?.status) {
         toast.error(data?.message || "Something went wrong");
         return;
       } else {
@@ -96,7 +96,7 @@ export default function OtpForm() {
   const { mutate: resentOtp, isPending: resentOtpPending } = useMutation({
     mutationKey: ["fotgot-password"],
     mutationFn: (email: string) =>
-      fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/forgot-password`, {
+      fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/forget-password`, {
         method: "POST",
         headers: {
           "content-type": "application/json",
@@ -104,7 +104,7 @@ export default function OtpForm() {
         body: JSON.stringify({ email }),
       }).then((res) => res.json()),
     onSuccess: (data, email) => {
-      if (!data?.success) {
+      if (!data?.status) {
         toast.error(data?.message || "Something went wrong");
         return;
       } else {

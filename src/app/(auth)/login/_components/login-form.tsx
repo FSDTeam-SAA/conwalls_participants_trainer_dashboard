@@ -16,8 +16,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Eye, EyeOff, Globe, LockKeyhole, Mail, User, UserPlus } from "lucide-react";
 import { useState } from "react";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
+// import { Checkbox } from "@/components/ui/checkbox";
+// import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -27,7 +27,7 @@ import { toast } from "sonner";
 import AuthImage from "../../../../../public/assets/images/auth_logo.png";
 
 const formSchema = z.object({
-  role: z.enum(["participant", "trainer"]).default("participant"),
+  role: z.enum(["PARTICIPANT", "TRAINER"]).default("PARTICIPANT"),
   language: z.string().min(1, {
     message: "Please select a language.",
   }),
@@ -37,7 +37,7 @@ const formSchema = z.object({
   password: z
     .string()
     .min(6, { message: "Password must be at least 6 characters long." }),
-  rememberMe: z.boolean(),
+  // rememberMe: z.boolean(),
 });
 
 const LoginForm = () => {
@@ -47,11 +47,11 @@ const LoginForm = () => {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      role: "participant" as const,
-      language: "English",
+      role: "PARTICIPANT" as const,
+      language: "english",
       email: "",
       password: "",
-      rememberMe: false,
+      // rememberMe: false,
     },
   });
 
@@ -63,6 +63,8 @@ const LoginForm = () => {
       const res = await signIn("credentials", {
         email: values?.email,
         password: values?.password,
+        role: values?.role,
+        language: values?.language,
         redirect: false,
       });
 
@@ -71,10 +73,10 @@ const LoginForm = () => {
       // }
 
       if (res?.error) {
-        if (res.error === "ADMIN_ONLY") {
-          toast.error("Only admin can access this admin dashboard");
-          return;
-        }
+        // if (res.error === "ADMIN_ONLY") {
+        //   toast.error("Only admin can access this admin dashboard");
+        //   return;
+        // }
 
         if (res.error === "INVALID_CREDENTIALS") {
           toast.error("Email or Password wrong");
@@ -84,6 +86,7 @@ const LoginForm = () => {
         toast.error("Login failed");
         return;
       }
+
       toast.success("Login successful!");
       router.push("/");
     } catch (error) {
@@ -131,9 +134,9 @@ const LoginForm = () => {
                     <div className="grid grid-cols-2 gap-2">
                       <button
                         type="button"
-                        onClick={() => field.onChange("participant")}
+                        onClick={() => field.onChange("PARTICIPANT")}
                         className={`h-[48px] rounded-[8px] border  text-base font-medium transition ${
-                          field.value === "participant"
+                          field.value === "PARTICIPANT"
                             ? "bg-gradient-to-b from-[#F1FFC5] via-[#F6FFDA] to-white border-primary text-[#666666]"
                             : "bg-white shadow-[0_0_10px_#0000001A]  text-[#666666]"
                         }`}
@@ -143,9 +146,9 @@ const LoginForm = () => {
 
                       <button
                         type="button"
-                        onClick={() => field.onChange("trainer")}
+                        onClick={() => field.onChange("TRAINER")}
                         className={`h-[48px] rounded-[8px] border  text-base font-medium transition ${
-                          field.value === "trainer"
+                          field.value === "TRAINER"
                             ? "bg-gradient-to-b from-[#F1FFC5] via-[#F6FFDA] to-white border-primary text-[#666666]"
                             : "bg-white shadow-[0_0_10px_#0000001A]  text-[#666666]"
                         }`}
@@ -165,16 +168,16 @@ const LoginForm = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-lg md:text-xl lg:text-2xl font-medium text-[#001B31]">
-                    <Globe className="inline mr-1 w-6 h-6 text-[#00253E]" /> Language
+                    <Globe className="inline mr-1 -mt-1 w-6 h-6 text-[#00253E]" /> Language
                   </FormLabel>
                   <FormControl>
                     <select
                       {...field}
                       className="w-full h-[48px] rounded-[8px] border border-[#6C6C6C] px-4 text-base"
                     >
-                      <option value="English">English</option>
+                      <option value="english">English</option>
                       {/* <option value="Bangla">Bangla</option> */}
-                      <option value="German">German</option>
+                      <option value="germany">German</option>
                     </select>
                   </FormControl>
                   <FormMessage />
@@ -188,7 +191,7 @@ const LoginForm = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-lg md:text-xl lg:text-2xl font-medium text-[#001B31]">
-                   <Mail className="inline mr-1 w-6 h-6 text-[#00253E]"/> Email Address
+                   <Mail className="inline mr-1 -mt-1 w-6 h-6 text-[#00253E]"/> Email Address
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -206,8 +209,8 @@ const LoginForm = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-lg md:text-xl lg:text-2xl font-medium text-[#001B31]">
-                  <LockKeyhole className="inline mr-1 w-6 h-6 text-[#00253E]"/>  Password 
+                  <FormLabel className="text-lg md:text-xl lg:text-2xl font-medium text-[#001B31] ">
+                  <LockKeyhole className="inline mr-1 -mt-1 w-6 h-6 text-[#00253E]"/>  Password 
                   </FormLabel>
                   <FormControl>
                     <div className="relative">
@@ -236,12 +239,21 @@ const LoginForm = () => {
               )}
             />
 
-            <FormField
+            <div className="flex items-center justify-end">
+              <Link
+                    className="text-base font-normal text-primary cursor-pointer leading-[120%] hover:underline"
+                    href="/forgot-password"
+                  >
+                    Forgot Password?
+                  </Link>
+            </div>
+
+            {/* <FormField
               control={form.control}
               name="rememberMe"
               render={({ field }) => (
                 <div className="w-full flex items-center justify-end">
-                  {/* <FormItem className="flex items-center gap-[10px]">
+                  <FormItem className="flex items-center gap-[10px]">
                     <FormControl className="mt-1">
                       <Checkbox
                         id="rememberMe"
@@ -257,7 +269,7 @@ const LoginForm = () => {
                       Remember Me
                     </Label>
                     <FormMessage className="text-red-500" />
-                  </FormItem> */}
+                  </FormItem>
                   <Link
                     className="text-base font-normal text-primary cursor-pointer leading-[120%] hover:underline"
                     href="/forgot-password"
@@ -266,7 +278,8 @@ const LoginForm = () => {
                   </Link>
                 </div>
               )}
-            />
+            /> */}
+
             <div className="pt-3">
               <Button
                 disabled={isLoading}

@@ -43,7 +43,7 @@ const ForgotPasswordForm = () => {
   const {mutate, isPending} = useMutation({
     mutationKey: ["forgot-password"],
     mutationFn : async (values:{email:string})=>{
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/forgot-password`,{
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/forget-password`,{
         method : "POST",
         headers: {
           "Content-Type" : "application/json"
@@ -53,7 +53,7 @@ const ForgotPasswordForm = () => {
       return res.json();
     },
     onSuccess: (data, email)=>{
-      if(!data?.success){
+      if(!data?.status){
         toast?.error(data?.message || "Something went wrong");
         return
       }
@@ -93,7 +93,7 @@ const ForgotPasswordForm = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-lg md:text-xl lg:text-2xl font-medium text-[#001B31]">
-                   <Mail className="inline mr-1 w-6 h-6 text-[#00253E]"/> Email Address
+                   <Mail className="inline mr-1 -mt-1 w-6 h-6 text-[#00253E]"/> Email Address
                   </FormLabel>
                   <FormControl>
                     <Input

@@ -41,14 +41,14 @@ export const authOptions: NextAuthOptions = {
 
           const response = await res.json();
 
-          console.log("response", response);
+          console.log("response login", response);
 
-          if (!res.ok || !response?.success) {
+          if (!res.ok || !response?.status) {
             throw new Error(response?.message || "Login failed");
           }
-          if (response.data.user.role !== "admin") {
-            throw new Error("ADMIN_ONLY");
-          }
+          // if (response.data.user.role !== "admin") {
+          //   throw new Error("ADMIN_ONLY");
+          // }
           const { user, accessToken } = response.data;
 
           return {
@@ -57,6 +57,7 @@ export const authOptions: NextAuthOptions = {
             lastName: user.lastName,
             email: user.email,
             role: user.role,
+            language: user.language,
             profileImage: user.profileImage,
             accessToken,
           };
@@ -81,6 +82,7 @@ export const authOptions: NextAuthOptions = {
         token.lastName = user.lastName;
         token.email = user.email;
         token.role = user.role;
+        token.language = user.language;
         token.profileImage = user.profileImage;
         token.accessToken = user.accessToken;
       }
@@ -95,6 +97,7 @@ export const authOptions: NextAuthOptions = {
         lastName: token.lastName,
         email: token.email,
         role: token.role,
+        language: token.language,
         profileImage: token.profileImage,
         accessToken: token.accessToken,
       };

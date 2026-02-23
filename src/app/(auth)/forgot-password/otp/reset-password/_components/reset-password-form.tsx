@@ -17,8 +17,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Eye, EyeOff, LockKeyhole } from "lucide-react";
 import { useState } from "react";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
+// import { Checkbox } from "@/components/ui/checkbox";
+// import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
@@ -73,7 +73,7 @@ const ResetPasswordForm = () => {
       return res.json();
     },
     onSuccess: (data)=>{
-      if(!data?.success){
+      if(!data?.status){
         toast.error(data?.message || "Something went wrong");
         return
       }else{
@@ -118,7 +118,7 @@ const ResetPasswordForm = () => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-lg md:text-xl lg:text-2xl font-medium text-[#001B31]">
-                  <LockKeyhole className="inline mr-1 w-6 h-6 text-[#00253E]"/> Create  Password 
+                  <LockKeyhole className="inline mr-1 -mt-1 w-6 h-6 text-[#00253E]"/> Create  Password 
                   </FormLabel>
                 <FormControl>
                   <div className="relative">
@@ -152,7 +152,7 @@ const ResetPasswordForm = () => {
             render={({ field }) => (
               <FormItem>
                <FormLabel className="text-lg md:text-xl lg:text-2xl font-medium text-[#001B31]">
-                  <LockKeyhole className="inline mr-1 w-6 h-6 text-[#00253E]"/>Confirm  Password 
+                  <LockKeyhole className="inline mr-1 -mt-1 w-6 h-6 text-[#00253E]"/>Confirm  Password 
                   </FormLabel>
                 <FormControl>
                   <div className="relative">
