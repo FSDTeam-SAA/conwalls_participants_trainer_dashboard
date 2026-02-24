@@ -1,12 +1,14 @@
-import React from 'react'
-import HomeContainer from './_components/home-container'
+import React from "react";
+import HomeContainer from "./_components/home-container";
+import DashboardHeader from "./(participants)/_components/dashboard-header";
 
 const HomePage = () => {
   return (
     <div>
-        <HomeContainer/>
+      <DashboardHeader />
+      <HomeContainer />
     </div>
-  )
-}
+  );
+};
 
-export default HomePage
+export default HomePage;
