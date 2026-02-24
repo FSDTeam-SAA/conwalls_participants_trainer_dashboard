@@ -14,7 +14,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Eye, EyeOff, Globe, LockKeyhole, Mail, User, UserPlus } from "lucide-react";
+import { Eye, EyeOff, LockKeyhole, Mail, User, UserPlus } from "lucide-react";
 import { useState } from "react";
 // import { Checkbox } from "@/components/ui/checkbox";
 // import { Label } from "@/components/ui/label";
@@ -28,9 +28,9 @@ import AuthImage from "../../../../../public/assets/images/auth_logo.png";
 
 const formSchema = z.object({
   role: z.enum(["PARTICIPANT", "TRAINER"]).default("PARTICIPANT"),
-  language: z.string().min(1, {
-    message: "Please select a language.",
-  }),
+  // language: z.string().min(1, {
+  //   message: "Please select a language.",
+  // }),
   email: z.string().email({
     message: "Please enter a valid email address.",
   }),
@@ -48,7 +48,7 @@ const LoginForm = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       role: "PARTICIPANT" as const,
-      language: "english",
+      // language: "english",
       email: "",
       password: "",
       // rememberMe: false,
@@ -64,7 +64,7 @@ const LoginForm = () => {
         email: values?.email,
         password: values?.password,
         role: values?.role,
-        language: values?.language,
+        // language: values?.language,
         redirect: false,
       });
 
@@ -162,7 +162,7 @@ const LoginForm = () => {
               )}
             />
 
-            <FormField
+            {/* <FormField
               control={form.control}
               name="language"
               render={({ field }) => (
@@ -176,14 +176,13 @@ const LoginForm = () => {
                       className="w-full h-[48px] rounded-[8px] border border-[#6C6C6C] px-4 text-base"
                     >
                       <option value="english">English</option>
-                      {/* <option value="Bangla">Bangla</option> */}
                       <option value="germany">German</option>
                     </select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
             <FormField
               control={form.control}
