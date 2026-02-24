@@ -3,8 +3,11 @@
 import Image from "next/image";
 import React from "react";
 
-import leftLogo from "../../../../public/assets/images/left_logo.png";
+
 import rightLogo from "../../../../public/assets/images/right_logo.png";
+
+import leftLogo from "../../../../public/assets/images/left_logo.png"
+
 import Link from "next/link";
 
 const DashboardHeader = () => {
