@@ -5,6 +5,10 @@ import AuthProvider from "@/components/providers/AuthProvider";
 import AppProvider from "@/components/providers/AppProvider";
 
 import { Nunito_Sans } from "next/font/google";
+import Script from "next/script";
+import TranslateProvider from "@/components/providers/TranslateProvider";
+import LangConfig from "./lang-config";
+import { Suspense } from "react";
 // import DashboardHeader from "./(participants)/_components/dashboard-header";
 
 const nunito = Nunito_Sans({
@@ -24,9 +28,31 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`font-nunito antialiased`}>
         <AuthProvider>
           <AppProvider>
-            {/* <DashboardHeader/> */}
+            {/* ✅ Google translate container */}
+            <div id="google_translate_element"></div>
+
+            {/* ✅ Loaded only on client */}
+            <Suspense fallback={null}>
+              <LangConfig />
+            </Suspense>
+            <Suspense fallback={null}>
+              <TranslateProvider />
+            </Suspense>
+
+            {/* Load Google Translate script after components are ready */}
+            <Script
+              src="//translate.google.com/translate_a/element.js?cb=TranslateInit"
+              strategy="lazyOnload"
+            />
 
             {children}
+
+
+            {/* ✅ Load google script after client ready */}
+            <Script
+              src="//translate.google.com/translate_a/element.js?cb=TranslateInit"
+              strategy="afterInteractive"
+            />
             <Toaster />
 
           </AppProvider>
