@@ -3,12 +3,12 @@
 import Image from "next/image";
 import React from "react";
 
-
 import rightLogo from "../../../../public/assets/images/right_logo.png";
 
-import leftLogo from "../../../../public/assets/images/left_logo.png"
+import leftLogo from "../../../../public/assets/images/left_logo.png";
 
 import Link from "next/link";
+import LanguageSwitcher from "@/components/ui/language-switcher";
 
 const DashboardHeader = () => {
   // const session = useSession();
@@ -28,15 +28,21 @@ const DashboardHeader = () => {
             className="w-[80px] h-[80px] object-contain"
           />
         </Link>
-        <Link href="/">
-          <Image
-            src={rightLogo}
-            alt="dashboard header"
-            width={300}
-            height={346}
-            className="w-[160px] h-[79px] object-contain"
-          />
-        </Link>
+        {/* Language Switcher */}
+        <div className="flex items-center gap-8">
+          <div>
+            <LanguageSwitcher />
+          </div>
+          <Link href="/">
+            <Image
+              src={rightLogo}
+              alt="dashboard header"
+              width={300}
+              height={346}
+              className="w-[160px] h-[79px] object-contain"
+            />
+          </Link>
+        </div>
       </div>
     </div>
   );
