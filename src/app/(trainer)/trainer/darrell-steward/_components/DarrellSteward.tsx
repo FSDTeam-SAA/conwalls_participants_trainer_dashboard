@@ -1,18 +1,67 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 
-const projects = [
-  { id: 1, name: "New ERP-System", createdDate: "08 - 02 - 2026" },
-  { id: 2, name: "CRM Integration", createdDate: "09 - 02 - 2026" },
-  { id: 3, name: "Mobile App Redesign", createdDate: "12 - 02 - 2026" },
-  { id: 4, name: "Data Analytics Dashboard", createdDate: "15 - 02 - 2026" },
-];
+interface Project {
+  _id: string;
+  projectTitle: string;
+  kickOffDate: string;
+  participantName: string;
+}
+
+interface ApiResponse {
+  status: boolean;
+  message: string;
+  data: {
+    items: Project[];
+    paginationInfo: {
+      currentPage: number;
+      totalPages: number;
+      totalData: number;
+      hasNextPage: boolean;
+      hasPrevPage: boolean;
+    };
+  };
+}
 
 export default function DarrellSteward() {
+  const params = useParams();
+  const participantId = params?.id as string;
+
+  const { data: projectData, isLoading } = useQuery<ApiResponse>({
+    queryKey: ["participant-projects", participantId],
+    queryFn: async () => {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/trainer/participant-insights/${participantId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            // Authorization: `Bearer ${TOKEN}`,
+          },
+        },
+      );
+      if (!res.ok) throw new Error("Failed to fetch projects");
+      return res.json();
+    },
+    enabled: !!participantId,
+  });
+
+  const projects = projectData?.data?.items ?? [];
+
+  const formatDate = (dateStr: string) => {
+    const date = new Date(dateStr);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    return `${day} - ${month} - ${year}`;
+  };
+
   return (
-    <div className="min-h-screen bg-white p-6 font-sans">
+    <div className="min-h-screen p-1 font-sans">
       {/* Back Button */}
       <div className="mb-4">
         <Link
@@ -32,23 +81,35 @@ export default function DarrellSteward() {
         <p className="text-sm text-gray-500 mt-1 flex items-center gap-1">
           Dashboard
           <ChevronRight size={14} className="text-gray-400" />
-          <span className="text-gray-700 font-medium">Darrell Steward</span>
+          <span className="text-gray-700 font-medium">
+            {projects[0]?.participantName ?? "Participant"}
+          </span>
         </p>
       </div>
 
       {/* Project Cards */}
       <div className="flex flex-col gap-3">
-        {projects.map((project) => (
-          <div
-            key={project.id}
-            className="w-full rounded-xl px-6 py-4 bg-[#003049] text-white"
-          >
-            <p className="text-base font-semibold">{project.name}</p>
-            <p className="text-xs text-gray-300 mt-1">
-              Created Date : {project.createdDate}
-            </p>
-          </div>
-        ))}
+        {isLoading ? (
+          <p className="text-sm text-gray-400">Loading...</p>
+        ) : projects.length === 0 ? (
+          <p className="text-sm text-gray-400">No projects found.</p>
+        ) : (
+          projects.map((project) => (
+            <Link  key={project._id} href={`/trainer/darrell-steward-project-list/${project._id}`}>
+              <div
+               
+                className="w-full rounded-xl px-6 py-4 bg-[#003049] text-white"
+              >
+                <p className="text-base font-semibold">
+                  {project.projectTitle}
+                </p>
+                <p className="text-xs text-gray-300 mt-1">
+                  Created Date : {formatDate(project.kickOffDate)}
+                </p>
+              </div>
+            </Link>
+          ))
+        )}
       </div>
     </div>
   );

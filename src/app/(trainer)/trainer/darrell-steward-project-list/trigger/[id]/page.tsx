@@ -1,10 +1,10 @@
 import React from 'react'
-import DarrellSteward from './_components/DarrellSteward'
+import TriggerPage from '../_components/TriggerPage'
 
 function page() {
   return (
     <div>
-        <DarrellSteward />
+        <TriggerPage />
     </div>
   )
 }

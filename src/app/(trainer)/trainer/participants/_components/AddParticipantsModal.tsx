@@ -13,12 +13,67 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff, Plus, X } from "lucide-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
 
 export function AddParticipantsModal() {
   const [showPassword, setShowPassword] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    phone: "",
+    password: "",
+    role: "",
+  });
+
+  const queryClient = useQueryClient();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const session = useSession();
+    const TOKEN = session?.data?.user?.accessToken ?? "";
+
+  const addParticipantMutation = useMutation({
+    mutationFn: async () => {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/trainer/connect-participant`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${TOKEN}`,
+          },
+          body: JSON.stringify({
+            name: formData.fullName,
+            email: formData.email,
+            phone: formData.phone,
+            password: formData.password,
+            role: formData.role,
+          }),
+        }
+      );
+      if (!res.ok) throw new Error("Failed to add participant");
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["participants"] });
+      setFormData({ fullName: "", email: "", phone: "", password: "", role: "" });
+      setOpen(false);
+    //   queryClient.invalidateQueries({ queryKey: ["participants",] });
+    },
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    addParticipantMutation.mutate();
+  };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <form>
         <DialogTrigger asChild>
           <Button className="bg-[#BADA55] hover:bg-[#BADA55]/90 text-[#00253E] font-semibold px-5 h-[56px] flex items-center gap-2 shadow-sm rounded-[8px]">
@@ -55,6 +110,8 @@ export function AddParticipantsModal() {
               </Label>
               <Input
                 name="fullName"
+                value={formData.fullName}
+                onChange={handleChange}
                 placeholder="Butlar Mane"
                 className="h-11 rounded-lg border-gray-200 text-sm placeholder:text-gray-400 focus-visible:ring-[#6abf4b] focus-visible:border-[#6abf4b]"
               />
@@ -68,6 +125,8 @@ export function AddParticipantsModal() {
               <Input
                 name="email"
                 type="email"
+                value={formData.email}
+                onChange={handleChange}
                 placeholder="Butlar@email.com"
                 className="h-11 rounded-lg border-gray-200 text-sm placeholder:text-gray-400 focus-visible:ring-[#6abf4b] focus-visible:border-[#6abf4b]"
               />
@@ -81,6 +140,8 @@ export function AddParticipantsModal() {
               </Label>
               <Input
                 name="phone"
+                value={formData.phone}
+                onChange={handleChange}
                 placeholder="+997 9384u35803"
                 className="h-11 rounded-lg border-gray-200 text-sm placeholder:text-gray-400 focus-visible:ring-[#6abf4b] focus-visible:border-[#6abf4b]"
               />
@@ -95,6 +156,8 @@ export function AddParticipantsModal() {
                 <Input
                   name="password"
                   type={showPassword ? "text" : "password"}
+                  value={formData.password}
+                  onChange={handleChange}
                   placeholder="••••••••••••"
                   className="h-11 rounded-lg border-gray-200 text-sm pr-10 placeholder:text-gray-400 focus-visible:ring-[#6abf4b] focus-visible:border-[#6abf4b]"
                 />
@@ -113,6 +176,8 @@ export function AddParticipantsModal() {
               <Label className="text-sm font-medium text-gray-700">Role</Label>
               <Input
                 name="role"
+                value={formData.role}
+                onChange={handleChange}
                 placeholder="Participants"
                 className="h-11 rounded-lg border-gray-200 text-sm placeholder:text-gray-400 focus-visible:ring-[#6abf4b] focus-visible:border-[#6abf4b]"
               />
@@ -136,10 +201,12 @@ export function AddParticipantsModal() {
               {/* Add */}
               <Button
                 type="submit"
+                onClick={handleSubmit}
+                disabled={addParticipantMutation.isPending}
                 className="flex-1 h-11 rounded-lg bg-[#6abf4b] hover:bg-[#59a83c] text-white font-semibold flex items-center justify-center gap-2"
               >
                 <Plus size={16} />
-                Add
+                {addParticipantMutation.isPending ? "Adding..." : "Add"}
               </Button>
             </DialogFooter>
           </div>

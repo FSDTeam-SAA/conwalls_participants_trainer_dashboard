@@ -9,16 +9,41 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Trash2, X } from "lucide-react";
+import { useSession } from "next-auth/react";
 
 interface DeleteParticipantsModalProps {
   id: string | number;
 }
 
 export function DeleteParticipantsModal({ id }: DeleteParticipantsModalProps) {
-  const handleDelete = () => {
-    console.log("Deleted id:", id);
-  };
+  const queryClient = useQueryClient();
+  const session = useSession();
+  const TOKEN = session?.data?.user?.accessToken ?? "";
+
+  const deleteParticipantMutation = useMutation({
+    mutationFn: async () => {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/trainer/remove-trainer`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${TOKEN}`,
+          },
+          body: JSON.stringify({
+            participantId: id,
+          }),
+        }
+      );
+      if (!res.ok) throw new Error("Failed to delete participant");
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["participants"] });
+    },
+  });
 
   return (
     <Dialog>
@@ -60,11 +85,12 @@ export function DeleteParticipantsModal({ id }: DeleteParticipantsModalProps) {
           <DialogClose asChild>
             <Button
               type="button"
-              onClick={handleDelete}
+              onClick={() => deleteParticipantMutation.mutate()}
+              disabled={deleteParticipantMutation.isPending}
               className="flex-1 h-11 rounded-lg bg-[#6abf4b] hover:bg-[#59a83c] text-white font-semibold flex items-center justify-center gap-2"
             >
               <Trash2 size={16} />
-              Remove
+              {deleteParticipantMutation.isPending ? "Removing..." : "Remove"}
             </Button>
           </DialogClose>
         </DialogFooter>
