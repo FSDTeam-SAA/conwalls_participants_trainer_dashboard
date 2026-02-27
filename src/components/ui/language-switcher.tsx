@@ -4,6 +4,13 @@ import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 import { parseCookies, setCookie } from 'nookies';
 import { isClient } from '@/lib/client-utils';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 
 type GoogleTranslationConfig = {
   defaultLanguage: string;
@@ -25,7 +32,6 @@ const LanguageSwitcherComponent = () => {
   useEffect(() => {
     if (!isClient) return;
 
-    // Function to handle configuration
     const handleConfig = () => {
       const translationConfig = window.__GOOGLE_TRANSLATION_CONFIG__;
       if (!translationConfig) return;
@@ -36,14 +42,12 @@ const LanguageSwitcherComponent = () => {
       setCurrentLang(lang);
     };
 
-    // Check if config already exists
     if (window.__GOOGLE_TRANSLATION_CONFIG__) {
       handleConfig();
     }
 
-    // Listen for config ready event
     window.addEventListener('translationConfigReady', handleConfig);
-    
+
     return () => {
       window.removeEventListener('translationConfigReady', handleConfig);
     };
@@ -57,30 +61,33 @@ const LanguageSwitcherComponent = () => {
   };
 
   if (!config) {
-    return <div className="text-center p-2 text-xs text-gray-400">Loading...</div>;
+    return null;
   }
 
   return (
-    <div className="flex justify-center gap-3 p-2 flex-wrap bg-white rounded-[12px]">
-      {config.languages.map((l) => (
-        <button
-          key={l.name}
-          onClick={() => switchLang(l.name)}
-          className={`px-4 py-1.5 rounded text-sm font-medium transition-all ${
-            currentLang === l.name
-              ? 'bg-[#00253E] text-white'
-              : 'bg-gray-100 hover:bg-gray-200'
-          }`}
-        >
-          {l.title}
-        </button>
-      ))}
-    </div>
+    <Select value={currentLang} onValueChange={switchLang}>
+      <SelectTrigger className="w-[140px] bg-white text-[#00253E] border-none rounded-full h-10 px-4 font-semibold focus:ring-0">
+        <SelectValue placeholder="Language" />
+      </SelectTrigger>
+      <SelectContent className="bg-white border-none shadow-lg rounded-[12px]">
+        {config.languages.map((lang) => (
+          <SelectItem
+            key={lang.name}
+            value={lang.name}
+            className="text-[#00253E] hover:bg-primary/10 cursor-pointer focus:bg-primary/20"
+          >
+            <div className="flex items-center gap-2">
+              <span>{lang.title}</span>
+            </div>
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   );
 };
 
-const LanguageSwitcher = dynamic(() => Promise.resolve(LanguageSwitcherComponent), { 
-  ssr: false 
+const LanguageSwitcher = dynamic(() => Promise.resolve(LanguageSwitcherComponent), {
+  ssr: false
 });
 
 export default LanguageSwitcher;

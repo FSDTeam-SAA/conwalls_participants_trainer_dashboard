@@ -50,7 +50,8 @@ const ProjectList = () => {
           Project List
         </h4>
         <Link href="/participants/add-new-project">
-          <button className="h-[56px] flex items-center gap-2 bg-primary font-medium leading-normal text-[#00253E] px-8 py-4 rounded-[8px]">
+          <button className="h-[56px] flex items-center gap-2 bg-primary font-medium leading-normal text-[#00253E] px-8 py-4 rounded-[8px] transition-all duration-200 active:scale-95 hover:scale-[1.02]">
+
             <Plus className="h-4 w-4" />
             Add New Project
           </button>
@@ -62,17 +63,19 @@ const ProjectList = () => {
       <div>
         {projectLists?.map((project) => {
           return (
-            <div
+            <Link
               key={project?._id}
-              className="border border-primary bg-[#00253E] rounded-[8px] shadow-[0_0_10px_0_#0000001A] p-4 mb-4"
+              href={`/participants/insight-engine/${project?._id}`}
             >
-              <h4 className="text-xl md:text-2xl text-white font-semibold leading-normal pb-1">
-                {project.projectTitle || ""}
-              </h4>
-              <p className="text-base text-white font-normal leading-normal">
-                Created Date : {moment(project.createdAt).format("DD-MM-YYYY")}
-              </p>
-            </div>
+              <div className="border border-primary bg-[#00253E] rounded-[8px] shadow-[0_0_10px_0_#0000001A] p-4 mb-4 cursor-pointer hover:bg-[#003456] transition-all duration-200">
+                <h4 className="text-xl md:text-2xl text-white font-semibold leading-normal pb-1">
+                  {project.projectTitle || ""}
+                </h4>
+                <p className="text-base text-white font-normal leading-normal">
+                  Created Date : {moment(project.createdAt).format("DD-MM-YYYY")}
+                </p>
+              </div>
+            </Link>
           );
         })}
       </div>
