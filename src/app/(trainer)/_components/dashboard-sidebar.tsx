@@ -1,9 +1,5 @@
 "use client";
-import {
-  LogOut,
-  Settings,
-  Users,
-} from "lucide-react";
+import { LogOut, Users } from "lucide-react";
 
 import {
   Sidebar,
@@ -23,23 +19,22 @@ import { signOut } from "next-auth/react";
 
 const items = [
   {
-    title: "User Management",
-    url: "/user-management",
+    title: "Participants Management",
+    url: "/trainer/participants",
     icon: Users,
   },
-  {
-    title: "Settings",
-    url: "/settings",
-    icon: Settings,
-  },
-
+  // {
+  //   title: "Settings",
+  //   url: "/settings",
+  //   icon: Settings,
+  // },
 ];
 
 export function DashboardSidebar() {
   const pathName = usePathname();
 
   return (
-    <Sidebar className="border-none w-[320px]">
+    <Sidebar className="border-none w-[300px]">
       <SidebarContent className="bg-primary scrollbar-hide">
         <SidebarGroup className="p-0">
           <div className="flex flex-col justify-between min-h-screen pb-5">
@@ -67,15 +62,30 @@ export function DashboardSidebar() {
                     return (
                       <SidebarMenuItem key={item.title}>
                         <SidebarMenuButton
-                          className={`h-[60px] rounded-none text-[20px] text-primary hover:bg-[#f8f9fa] hover:text-primary transition-all duration-300 ${
-                            isActive &&
-                            "bg-[#f8f9fa] hover:bg-[#f8f9fa] text-primary shadow-[0px_4px_6px_0px_#DF10201A] hover:text-primary hover:shadow-[0px_4px_6px_0px_#DF10201A] font-medium"
-                          }`}
                           asChild
+                          className={`
+      h-[58px] rounded-[8px] px-4
+      transition-all duration-300
+      ${
+        isActive
+          ? "bg-[#00253E] text-white"
+          : "text-[#FF3333] hover:bg-[#00253E] hover:text-white"
+      }
+    `}
                         >
-                          <Link href={item.url}>
-                            <item.icon />
-                            <span>{item.title}</span>
+                          <Link
+                            href={item.url}
+                            className="flex items-center gap-3 group"
+                          >
+                            <item.icon
+                              className={`
+          !w-6 !h-6 transition-colors duration-300
+          ${isActive ? "text-white" : "text-[#FF3333] group-hover:text-white"}
+        `}
+                            />
+                            <span className="text-base font-semibold leading-[110%]">
+                              {item.title}
+                            </span>
                           </Link>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
@@ -87,7 +97,10 @@ export function DashboardSidebar() {
 
             <div>
               <SidebarFooter className="border-t border-gray-300">
-                <button onClick={()=>signOut({callbackUrl:"/login"})} className="font-medium text-red-500 flex items-center gap-2 pl-2 mt-5">
+                <button
+                  onClick={() => signOut({ callbackUrl: "/login" })}
+                  className="font-medium text-red-500 flex items-center gap-2 pl-2 mt-5"
+                >
                   <LogOut className="h-4 w-4" /> Log out
                 </button>
               </SidebarFooter>
