@@ -76,14 +76,14 @@ export default function MeasuresViewDetails() {
   };
 
   return (
-    <div className="min-h-screen bg-white p-6 font-sans">
+    <div className="min-h-screen font-sans">
       {/* Breadcrumb */}
-      <div className="mb-6">
-        <p className="text-sm font-semibold text-gray-800">Project List</p>
+      <div className="mb-6 pt-4">
+        <p className="text-lg md:text-xl lg:text-2xl font-semibold text-[#00253E] leading-normal">Project List</p>
         <p className="text-xs text-gray-500 flex items-center gap-1 mt-0.5">
-          <span>Stakeholder</span>
-          <ChevronRight size={12} />
-          <span>Measures</span>
+          <span className="text-lg md:text-xl font-medium text-[#00253E] leading-[120%]">Stakeholder</span>
+          <ChevronRight size={20} />
+          <span className="text-lg md:text-xl font-medium text-[#00253E] leading-[120%]">Measures</span>
         </p>
       </div>
 
