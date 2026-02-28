@@ -92,14 +92,16 @@ export function DashboardSidebar() {
               </div>
 
               <div className=" ">
-                <SidebarFooter className="border-t border-gray-300">
+                <SidebarFooter className="">
                   <button
                     onClick={() => setLogoutModalOpen(true)}
-                    className="font-medium text-[#FF0000] flex items-center gap-2 pl-5 mt-20"
+                    className="flex items-center gap-3 px-4 py-3 rounded-[8px] text-[17px] font-semibold text-[#FF4D4D] hover:bg-black/5 transition-all duration-200 w-full mt-20"
                   >
-                    <LogOut className="h-4 w-4" /> Log out
+                    <LogOut className="w-6 h-6 flex-shrink-0" />
+                    Log out
                   </button>
                 </SidebarFooter>
+
               </div>
             </div>
           </SidebarGroup>
