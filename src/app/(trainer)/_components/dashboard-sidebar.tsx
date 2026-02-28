@@ -1,9 +1,5 @@
-"use client";
-import {
-  LogOut,
-  Settings,
-  Users,
-} from "lucide-react";
+'use client'
+import { LogOut, Users } from 'lucide-react'
 
 import {
   Sidebar,
@@ -15,43 +11,41 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar";
-import Image from "next/image";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { signOut } from "next-auth/react";
-import { useState } from "react";
-import LogoutModal from "@/components/modals/logout-modal";
-import { toast } from "sonner";
-
+} from '@/components/ui/sidebar'
+import Image from 'next/image'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { signOut } from 'next-auth/react'
+import { useState } from 'react'
+import LogoutModal from '@/components/modals/logout-modal'
+import { toast } from 'sonner'
 
 const items = [
   {
-    title: "User Management",
-    url: "/user-management",
+    title: 'Participants Management',
+    url: '/trainer/participants',
     icon: Users,
   },
-  {
-    title: "Settings",
-    url: "/settings",
-    icon: Settings,
-  },
-
-];
+  // {
+  //   title: "Settings",
+  //   url: "/settings",
+  //   icon: Settings,
+  // },
+]
 
 export function DashboardSidebar() {
-  const pathName = usePathname();
-  const [logoutModalOpen, setLogoutModalOpen] = useState(false);
+  const pathName = usePathname()
+  const [logoutModalOpen, setLogoutModalOpen] = useState(false)
 
   const handleLogout = async () => {
     try {
-      toast.success("Logout successful!");
-      await signOut({ callbackUrl: "/login" });
+      toast.success('Logout successful!')
+      await signOut({ callbackUrl: '/login' })
     } catch (error) {
-      console.error("Logout failed:", error);
-      toast.error("Logout failed. Please try again.");
+      console.error('Logout failed:', error)
+      toast.error('Logout failed. Please try again.')
     }
-  };
+  }
 
   return (
     <>
@@ -71,19 +65,20 @@ export function DashboardSidebar() {
             </SidebarGroupLabel>
             <SidebarGroupContent className="px-4 pt-5">
               <SidebarMenu>
-                {items.map((item) => {
+                {items.map(item => {
                   const isActive =
-                    item.url === "/"
-                      ? pathName === "/"
+                    item.url === '/'
+                      ? pathName === '/'
                       : pathName === item.url ||
-                      pathName.startsWith(`${item.url}/`);
+                        pathName.startsWith(`${item.url}/`)
 
                   return (
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton
-                        className={`h-[60px] rounded-none text-[20px] text-primary hover:bg-[#f8f9fa] hover:text-primary transition-all duration-300 active:scale-95 hover:scale-[1.02] ${isActive &&
-                          "bg-[#f8f9fa] hover:bg-[#f8f9fa] text-primary shadow-[0px_4px_6px_0px_#DF10201A] hover:text-primary hover:shadow-[0px_4px_6px_0px_#DF10201A] font-medium"
-                          }`}
+                        className={`h-[60px] rounded-none text-[20px] text-primary hover:bg-[#f8f9fa] hover:text-primary transition-all duration-300 active:scale-95 hover:scale-[1.02] ${
+                          isActive &&
+                          'bg-[#f8f9fa] hover:bg-[#f8f9fa] text-primary shadow-[0px_4px_6px_0px_#DF10201A] hover:text-primary hover:shadow-[0px_4px_6px_0px_#DF10201A] font-medium'
+                        }`}
                         asChild
                       >
                         <Link href={item.url}>
@@ -92,7 +87,7 @@ export function DashboardSidebar() {
                         </Link>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
-                  );
+                  )
                 })}
               </SidebarMenu>
             </SidebarGroupContent>
@@ -115,6 +110,5 @@ export function DashboardSidebar() {
         onConfirm={handleLogout}
       />
     </>
-  );
+  )
 }
-

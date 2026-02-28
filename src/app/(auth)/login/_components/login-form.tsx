@@ -19,7 +19,7 @@ import { useState } from "react";
 // import { Checkbox } from "@/components/ui/checkbox";
 // import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { toast } from "sonner";
@@ -43,6 +43,8 @@ const formSchema = z.object({
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
+  const session = useSession();
+  console.log("session",session);
   const [isLoading, setIsLoading] = useState(false);
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -54,6 +56,8 @@ const LoginForm = () => {
       // rememberMe: false,
     },
   });
+
+  
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -87,8 +91,15 @@ const LoginForm = () => {
         return;
       }
 
+      
       toast.success("Login successful!");
-      router.push("/participants");
+      if (session?.data?.user?.role === "PARTICIPANT") {
+        router.push("/participants");
+      } else if (session?.data?.user?.role === "TRAINER") {
+        router.push("/trainer/participants");
+      } else {
+        router.push("/login");
+      }
     } catch (error) {
       console.error("Login failed:", error);
       toast.error("Login failed. Please try again.");
@@ -103,7 +114,7 @@ const LoginForm = () => {
           <Link href="/">
             <Image
               src={AuthImage}
-              alt="auth logo"
+              alt="auth logo" 
               width={500}
               height={500}
               className="w-[260px] h-[79px] object-contain"
