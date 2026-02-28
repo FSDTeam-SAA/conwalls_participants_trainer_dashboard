@@ -4,7 +4,7 @@ import { EditParticipantModal } from './_components/EditParticipantModal'
 function page() {
   return (
     <div>
-        <EditParticipantModal />
+        <EditParticipantModal id="participant-id" />
     </div>
   )
 }

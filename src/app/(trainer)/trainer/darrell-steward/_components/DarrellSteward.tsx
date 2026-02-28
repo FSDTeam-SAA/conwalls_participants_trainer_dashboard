@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 
@@ -65,7 +65,7 @@ export default function DarrellSteward() {
       {/* Back Button */}
       <div className="mb-4">
         <Link
-          href="/participants"
+          href="/trainer/participants"
           className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 transition-colors"
         >
           <span className="w-6 h-6 rounded-full border border-gray-300 flex items-center justify-center">
@@ -77,15 +77,16 @@ export default function DarrellSteward() {
 
       {/* Page Header */}
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">Project List</h1>
-        <p className="text-sm text-gray-500 mt-1 flex items-center gap-1">
-          Dashboard
-          <ChevronRight size={14} className="text-gray-400" />
-          <span className="text-gray-700 font-medium">
-            {projects[0]?.participantName ?? "Participant"}
-          </span>
-        </p>
-      </div>
+          <h1 className="text-2xl font-bold text-gray-800">
+            Project List
+          </h1>
+          <p className="text-sm text-gray-500 mt-1">
+            Dashboard <span className="text-gray-400">&gt;</span>{" "}
+            <span className="text-gray-600 font-medium">
+              Darrell Steward
+            </span>
+          </p>
+        </div>
 
       {/* Project Cards */}
       <div className="flex flex-col gap-3">
@@ -100,10 +101,10 @@ export default function DarrellSteward() {
                
                 className="w-full rounded-xl px-6 py-4 bg-[#003049] text-white"
               >
-                <p className="text-base font-semibold">
+                <p className="text-[24px] font-bold">
                   {project.projectTitle}
                 </p>
-                <p className="text-xs text-gray-300 mt-1">
+                <p className="text-base text-[#FFFFFF] mt-1">
                   Created Date : {formatDate(project.kickOffDate)}
                 </p>
               </div>
