@@ -31,7 +31,7 @@ const ProjectList = () => {
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const limit = 10;
 
-  const { data, isLoading, isError, error, refetch } = useQuery<ProjectListsApiResponse>(
+  const { data, isLoading, refetch } = useQuery<ProjectListsApiResponse>(
     {
       queryKey: ["insight-engine-list", page],
       queryFn: async () => {
@@ -67,8 +67,9 @@ const ProjectList = () => {
       toast.success("Project deleted successfully");
       setDeleteId(null);
       refetch();
-    } catch (err: any) {
-      toast.error(err.message || "Something went wrong");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Something went wrong";
+      toast.error(message);
     }
   };
 
