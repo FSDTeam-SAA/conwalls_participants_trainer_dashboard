@@ -35,6 +35,7 @@ interface SystemFormsProps {
   onBack: () => void
   onNext: () => void
   projectTitle: string
+  initialData?: SystemFormValues
 }
 
 type SystemFormValues = {
@@ -51,6 +52,7 @@ export default function SystemForms({
   onBack,
   projectTitle,
   onNext,
+  initialData,
 }: SystemFormsProps) {
   const session = useSession()
   const token = (session?.data?.user as { accessToken?: string })?.accessToken
@@ -71,8 +73,18 @@ export default function SystemForms({
   const {
     register,
     handleSubmit,
+    reset,
     formState: { isSubmitting },
-  } = useForm<SystemFormValues>()
+  } = useForm<SystemFormValues>({
+    defaultValues: initialData
+  })
+
+  // Pre-fill form when initialData changes
+  useEffect(() => {
+    if (initialData) {
+      reset(initialData);
+    }
+  }, [initialData, reset]);
 
   const { data: systemSettings } = useSystemSettings();
 
@@ -93,6 +105,7 @@ export default function SystemForms({
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
+            id: projectId, // CRITICAL: Pass the ID to prevent duplication
             participantName,
             organization,
             projectTitle,

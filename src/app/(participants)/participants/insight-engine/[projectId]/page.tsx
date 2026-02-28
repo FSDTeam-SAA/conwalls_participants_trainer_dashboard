@@ -38,6 +38,25 @@ export default function InsightEnginePage() {
     enabled: !!token && !!projectId,
   })
 
+  // Sync state with fetched project data
+  React.useEffect(() => {
+    if (projectData?.data) {
+      const data = projectData.data;
+      if (data.kickOffDate) {
+        const date = new Date(data.kickOffDate);
+        setKickOffDate(date);
+
+        // If kickOffDate exists, we are at least at step 2
+        // Check if systemForms exists to determine if we move to step 3
+        if (data.systemForms && Object.keys(data.systemForms).length > 0) {
+          setStep(3);
+        } else {
+          setStep(2);
+        }
+      }
+    }
+  }, [projectData]);
+
   const projectTitle = projectData?.data?.projectTitle || 'Project';
 
   const STEPS = [
@@ -67,9 +86,10 @@ export default function InsightEnginePage() {
         steps={displaySteps}
       />
 
-      {step === 1 && !kickOffDate && (
+      {step === 1 && (
         <KickOffDateForm
           projectTitle={projectTitle}
+          initialDate={kickOffDate}
           onNext={date => {
             setKickOffDate(date)
             setStep(2)
@@ -82,8 +102,8 @@ export default function InsightEnginePage() {
           projectId={projectId}
           projectTitle={projectTitle}
           kickOffDate={kickOffDate}
+          initialData={projectData?.data?.systemForms}
           onBack={() => {
-            setKickOffDate(undefined)
             setStep(1)
           }}
           onNext={() => setStep(3)}
@@ -104,6 +124,7 @@ export default function InsightEnginePage() {
           projectId={projectId}
           projectTitle={projectTitle}
           kickOffDate={kickOffDate}
+          onBack={() => setStep(3)}
         />
       )}
     </div>

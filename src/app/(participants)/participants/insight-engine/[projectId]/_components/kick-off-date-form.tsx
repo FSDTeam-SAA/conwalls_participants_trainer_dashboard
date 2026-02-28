@@ -15,10 +15,11 @@ import {
 interface KickOffDateFormProps {
     onNext: (date: Date) => void;
     projectTitle: string;
+    initialDate?: Date;
 }
 
-export default function KickOffDateForm({ onNext, projectTitle }: KickOffDateFormProps) {
-    const [date, setDate] = useState<Date>();
+export default function KickOffDateForm({ onNext, projectTitle, initialDate }: KickOffDateFormProps) {
+    const [date, setDate] = useState<Date | undefined>(initialDate);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
