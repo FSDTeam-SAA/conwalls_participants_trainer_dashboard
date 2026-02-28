@@ -6,16 +6,13 @@ import { useSession } from 'next-auth/react'
 import { useParams } from 'next/navigation'
 import KickOffDateForm from './_components/kick-off-date-form'
 import SystemForms from './_components/system-forms'
+import StakeholderList from './_components/stakeholder-list'
 import { Loader2 } from 'lucide-react'
 import StepNavigation from './_components/step-navigation'
 import { Scroll, Users, ClipboardList, Clock } from 'lucide-react'
+import Timetable from './_components/timetable'
 
-const STEPS = [
-  { id: 1, title: 'New ERP-System', icon: Scroll },
-  { id: 2, title: 'Stakeholder', icon: Users },
-  { id: 3, title: 'Measures', icon: ClipboardList },
-  { id: 4, title: 'Timetable', icon: Clock },
-]
+
 
 export default function InsightEnginePage() {
   const { projectId } = useParams() as { projectId: string }
@@ -24,6 +21,7 @@ export default function InsightEnginePage() {
 
   const [step, setStep] = useState(1)
   const [kickOffDate, setKickOffDate] = useState<Date>()
+  const [activeSubStep, setActiveSubStep] = useState<'Trigger' | 'Measures' | null>(null)
 
   const { data: projectData, isLoading: isProjectLoading } = useQuery({
     queryKey: ['project', projectId],
@@ -40,7 +38,19 @@ export default function InsightEnginePage() {
     enabled: !!token && !!projectId,
   })
 
-  const projectTitle = projectData?.data?.projectTitle || 'Project'
+  const projectTitle = projectData?.data?.projectTitle || 'Project';
+
+  const STEPS = [
+    { id: 1, title: projectTitle, icon: Scroll },
+    { id: 2, title: 'Stakeholder', icon: Users },
+    { id: 3, title: activeSubStep === 'Trigger' ? 'Trigger' : 'Measures', icon: ClipboardList },
+    { id: 4, title: 'Timetable', icon: Clock },
+  ];
+
+  let displaySteps = STEPS;
+  if (activeSubStep) {
+    displaySteps = STEPS.slice(0, 3);
+  }
 
   if (isProjectLoading || !session.data) {
     return (
@@ -53,8 +63,8 @@ export default function InsightEnginePage() {
   return (
     <div className=" mx-auto py-6 px-4 w-full">
       <StepNavigation
-        currentStep={step > 2 ? step : 1} // Simplified for demo
-        steps={STEPS}
+        currentStep={step}
+        steps={displaySteps}
       />
 
       {step === 1 && !kickOffDate && (
@@ -76,19 +86,25 @@ export default function InsightEnginePage() {
             setKickOffDate(undefined)
             setStep(1)
           }}
+          onNext={() => setStep(3)}
         />
       )}
 
       {step === 3 && (
-        <div className="p-10 border border-dashed rounded-xl flex items-center justify-center text-gray-500">
-          Stakeholder step coming soon...
-        </div>
+        <StakeholderList
+          projectId={projectId}
+          onBack={() => setStep(2)}
+          onNext={() => setStep(4)}
+          onSubStepChange={setActiveSubStep}
+        />
       )}
 
-      {step === 4 && (
-        <div className="p-10 border border-dashed rounded-xl flex items-center justify-center text-gray-500">
-          Measures step coming soon...
-        </div>
+      {step === 4 && kickOffDate && (
+        <Timetable
+          projectId={projectId}
+          projectTitle={projectTitle}
+          kickOffDate={kickOffDate}
+        />
       )}
     </div>
   )

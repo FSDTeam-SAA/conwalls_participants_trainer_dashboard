@@ -316,10 +316,10 @@ export default function AddNewProjectForm() {
   // ----------------- Fetch All Projects -----------------
   const { data, refetch, isLoading, isError, error } =
     useQuery<ProjectListsApiResponse>({
-      queryKey: ["projects"],
+      queryKey: ["insight-engine-list"],
       queryFn: async () => {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/insight-engine`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/insight-engine/participant/projects`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -370,7 +370,7 @@ export default function AddNewProjectForm() {
       refetch();
       projectForm.reset();
       setStep(3);
-      queryClient.invalidateQueries({ queryKey: ["projects"] });
+      queryClient.invalidateQueries({ queryKey: ["insight-engine-list"] });
     },
     onError: (err: Error) => {
       alert(err.message || "Something went wrong");

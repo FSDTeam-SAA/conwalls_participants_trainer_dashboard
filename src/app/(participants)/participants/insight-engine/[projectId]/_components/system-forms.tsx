@@ -14,7 +14,8 @@ import {
   ShieldAlert,
   Lightbulb,
 } from 'lucide-react'
-import { useQuery, useMutation } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
+import { useSystemSettings } from '@/hooks/use-system-settings'
 import { useSession } from 'next-auth/react'
 import { parseCookies } from 'nookies'
 import { Button } from '@/components/ui/button'
@@ -32,6 +33,7 @@ interface SystemFormsProps {
   projectId: string
   kickOffDate: Date
   onBack: () => void
+  onNext: () => void
   projectTitle: string
 }
 
@@ -48,6 +50,7 @@ export default function SystemForms({
   kickOffDate,
   onBack,
   projectTitle,
+  onNext,
 }: SystemFormsProps) {
   const session = useSession()
   const token = (session?.data?.user as { accessToken?: string })?.accessToken
@@ -71,20 +74,7 @@ export default function SystemForms({
     formState: { isSubmitting },
   } = useForm<SystemFormValues>()
 
-  const { data: systemSettings } = useQuery({
-    queryKey: ['system-settings'],
-    queryFn: async () => {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/system-setting`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      )
-      if (!res.ok) throw new Error('Failed to fetch system settings')
-      return res.json()
-    },
-    enabled: !!token,
-  })
+  const { data: systemSettings } = useSystemSettings();
 
   const submitMutation = useMutation({
     mutationFn: async (values: SystemFormValues) => {
@@ -123,7 +113,7 @@ export default function SystemForms({
     },
     onSuccess: () => {
       toast.success('System forms submitted successfully')
-      router.push('/participants')
+      onNext()
     },
     onError: error => {
       toast.error(error.message || 'Something went wrong')
@@ -131,13 +121,10 @@ export default function SystemForms({
   })
 
   const getHelpText = (name: string) => {
-    const item = systemSettings?.data?.items?.find(
-      (i: any) => i.helpTexts && i.helpTexts.length > 0,
-    )
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const help = item?.helpTexts?.find((h: any) => h.name === name)
-    return help?.values?.[language] || help?.values?.en || ''
-  }
+    const helptexts = systemSettings?.helpTexts || [];
+    const help = helptexts.find((h: any) => h.name === name);
+    return help?.values?.[language] || help?.values?.en || '';
+  };
 
   const onSubmit = (values: SystemFormValues) => {
     submitMutation.mutate(values)

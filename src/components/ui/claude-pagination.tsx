@@ -61,8 +61,8 @@ const ClaudePagination: React.FC<PaginationProps> = ({
   }
 
   return (
-    <Pagination className="">
-      <PaginationContent className="flex items-center justify-end gap-2">
+    <Pagination className="w-auto mx-0">
+      <PaginationContent className="flex items-center justify-end gap-3">
         <PaginationItem>
           <PaginationLink
             onClick={() => {
@@ -71,13 +71,13 @@ const ClaudePagination: React.FC<PaginationProps> = ({
               } else handlePageClick(currentPage - 1)
             }}
             className={cn(
-              'border border-primary hover:bg-primary cursor-pointer  hover:text-white rounded-[4px]',
+              'h-12 w-12 border border-primary hover:bg-primary cursor-pointer hover:text-white rounded-[6px] flex items-center justify-center transition-all duration-200',
               currentPage === 1 &&
-                'cursor-not-allowed bg-[#E3E3E3] border-0  pointer-events-none'
+              'cursor-not-allowed bg-[#E3E3E3] border-0 pointer-events-none'
             )}
           >
             <ChevronLeft
-              className={cn('h-4 w-4', currentPage === 1 && 'text-[#B0B0B0]')}
+              className={cn('h-6 w-6 text-[#00253E]', currentPage === 1 && 'text-[#B0B0B0]')}
             />
           </PaginationLink>
         </PaginationItem>
@@ -87,10 +87,10 @@ const ClaudePagination: React.FC<PaginationProps> = ({
             <PaginationLink
               onClick={() => handlePageClick(page)}
               className={cn(
-                'border cursor-pointer border-primary  hover:text-white rounded-[4px]',
+                'h-12 w-12 border cursor-pointer border-primary hover:text-white rounded-[6px] flex items-center justify-center text-[18px] font-bold transition-all duration-200',
                 page === currentPage
-                  ? 'bg-primary text-white hover:bg-primary hover:text-white'
-                  : 'hover:bg-primary hover:text-white'
+                  ? 'bg-primary text-[#00253E] hover:bg-primary/90'
+                  : 'text-[#00253E] hover:bg-primary hover:text-white border-transparent'
               )}
             >
               {page === '...' ? '...' : page}
@@ -108,12 +108,12 @@ const ClaudePagination: React.FC<PaginationProps> = ({
               }
             }}
             className={cn(
-              'border border-primary hover:bg-primary cursor-pointer  hover:text-white rounded-[4px]',
+              'h-12 w-12 border border-primary hover:bg-primary cursor-pointer hover:text-white rounded-[6px] flex items-center justify-center transition-all duration-200',
               currentPage === totalPages &&
-                'cursor-not-allowed bg-[#E3E3E3] border-0  pointer-events-none'
+              'cursor-not-allowed bg-[#E3E3E3] border-0 pointer-events-none'
             )}
           >
-            <ChevronRight className="h-4 w-4 text-black" />
+            <ChevronRight className="h-6 w-6 text-[#00253E]" />
           </PaginationLink>
         </PaginationItem>
       </PaginationContent>

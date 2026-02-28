@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { Scroll, Users, ClipboardList, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface StepNavigationProps {
