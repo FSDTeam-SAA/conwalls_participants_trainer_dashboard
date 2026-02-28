@@ -81,7 +81,7 @@ export function AddParticipantsModal() {
             Add New Participants
           </Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[480px] p-0 gap-0 rounded-2xl border-0 shadow-2xl [&>button]:hidden bg-white">
+        <DialogContent className="sm:max-w-[480px] p-0 gap-0 !rounded-[16px] border-0 shadow-2xl [&>button]:hidden bg-white">
           <DialogHeader className="px-6 pt-6 pb-0">
             <div className="flex items-start justify-between">
               <DialogTitle className="text-xl font-bold text-gray-800">
@@ -96,9 +96,8 @@ export function AddParticipantsModal() {
                 </button>
               </DialogClose>
             </div>
-            <DialogDescription className="text-xs text-gray-400 mt-1 leading-relaxed">
-              Want to delete this Revenue, remember if you delete this it not
-              show again in your dashboard.
+            <DialogDescription className="text-[14px] text-[#00253E] my-2 leading-relaxed">
+              Want to delete  this Revenue. remember if you delete this it not show again in your dashboard.
             </DialogDescription>
           </DialogHeader>
 
@@ -113,7 +112,7 @@ export function AddParticipantsModal() {
                 value={formData.fullName}
                 onChange={handleChange}
                 placeholder="Butlar Mane"
-                className="h-11 rounded-lg border-gray-200 text-sm placeholder:text-gray-400 focus-visible:ring-[#6abf4b] focus-visible:border-[#6abf4b]"
+                className="h-11 rounded-[8px] border-[#00253E] text-sm placeholder:text-gray-400 focus-visible:ring-[#6abf4b] focus-visible:border-[#6abf4b]"
               />
             </div>
 
@@ -128,7 +127,7 @@ export function AddParticipantsModal() {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="Butlar@email.com"
-                className="h-11 rounded-lg border-gray-200 text-sm placeholder:text-gray-400 focus-visible:ring-[#6abf4b] focus-visible:border-[#6abf4b]"
+                className="h-11 !rounded-[8px] border-[#00253E] text-sm placeholder:text-gray-400 focus-visible:ring-[#6abf4b] focus-visible:border-[#6abf4b]"
               />
             </div>
 
@@ -143,7 +142,7 @@ export function AddParticipantsModal() {
                 value={formData.phone}
                 onChange={handleChange}
                 placeholder="+997 9384u35803"
-                className="h-11 rounded-lg border-gray-200 text-sm placeholder:text-gray-400 focus-visible:ring-[#6abf4b] focus-visible:border-[#6abf4b]"
+                className="h-11 rounded-[8px] border-[#00253E] text-sm placeholder:text-gray-400 focus-visible:ring-[#6abf4b] focus-visible:border-[#6abf4b]"
               />
             </div>
 
@@ -159,7 +158,7 @@ export function AddParticipantsModal() {
                   value={formData.password}
                   onChange={handleChange}
                   placeholder="••••••••••••"
-                  className="h-11 rounded-lg border-gray-200 text-sm pr-10 placeholder:text-gray-400 focus-visible:ring-[#6abf4b] focus-visible:border-[#6abf4b]"
+                  className="h-11 rounded-[8px] border-[#00253E] text-sm pr-10 placeholder:text-gray-400 focus-visible:ring-[#6abf4b] focus-visible:border-[#6abf4b]"
                 />
                 <button
                   type="button"
@@ -179,7 +178,7 @@ export function AddParticipantsModal() {
                 value={formData.role}
                 onChange={handleChange}
                 placeholder="Participants"
-                className="h-11 rounded-lg border-gray-200 text-sm placeholder:text-gray-400 focus-visible:ring-[#6abf4b] focus-visible:border-[#6abf4b]"
+                className="h-11 rounded-[8px] border-[#00253E] text-sm placeholder:text-gray-400 focus-visible:ring-[#6abf4b] focus-visible:border-[#6abf4b]"
               />
             </div>
 
@@ -203,7 +202,7 @@ export function AddParticipantsModal() {
                 type="submit"
                 onClick={handleSubmit}
                 disabled={addParticipantMutation.isPending}
-                className="flex-1 h-11 rounded-lg bg-[#6abf4b] hover:bg-[#59a83c] text-white font-semibold flex items-center justify-center gap-2"
+                className="flex-1 h-11 rounded-lg bg-[#BADA55] hover:bg-[#BADA55]/90 text-black font-semibold flex items-center justify-center gap-2"
               >
                 <Plus size={16} />
                 {addParticipantMutation.isPending ? "Adding..." : "Add"}

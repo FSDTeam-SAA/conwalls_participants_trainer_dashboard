@@ -189,14 +189,14 @@ export default function ParticipantsManagement() {
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="bg-[#edf7e4] hover:bg-[#d4f0be] text-[#3a7d1e] font-medium text-xs rounded-md px-3 py-1.5 h-auto flex items-center gap-1.5"
+                          className="bg-[#edf7e4] hover:bg-[#d4f0be] text-[#3a7d1e] font-medium text-xs px-3 py-1.5 h-auto flex items-center gap-1.5 rounded-[8px] border-[#d4f0be]"
                         >
                           <Eye size={13} />
                           View Projects
                         </Button>
                       </Link>
 
-                      <EditParticipantModal />
+                      <EditParticipantModal id={participant._id}/>
 
                       <DeleteParticipantsModal id={participant._id} />
                     </div>
@@ -222,7 +222,7 @@ export default function ParticipantsManagement() {
               size="icon"
               onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
               disabled={currentPage === 1 || !paginationInfo?.hasPrevPage}
-              className="h-9 w-9 border-gray-200 text-gray-500 hover:border-[#6abf4b] hover:text-[#3a7d1e] disabled:opacity-40 rounded-md"
+              className="h-9 w-9 border-[#00253E] text-[#00253E] hover:bg-[#BADA55] hover:text-[#00253E] disabled:opacity-40 rounded-md"
             >
               <ChevronLeft size={15} />
             </Button>
@@ -234,10 +234,10 @@ export default function ParticipantsManagement() {
                 variant="outline"
                 size="icon"
                 onClick={() => setCurrentPage(page)}
-                className={`h-9 w-9 rounded-md font-medium text-sm border ${
+                className={`h-9 w-9 rounded-md font-medium text-sm border-[#00253E] ${
                   currentPage === page
-                    ? "bg-[#6abf4b] text-white border-[#6abf4b] hover:bg-[#59a83c]"
-                    : "border-gray-200 text-gray-600 hover:border-[#6abf4b] hover:text-[#3a7d1e]"
+                    ? "bg-[#BADA55] text-[#00253E]"
+                    : "text-[#00253E] hover:bg-[#BADA55]"
                 }`}
               >
                 {page}
@@ -252,7 +252,7 @@ export default function ParticipantsManagement() {
               disabled={
                 currentPage === totalPages || !paginationInfo?.hasNextPage
               }
-              className="h-9 w-9 border-gray-200 text-gray-500 hover:border-[#6abf4b] hover:text-[#3a7d1e] disabled:opacity-40 rounded-md"
+              className="h-9 w-9 border-[#00253E] text-[#00253E] hover:bg-[#BADA55] hover:text-[#00253E] disabled:opacity-40 rounded-md"
             >
               <ChevronRight size={15} />
             </Button>

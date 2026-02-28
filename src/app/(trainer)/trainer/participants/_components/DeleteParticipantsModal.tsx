@@ -51,12 +51,12 @@ export function DeleteParticipantsModal({ id }: DeleteParticipantsModalProps) {
         <Button
           variant="ghost"
           size="icon"
-          className="h-8 w-8 bg-red-100 hover:bg-red-200 rounded-md text-red-500"
+          className="h-8 w-8 bg-red-100 hover:bg-red-200 rounded-[8px] text-red-500 border border-red-200"
         >
           <Trash2 size={14} />
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[380px] p-0 gap-0 rounded-2xl border-0 shadow-2xl [&>button]:hidden bg-white">
+      <DialogContent className="sm:max-w-[380px] p-0 gap-0 !rounded-2xl border-0 shadow-2xl [&>button]:hidden bg-white">
         <DialogHeader className="px-6 pt-8 pb-0 flex flex-col items-center text-center">
           <DialogTitle className="text-xl font-bold text-gray-800">
             Are you sure?
@@ -72,7 +72,7 @@ export function DeleteParticipantsModal({ id }: DeleteParticipantsModalProps) {
             <Button
               type="button"
               variant="outline"
-              className="flex-1 h-11 rounded-lg border-gray-200 text-gray-600 font-medium hover:bg-gray-50 flex items-center justify-center gap-2"
+              className="flex-1 h-11 !rounded-[8px] border-gray-200 text-gray-600 font-medium hover:bg-gray-50 flex items-center justify-center gap-2"
             >
               <span className="w-5 h-5 rounded-full bg-gray-200 flex items-center justify-center">
                 <X size={11} className="text-gray-500" />
@@ -87,7 +87,7 @@ export function DeleteParticipantsModal({ id }: DeleteParticipantsModalProps) {
               type="button"
               onClick={() => deleteParticipantMutation.mutate()}
               disabled={deleteParticipantMutation.isPending}
-              className="flex-1 h-11 rounded-lg bg-[#6abf4b] hover:bg-[#59a83c] text-white font-semibold flex items-center justify-center gap-2"
+              className="flex-1 h-11 !rounded-[8px] bg-[#6abf4b] hover:bg-[#59a83c] text-black font-semibold flex items-center justify-center gap-2"
             >
               <Trash2 size={16} />
               {deleteParticipantMutation.isPending ? "Removing..." : "Remove"}
