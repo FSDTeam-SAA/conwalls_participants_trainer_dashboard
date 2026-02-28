@@ -96,7 +96,7 @@ const LoginForm = () => {
       if (session?.data?.user?.role === "PARTICIPANT") {
         router.push("/participants");
       } else if (session?.data?.user?.role === "TRAINER") {
-        router.push("/trainer");
+        router.push("/trainer/participants");
       } else {
         router.push("/login");
       }
