@@ -95,8 +95,15 @@ export default function DarrellStewardProjectContinue() {
                 </Link>
 
                 {/* Measures */}
-                <Link
-                  href={`/trainer/darrell-steward-project-list/measures`}
+               <Link
+                  href={{
+                    pathname:
+                      "/trainer/darrell-steward-project-list/measures",
+                    query: {
+                      projectId: projectId,
+                      stakeholderId: stakeholder._id,
+                    },
+                  }}
                 >
                   <button className="flex items-center gap-1.5 text-xs font-semibold text-gray-700 bg-white border border-gray-200 rounded-md px-3 py-1.5 hover:bg-gray-50 transition-colors">
                     Measures

@@ -1,9 +1,10 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { ChevronRight, Clock, Eye, Users } from "lucide-react";
+import { Clock, Eye, Users } from "lucide-react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 interface Measure {
   _id: string;
@@ -29,47 +30,46 @@ const categoryStyles: Record<string, string> = {
 };
 
 export default function MeasuresPage() {
-  const params = useParams();
-  const stakeholderId = params?.id as string;
+  const searchParams = useSearchParams();
+
+  const projectId = searchParams.get("projectId") as string;
+  const stakeholderId = searchParams.get("stakeholderId") as string;
+
+  const session = useSession();
+  const TOKEN = session?.data?.user?.accessToken ?? "";
 
   const { data: measuresData, isLoading } = useQuery<ApiResponse>({
-    queryKey: ["measures", stakeholderId],
+    queryKey: ["measures", projectId, stakeholderId],
     queryFn: async () => {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/measures?stakeholderId=${stakeholderId}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/measure/${stakeholderId}/stakeholders/${projectId}`,
         {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            // Authorization: `Bearer ${TOKEN}`,
+            Authorization: `Bearer ${TOKEN}`,
           },
-        }
+        },
       );
       if (!res.ok) throw new Error("Failed to fetch measures");
       return res.json();
     },
-    enabled: !!stakeholderId,
+    enabled: !!projectId && !!stakeholderId,
   });
 
   const measures = measuresData?.data ?? [];
 
   return (
     <div className="min-h-screen bg-white p-4 font-sans">
-      {/* Breadcrumb Tabs */}
+      {/* Breadcrumb */}
       <div className="flex items-center gap-0 mb-6 w-fit rounded-lg overflow-hidden border border-gray-200">
-        {/* New ERP-System */}
         <div className="flex items-center gap-2 bg-[#003049] text-white text-xs font-semibold px-4 py-2.5">
-          <span className="w-4 h-4 rounded-full border border-white/50 flex items-center justify-center text-[10px]">
-            ⊙
-          </span>
           New ERP-System
         </div>
-        {/* Stakeholder */}
         <div className="flex items-center gap-2 bg-[#1a4a6b] text-white text-xs font-semibold px-4 py-2.5">
           <Users size={13} />
           Stakeholder
         </div>
-        {/* Measures — active */}
         <div className="flex items-center gap-2 bg-[#c5e84a] text-[#2d4a00] text-xs font-semibold px-4 py-2.5">
           <Clock size={13} />
           Measures
@@ -78,7 +78,6 @@ export default function MeasuresPage() {
 
       {/* Table */}
       <div className="rounded-xl overflow-hidden border border-gray-100">
-        {/* Table Header */}
         <div className="grid grid-cols-4 bg-[#003049] text-white text-sm font-semibold px-5 py-3">
           <span>Subject</span>
           <span>Type</span>
@@ -86,12 +85,13 @@ export default function MeasuresPage() {
           <span className="text-center">Action</span>
         </div>
 
-        {/* Table Rows */}
         <div className="divide-y divide-gray-100">
           {isLoading ? (
             <div className="px-5 py-6 text-sm text-gray-400">Loading...</div>
           ) : measures.length === 0 ? (
-            <div className="px-5 py-6 text-sm text-gray-400">No measures found.</div>
+            <div className="px-5 py-6 text-sm text-gray-400">
+              No measures found.
+            </div>
           ) : (
             measures.map((measure) => (
               <div
@@ -116,10 +116,7 @@ export default function MeasuresPage() {
                   <Link
                     href={`/trainer/darrell-steward-project-list/measures/${measure._id}`}
                   >
-                    <button
-                      type="button"
-                      className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition-colors duration-200"
-                    >
+                    <button className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition-colors duration-200">
                       <Eye className="w-4 h-4" />
                     </button>
                   </Link>
@@ -129,24 +126,23 @@ export default function MeasuresPage() {
           )}
         </div>
       </div>
-
-      {/* Footer Buttons */}
-      <div className="flex items-center justify-between mt-5">
-        {/* Stakeholder */}
-        <Link href="#">
-          <button className="flex items-center gap-2 bg-[#003049] hover:bg-[#002538] text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors">
-            <Users size={15} />
+      {/* Bottom Navigation */}
+      <div className="flex items-center justify-between mt-6">
+        <Link
+          href={`/trainer/darrell-steward-project-list?projectId=${projectId}`}
+        >
+          <button className="flex items-center gap-2 bg-[#003049] text-white text-xs font-semibold px-5 py-2.5 rounded-lg hover:bg-[#1a4a6b] transition-colors">
+            <Users size={13} />
             Stakeholder
           </button>
         </Link>
 
-        {/* Timetable */}
-        <Link href="#">
-          <button className="flex items-center gap-2 bg-[#c5e84a] hover:bg-[#b5d83a] text-[#2d4a00] text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors">
-            <Clock size={15} />
-            Timetable
-            <ChevronRight size={14} />
-            <ChevronRight size={14} className="-ml-3" />
+        <Link
+          href={`/trainer/time-table?projectId=${projectId}&stakeholderId=${stakeholderId}`}
+        >
+          <button className="flex items-center gap-2 border border-[#003049] text-[#003049] bg-white text-xs font-semibold px-5 py-2.5 rounded-lg hover:bg-gray-50 transition-colors">
+            <Clock size={13} />
+            Timetable »
           </button>
         </Link>
       </div>

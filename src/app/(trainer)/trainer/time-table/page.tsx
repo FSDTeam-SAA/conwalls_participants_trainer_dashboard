@@ -1,10 +1,10 @@
 import React, { Suspense } from 'react'
-import MeasuresPage from './_components/MeasuresPage'
+import TimeTable from './_components/TimeTable'
 
 function page() {
   return (
     <Suspense fallback={<div></div>}>
-        <MeasuresPage />
+        <TimeTable />
     </Suspense>
   )
 }
