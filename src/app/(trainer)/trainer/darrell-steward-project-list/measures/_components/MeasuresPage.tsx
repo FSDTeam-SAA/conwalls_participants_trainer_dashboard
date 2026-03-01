@@ -129,7 +129,7 @@ export default function MeasuresPage() {
       {/* Bottom Navigation */}
       <div className="flex items-center justify-between mt-6">
         <Link
-          href={`/trainer/darrell-steward-project-list?projectId=${projectId}`}
+          href={`/trainer/darrell-steward-project-list/continue/${projectId}`}
         >
           <button className="flex items-center gap-2 bg-[#003049] text-white text-xs font-semibold px-5 py-2.5 rounded-lg hover:bg-[#1a4a6b] transition-colors">
             <Users size={13} />

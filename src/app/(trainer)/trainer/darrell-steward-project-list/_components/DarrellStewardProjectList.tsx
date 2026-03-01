@@ -1,12 +1,12 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { ChevronLeft, ChevronsRight, CalendarDays } from "lucide-react";
+import { ChevronLeft, ChevronsRight, CalendarDays, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 
 import penIcon from "../../../../../../public/assets/images/pen.png"
-import infoIcon from "../../../../../../public/assets/images/info.png"
+// import infoIcon from "../../../../../../public/assets/images/info.png"
 import Image from "next/image";
 
 interface ProjectData {
@@ -93,12 +93,12 @@ export default function DarrellStewardProjectList() {
 
        {/* Page Header */}
       <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-800">
-            Project List
+          <h1 className="text-2xl font-semibold leading-[110%] text-[#00253E]">
+            Project List 
           </h1>
-          <p className="text-sm text-gray-500 mt-1">
-            Dashboard <span className="text-gray-400">&gt;</span>{" "}
-            <span className="text-gray-600 font-medium">
+          <p className="flex items-center gap-2 text-lg md:text-xl text-[#00253E] font-medium leading-[120%] mt-1">
+            Dashboard <ChevronRight size={24} className="text-[#6B6B6B]" />
+            <span className="text-lg md:text-xl text-[#00253E] font-medium leading-[120%]">
               {project?.participantName ?? "—"}
             </span>
           </p>
@@ -126,7 +126,7 @@ export default function DarrellStewardProjectList() {
                 <span className="text-lg md:text-xl font-normal text-[#00253E]">
                   {field.label}
                 </span>
-                 <Image src={infoIcon} alt="Pen Icon" width={24} height={24} />
+                 {/* <Image src={infoIcon} alt="Pen Icon" width={24} height={24} /> */}
               </div>
 
               {/* Text Box */}

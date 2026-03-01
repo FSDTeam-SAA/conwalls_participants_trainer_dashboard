@@ -185,7 +185,7 @@ export default function SystemForms({
             <div className="flex items-center gap-2">
               <LucideHistory className="w-5 h-5 text-[#00253E]/60" />
               <label className="text-[20px] font-medium text-[#00253E]">
-                The past (good old days)
+                The past (good old days) 
               </label>
               <HelpIcon text={getHelpText('The past (good old days)')} />
             </div>
