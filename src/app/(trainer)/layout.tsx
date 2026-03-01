@@ -24,7 +24,7 @@ export default function DashboardLayout({
 
           {/* Sidebar */}
           <div
-            style={{ "--sidebar-width": "300px" } as React.CSSProperties}
+            style={{ "--sidebar-width": "335px" } as React.CSSProperties}
           >
             <DashboardSidebar />
           </div>

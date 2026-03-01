@@ -52,6 +52,8 @@ export default function DarrellSteward() {
 
   const projects = projectData?.data?.items ?? [];
 
+  console.log("Fetched Projects:", projects);
+
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
     const day = String(date.getDate()).padStart(2, "0");
@@ -95,7 +97,7 @@ export default function DarrellSteward() {
         ) : projects.length === 0 ? (
           <p className="text-sm text-gray-400">No projects found.</p>
         ) : (
-          projects.map((project) => (
+          projects?.map((project) => (
             <Link  key={project._id} href={`/trainer/darrell-steward-project-list/${project._id}`}>
               <div
                
