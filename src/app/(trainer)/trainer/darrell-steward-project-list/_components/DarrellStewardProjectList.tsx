@@ -1,13 +1,18 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { ChevronLeft, ChevronRight, Calendar, Info } from "lucide-react";
+import { ChevronLeft, ChevronsRight, CalendarDays } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+
+import penIcon from "../../../../../../public/assets/images/pen.png"
+import infoIcon from "../../../../../../public/assets/images/info.png"
+import Image from "next/image";
 
 interface ProjectData {
   _id: string;
   projectTitle: string;
+  createdBy: string;
   participantName: string;
   kickOffDate: string;
   systemForms: {
@@ -37,6 +42,8 @@ export default function DarrellStewardProjectList() {
   const params = useParams();
   const projectId = params?.id as string;
 
+
+
   const { data: projectData, isLoading } = useQuery<ApiResponse>({
     queryKey: ["project-details", projectId],
     queryFn: async () => {
@@ -57,6 +64,10 @@ export default function DarrellStewardProjectList() {
   });
 
   const project = projectData?.data;
+
+  // console.log("Fetched Project Details:", project?.createdBy);
+
+  const participantsId = project?.createdBy
 
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
@@ -94,8 +105,8 @@ export default function DarrellStewardProjectList() {
         </div>
 
       {/* Kick Off Date */}
-      <div className="flex items-center gap-2 text-sm text-gray-600 mt-3 mb-6">
-        <Calendar size={15} className="text-gray-500" />
+      <div className="flex items-center gap-2 text-lg md:text-xl lg:text-2xl text-[#00253E] font-normal leading-[110%] mt-3 mb-6">
+        <CalendarDays  size={24} className="text-gray-500" />
         <span>
           Kick off :{" "}
           {project?.kickOffDate ? formatDate(project.kickOffDate) : "—"}
@@ -110,16 +121,16 @@ export default function DarrellStewardProjectList() {
           {fields.map((field) => (
             <div key={field.key}>
               {/* Label */}
-              <div className="flex items-center gap-1.5 mb-2">
-                <span className="text-base">🖊️</span>
-                <span className="text-base font-semibold text-[#00253E]">
+              <div className="flex items-center gap-1.5 mb-3">
+                <Image src={penIcon} alt="Pen Icon" width={24} height={24} />
+                <span className="text-lg md:text-xl font-normal text-[#00253E]">
                   {field.label}
                 </span>
-                <Info size={14} className="text-black" />
+                 <Image src={infoIcon} alt="Pen Icon" width={24} height={24} />
               </div>
 
               {/* Text Box */}
-              <div className="w-full !rounded-[8px] border border-[#00253E] px-4 py-3 min-h-[90px] text-[#00253E] leading-relaxed text-base">
+              <div className="w-full !rounded-[8px] border border-[#00253E] px-4 py-3 min-h-[90px] text-[#00253E] font-normal leading-[110%] text-lg md:text-xl">
                 {project?.systemForms?.[
                   field.key as keyof typeof project.systemForms
                 ] ?? "—"}
@@ -133,7 +144,7 @@ export default function DarrellStewardProjectList() {
      <div className="flex justify-between items-center my-10">
       {/* Go Back */}
         <Link
-          href="#"
+          href={`/trainer/darrell-steward/${participantsId}`}
           className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 transition-colors"
         >
           <span className="w-6 h-6 rounded-full border border-gray-300 flex items-center justify-center">
@@ -148,7 +159,7 @@ export default function DarrellStewardProjectList() {
         >
           <button className="bg-[#BADA55] hover:bg-[#BADA55]/90 text-black text-sm font-semibold px-6 py-2.5 !rounded-[8px] flex items-center gap-1.5 transition-colors">
             Continue
-            <ChevronRight size={15} />
+            <ChevronsRight  size={20} />
           </button>
         </Link>
      </div>

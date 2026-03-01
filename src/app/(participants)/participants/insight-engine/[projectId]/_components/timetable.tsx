@@ -191,9 +191,9 @@ export default function Timetable({
       {stakeholdersWithMeasures.map(sh => (
         <div key={sh._id} className="mb-12 block print:break-inside-avoid">
           {/* Stakeholder Header */}
-          <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center justify-between mb-6">
             <div className="flex items-center">
-              <div className="h-[44px] px-6 bg-white border border-gray-200 border-l-[6px] border-l-[#B5CC2E] rounded flex items-center gap-3 shadow-sm">
+              <div className="h-[44px] px-6 bg-white border border-x-[4px] border-[#B5CC2E] rounded-[8px] flex items-center gap-3 shadow-sm">
                 <User className="w-5 h-5 text-[#B5CC2E]" />
                 <span className="text-[16px] font-bold text-[#00253E]">
                   {sh.name}
@@ -204,7 +204,7 @@ export default function Timetable({
             <div className="flex items-center gap-3 print:hidden">
               <button
                 onClick={handlePrint}
-                className="h-[44px] px-6 bg-white border border-gray-200 rounded text-[14px] font-bold text-gray-700 flex items-center gap-2 hover:bg-gray-50 transition-colors shadow-sm"
+                className="h-[44px] px-6 bg-white border border-[#B5CC2E] rounded text-[14px] font-bold text-gray-700 flex items-center gap-2 hover:bg-gray-50 transition-colors shadow-sm"
               >
                 <Download className="w-5 h-5" />
                 Export PDF
@@ -228,19 +228,19 @@ export default function Timetable({
               {sh.measures.map(m => (
                 <div
                   key={m._id}
-                  className="bg-[#F8F9FA] border border-gray-100 rounded-xl p-6 flex flex-row items-center relative overflow-hidden shadow-sm"
+                  className="bg-[#F2F2F2] border-l-[4px]  border-[#BADA55] rounded-xl p-6 flex flex-row items-center relative overflow-hidden shadow-sm "
                 >
                   {/* Left colored accent based on category */}
-                  <div
+                  {/* <div
                     className="absolute left-0 top-0 bottom-0 w-[6px]"
                     style={{ backgroundColor: getCategoryColor(m.category) }}
-                  ></div>
+                  ></div> */}
 
-                  <div className="w-[140px] text-[16px] font-bold text-[#00253E]">
+                  <div className="w-[140px] text-[16px] text-lg md:text-xl font-semibold text-black">
                     {m.timing === 'pre' ? 'Week' : 'Week'} {m.startWeeks}
                   </div>
                   <div className="flex flex-col gap-2">
-                    <div className="text-[20px] font-bold text-[#00253E]">
+                    <div className="text-[20px] font-bold text-black">
                       {m.type} - {m.name}
                     </div>
                     <div className="flex">
@@ -266,8 +266,8 @@ export default function Timetable({
             </div>
           ) : (
             // Grid View (Timeline)
-            <div className="relative pt-24 pb-48 px-10 bg-white overflow-x-auto min-w-full print:overflow-visible rounded-xl shadow-sm border border-gray-50">
-              <div className="min-w-[1200px] relative h-[450px]">
+            <div className="relative pt-2 pb-24 px-10 bg-white overflow-x-auto min-w-[80%] print:overflow-visible rounded-xl shadow-sm border border-gray-50">
+              <div className="min-w-[80%] relative h-[350px] ">
                 {/* Horizontal Timeline Axis */}
                 <div className="absolute top-[200px] left-0 right-0 h-[44px] flex shadow-inner rounded-md overflow-hidden border border-gray-200">
                   {/* Split colored bars */}
@@ -357,31 +357,9 @@ export default function Timetable({
                   )
                 })}
 
-                {/* Special Ambassador Node from Image */}
-                <div
-                  className="absolute z-20"
-                  style={{
-                    left: `${((timelineStartBuffer + 2) / totalWeeks) * 100}%`,
-                    top: '360px',
-                    transform: 'translateX(-50%)',
-                  }}
-                >
-                  <div className="flex items-start gap-3 bg-white rounded-lg p-2 whitespace-nowrap shadow-md border border-gray-100">
-                    <div className="w-[20px] h-[20px] mt-1 flex-shrink-0 rounded-sm bg-[#A91D54]"></div>
-                    <div className="flex flex-col gap-1">
-                      <span className="text-[15px] font-bold text-[#00253E] leading-tight">
-                        Change Ambassador
-                      </span>
-                      <span className="text-[13px] text-[#00253E] font-medium leading-tight opacity-95">
-                        Tim krawchik
-                      </span>
-                      <span className="text-[11px] text-[#00253E]/70 font-black mt-0.5">
-                        5 weeks
-                      </span>
-                    </div>
-                  </div>
-                  <div className="absolute left-1/2 bottom-full w-[1px] bg-gray-400/80 z-10 h-[116px]"></div>
-                </div>
+                
+
+
               </div>
             </div>
           )}

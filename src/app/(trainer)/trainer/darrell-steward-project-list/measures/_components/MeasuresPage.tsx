@@ -42,7 +42,7 @@ export default function MeasuresPage() {
     queryKey: ["measures", projectId, stakeholderId],
     queryFn: async () => {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/measure/${stakeholderId}/stakeholders/${projectId}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/measure/${projectId}/stakeholders/${stakeholderId}`,
         {
           method: "GET",
           headers: {

@@ -15,19 +15,19 @@ export default function GridView({ stakeholders }: GridViewProps) {
       {stakeholders.map((stakeholder) => (
         <div key={stakeholder._id}>
           {/* Group Header */}
-          <div className="flex items-center justify-between mb-3">
-            <button className="flex items-center gap-2 bg-[#dce8f0] text-[#003049] text-xs font-semibold px-4 py-2 rounded-lg">
-              <User size={13} />
+          <div className="flex items-center justify-between mb-8">
+            <button className="flex items-center gap-3 bg-transparent text-[#00253E] text-lg md:text-xl lg:text-[22px] font-semibold px-4 py-2 rounded-[8px] border-y border-x-[4px] border-[#BADA55]">
+              <User size={24} className="bg-[#BADA55] p-1 rounded-[8px]" />
               {stakeholder.name}
             </button>
             <Button
-              variant="ghost"
-              size="sm"
-              className="flex items-center gap-1.5 border border-gray-200 text-gray-500 text-xs font-medium px-3 py-1.5 h-auto rounded-lg hover:bg-gray-50"
-            >
-              <Download size={12} />
-              Export PDF
-            </Button>
+                variant="ghost"
+                size="sm"
+                className="h-[46px] flex items-center gap-1.5 border border-[#BADA55] text-[#00253E] text-base font-medium px-5 py-1.5 rounded-[8px] hover:bg-gray-50"
+              >
+                <Download size={12} />
+                Export PDF
+              </Button>
           </div>
 
           {/* Gantt Chart */}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Bot, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
@@ -71,9 +71,9 @@ export default function MeasuresViewDetails() {
     }
   }, [singleMeasureData]);
 
-  const handleAdd = () => {
-    console.log({ category, type, name, startWeeks, timing });
-  };
+  // const handleAdd = () => {
+  //   console.log({ category, type, name, startWeeks, timing });
+  // };
 
   return (
     <div className="min-h-screen font-sans">
@@ -187,15 +187,15 @@ export default function MeasuresViewDetails() {
               </div>
 
               {/* AI Button */}
-              <button className="flex items-center gap-2 bg-[#003049] text-white text-xs font-semibold px-4 py-2.5 rounded-lg hover:bg-[#1a4a6b] transition-colors">
+              {/* <button className="flex items-center gap-2 bg-[#003049] text-white text-xs font-semibold px-4 py-2.5 rounded-lg hover:bg-[#1a4a6b] transition-colors">
                 <Bot size={14} />
                 AI »
-              </button>
+              </button> */}
             </div>
           </div>
 
           {/* Bottom Buttons */}
-          <div className="flex items-center justify-between mt-10">
+          <div className="flex items-center justify-between mt-10 ">
             {/* Back */}
             <Link href="#">
               <button className="flex items-center gap-1.5 border border-gray-300 text-gray-700 text-xs font-semibold px-5 py-2.5 rounded-lg hover:bg-gray-50 transition-colors">
@@ -204,14 +204,20 @@ export default function MeasuresViewDetails() {
               </button>
             </Link>
 
+            {/* AI Button */}
+              {/* <button className="flex items-center gap-2 bg-[#003049] text-white text-xs font-semibold px-4 py-2.5 rounded-lg hover:bg-[#1a4a6b] transition-colors">
+                <Bot size={14} />
+                AI »
+              </button> */}
+
             {/* Add */}
-            <button
+            {/* <button
               onClick={handleAdd}
               className="flex items-center gap-1.5 bg-[#c5e84a] text-[#2d4a00] text-xs font-semibold px-6 py-2.5 rounded-lg hover:bg-[#b8d93e] transition-colors"
             >
               Add
               <ChevronRight size={13} />
-            </button>
+            </button> */}
           </div>
         </>
       )}

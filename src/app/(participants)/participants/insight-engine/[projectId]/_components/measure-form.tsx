@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input'
 import { toast } from 'sonner'
 import { useSystemSettings } from '@/hooks/use-system-settings'
 import { Measure } from './measure-types'
+import aiIcon from "../../../../../../../public/assets/images/ai.png"
 import {
     Select,
     SelectContent,
@@ -19,6 +20,8 @@ import {
 } from '@/components/ui/select'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { parseCookies } from 'nookies'
+import Image from 'next/image'
+import Link from 'next/link'
 
 interface MeasureFormProps {
     projectId: string
@@ -123,7 +126,7 @@ export default function MeasureForm({
                 </h1>
             </div>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
 
                 {/* Category */}
                 <div className="space-y-3">
@@ -147,7 +150,7 @@ export default function MeasureForm({
                 </div>
 
                 {/* Type */}
-                <div className="space-y-3 pt-4">
+                <div className="space-y-3 ">
                     <label className="text-[20px] font-medium text-[#00253E]">Type</label>
                     <Select
                         value={typeValue}
@@ -165,7 +168,7 @@ export default function MeasureForm({
                 </div>
 
                 {/* Name */}
-                <div className="space-y-3 pt-4">
+                <div className="space-y-3 ">
                     <label className="text-[20px] font-medium text-[#00253E]">Name</label>
                     <Input
                         {...register('name', { required: true })}
@@ -175,7 +178,7 @@ export default function MeasureForm({
                 </div>
 
                 {/* Start Weeks */}
-                <div className="space-y-3 pt-4">
+                <div className="space-y-3">
                     <label className="text-[20px] font-medium text-[#00253E]">Start</label>
                     <div className="flex items-center gap-4">
                         <Input
@@ -189,7 +192,7 @@ export default function MeasureForm({
                 </div>
 
                 {/* Timing */}
-                <div className="space-y-3 pt-6">
+                <div className="flex items-center justify-between space-y-3 pt-6 ">
                     <RadioGroup
                         className="flex items-center gap-6"
                         value={timingValue}
@@ -208,10 +211,16 @@ export default function MeasureForm({
                             </label>
                         </div>
                     </RadioGroup>
+                    <div>
+                        <Link href={`/participants/insight-engine/${projectId}/kick-off-story`} >
+                        <button className='flex items-center gap-1 bg-[#00253E] rounded-[8px] py-4 px-6 text-base text-white leading-[110%] font-medium'> 
+                           <Image src={aiIcon} alt="AI Icon" className="w-5 h-5 mr-2 object-contain" /> AI <ChevronsRight className='w-5 h-5'/></button>
+                        </Link>
+                    </div>
                 </div>
 
 
-                <div className="flex items-center justify-between pt-6 border-t">
+                <div className="flex items-center justify-between pt-2 ">
                     <Button
                         type="button"
                         variant="outline"

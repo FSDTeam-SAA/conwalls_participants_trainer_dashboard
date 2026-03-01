@@ -24,7 +24,7 @@ export function AddParticipantsModal() {
     email: "",
     phone: "",
     password: "",
-    role: "",
+    role: "Participants",
   });
 
   const queryClient = useQueryClient();
@@ -175,10 +175,11 @@ export function AddParticipantsModal() {
               <Label className="text-sm font-medium text-gray-700">Role</Label>
               <Input
                 name="role"
+                disabled
                 value={formData.role}
                 onChange={handleChange}
                 placeholder="Participants"
-                className="h-11 rounded-[8px] border-[#00253E] text-sm placeholder:text-gray-400 focus-visible:ring-[#6abf4b] focus-visible:border-[#6abf4b]"
+                className=" h-11 rounded-[8px] border-[#00253E] text-sm placeholder:text-gray-400 focus-visible:ring-[#6abf4b] focus-visible:border-[#6abf4b]"
               />
             </div>
 
