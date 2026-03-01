@@ -102,8 +102,10 @@ const ProjectList = () => {
             ))}
           </div>
         ) : projectLists.length === 0 ? (
-          <div className="text-center py-10 bg-gray-50 border rounded-lg text-gray-500">
+          <div className="w-full h-fit flex items-center justify-center pt-20">
+            <div className="w-full text-center py-10 bg-gray-50 border rounded-lg text-gray-500">
             No projects found.
+          </div>
           </div>
         ) : (
           projectLists?.map((project) => {

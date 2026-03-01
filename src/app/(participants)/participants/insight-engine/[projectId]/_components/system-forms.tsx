@@ -59,6 +59,8 @@ export default function SystemForms({
   const router = useRouter()
   const [language, setLanguage] = useState<'en' | 'de'>('en')
 
+ 
+
   useEffect(() => {
     const cookies = parseCookies()
     const googtrans = cookies.googtrans
@@ -97,9 +99,9 @@ export default function SystemForms({
       const organization = 'Tech Solutions Ltd, Bangladesh'
 
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/insight-engine/submit`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/insight-engine/${projectId}`,
         {
-          method: 'POST',
+          method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,

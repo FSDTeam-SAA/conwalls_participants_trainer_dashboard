@@ -1,13 +1,12 @@
 import { Clock, Download, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { categoryStyles, type Stakeholder } from "./TimeTable";
+import { type Stakeholder } from "./TimeTable";
 
 interface ListViewProps {
   stakeholders: Stakeholder[];
 }
 
 export default function ListView({ stakeholders }: ListViewProps) {
-
   console.log("Rendering ListView with stakeholders:", stakeholders);
   return (
     <div className="space-y-6">
@@ -15,8 +14,8 @@ export default function ListView({ stakeholders }: ListViewProps) {
         <div key={stakeholder._id}>
           {/* Group header row */}
           <div className="flex items-center justify-between mb-6">
-            <button className="flex items-center gap-3 bg-transparent text-[#00253E] text-lg md:text-xl lg:text-[22px] font-semibold px-4 py-2 rounded-[8px] border border-[#BADA55]">
-              <User size={24} className="bg-[#BADA55] p-1 rounded-[8px]"/>
+            <button className="flex items-center gap-3 bg-transparent text-[#00253E] text-lg md:text-xl lg:text-[22px] font-semibold px-4 py-2 rounded-[8px] border-y border-x-[4px] border-[#BADA55]">
+              <User size={24} className="bg-[#BADA55] p-1 rounded-[8px]" />
               {stakeholder.name}
             </button>
             <div className="flex items-center gap-4">
@@ -39,7 +38,7 @@ export default function ListView({ stakeholders }: ListViewProps) {
           </div>
 
           {/* Measures table */}
-          <div className="border border-gray-200 rounded-lg overflow-hidden">
+          <div className="border border-gray-200 rounded-[16px] overflow-hidden">
             {stakeholder.measures.length === 0 ? (
               <div className="px-5 py-4 text-xs text-gray-400 bg-white">
                 No measures found.
@@ -48,29 +47,26 @@ export default function ListView({ stakeholders }: ListViewProps) {
               stakeholder.measures.map((measure, idx) => (
                 <div
                   key={measure._id}
-                  className={`flex items-stretch ${
+                  className={`bg-[#F2F2F2] border-l-[6px] border-[#BADA55] rounded-[16px] flex items-stretch ${
                     idx !== stakeholder.measures.length - 1
                       ? "border-b border-gray-200"
                       : ""
                   }`}
                 >
                   {/* Week cell */}
-                  <div className="w-20 shrink-0 bg-gray-50 border-r border-gray-200 flex items-center px-3 py-4">
-                    <span className="text-xs text-gray-500">
+                  <div className="w-28 flex items-center px-4">
+                    <span className="text-lg md:text-xl text-black font-semibold leading-[110%] ">
                       Week {measure.startWeeks}
                     </span>
                   </div>
 
                   {/* Content cell */}
-                  <div className="flex-1 bg-white px-5 py-3">
-                    <p className="text-sm text-gray-800 font-medium">
+                  <div className="flex-1  px-5 py-3">
+                    <p className="text-xl md:text-2xl lg:text-3xl text-black font-semibold leading-[110%] pb-1">
                       {measure.name}
                     </p>
                     <span
-                      className={`inline-block mt-1.5 text-[11px] font-semibold rounded-full px-3 py-0.5 ${
-                        categoryStyles[measure.category]?.badge ??
-                        "bg-gray-100 text-gray-600"
-                      }`}
+                      className={`inline-block mt-1.5 text-base md:text-lg font-semibold leading-[110%] rounded-full px-3 py-1 ${measure?.category === "communication" ? "bg-[#BADA55] text-[#00253E]" : measure?.category === "involvement" ? "bg-[#00253E] text-white" : "bg-[#9E1F62] text-white"}`}
                     >
                       {measure.category}
                     </span>
@@ -81,12 +77,14 @@ export default function ListView({ stakeholders }: ListViewProps) {
           </div>
 
           {/* Change Ambassador */}
-          <p className="text-xs text-gray-600 mt-3">
-            Change Ambassador :{" "}
-            <span className="text-[#5a8a30] font-medium italic">
-              {stakeholder.name}
-            </span>
-          </p>
+          <div className="bg-[#F2F2F2] px-4 py-6 rounded-[16px] mt-6 border">
+            <p className="text-xl md:text-2xl lg:text-3xl text-black font-semibold leading-[110%] mt-3">
+              Change Ambassador :{" "}
+              <span className="text-[#00253E] font-semibold text-lg md:text-xl leading-[110%]">
+                {stakeholder.name}
+              </span>
+            </p>
+          </div>
         </div>
       ))}
     </div>

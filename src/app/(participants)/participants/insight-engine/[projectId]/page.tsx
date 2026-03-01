@@ -66,6 +66,9 @@ export default function InsightEnginePage() {
     { id: 4, title: 'Timetable', icon: Clock },
   ];
 
+
+
+
   let displaySteps = STEPS;
   if (activeSubStep) {
     displaySteps = STEPS.slice(0, 3);
@@ -86,7 +89,7 @@ export default function InsightEnginePage() {
         steps={displaySteps}
       />
 
-      {step === 1 && (
+      {step === 1 &&  (
         <KickOffDateForm
           projectTitle={projectTitle}
           initialDate={kickOffDate}
