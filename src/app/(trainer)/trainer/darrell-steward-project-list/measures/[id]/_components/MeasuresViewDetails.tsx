@@ -59,6 +59,12 @@ export default function MeasuresViewDetails() {
     enabled: !!measureId && !!TOKEN,
   });
 
+
+  console.log("dd", singleMeasureData)
+
+  const stakeholderId = singleMeasureData?.data?.stakeholderId
+  const insightEngineId = singleMeasureData?.data?.insightEngineId
+
   // Populate form fields when data loads
   useEffect(() => {
     if (singleMeasureData?.data) {
@@ -197,10 +203,10 @@ export default function MeasuresViewDetails() {
           {/* Bottom Buttons */}
           <div className="flex items-center justify-between mt-10 ">
             {/* Back */}
-            <Link href="#">
+            <Link href={`/trainer/darrell-steward-project-list/measures?projectId=${insightEngineId}&stakeholderId=${stakeholderId}`}>
               <button className="flex items-center gap-1.5 border border-gray-300 text-gray-700 text-xs font-semibold px-5 py-2.5 rounded-lg hover:bg-gray-50 transition-colors">
                 <ChevronLeft size={13} />
-                Back
+                Back 
               </button>
             </Link>
 

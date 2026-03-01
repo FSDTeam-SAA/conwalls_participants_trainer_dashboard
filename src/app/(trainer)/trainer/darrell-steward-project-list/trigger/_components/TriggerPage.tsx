@@ -1,16 +1,19 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { ChevronLeft, ChevronRight, Info } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import penIcon from "../../../../../../../public/assets/images/pen.png"
+import Image from "next/image";
 
 interface Stakeholder {
   _id: string;
   name: string;
   roleType: string;
   painPoint: string;
+  insightEngineId: string;
   benefits: string;
   triggerEvaluation: string;
   objectionsConcerns: string;
@@ -26,6 +29,8 @@ interface ApiResponse {
 export default function TriggerPage() {
   const params = useParams();
   const stakeholderId = params?.id as string;
+
+  console.log("p", stakeholderId)
 
   const session = useSession();
   const TOKEN = session.data?.user?.accessToken;
@@ -59,14 +64,14 @@ export default function TriggerPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white p-6 pb-24 font-sans">
+    <div className="pb-24 font-sans">
       {/* Page Header */}
       <div className="mb-5">
-        <h1 className="text-xl font-bold text-gray-800">Project List</h1>
-        <p className="text-sm text-gray-500 mt-0.5 flex items-center gap-1">
-          <span className="text-gray-600">Stakeholder</span>
-          <ChevronRight size={14} className="text-gray-400" />
-          <span className="text-gray-600">Trigger</span>
+        <h2 className="text-2xl font-semibold leading-[110%] text-[#00253E]">Project List</h2>
+        <p className="flex items-center gap-1 mt-1">
+          <span className="text-lg md:text-xl text-[#00253E] font-medium leading-[120%]">Stakeholder</span>
+          <ChevronRight size={24} className="text-[#6B6B6B]" />
+          <span className="text-lg md:text-xl text-[#00253E] font-medium leading-[120%]">Trigger</span>
         </p>
       </div>
 
@@ -85,11 +90,10 @@ export default function TriggerPage() {
           {/* Pain Point */}
           <div>
             <div className="flex items-center gap-1.5 mb-2">
-              <span className="text-base">🖊️</span>
-              <span className="text-sm font-semibold text-gray-700">Pain point</span>
-              <Info size={14} className="text-gray-400" />
+              <Image src={penIcon} alt="Pen Icon" width={24} height={24} />
+              <span className="text-lg md:text-xl font-normal text-[#00253E]">Pain point</span>
             </div>
-            <div className="w-full rounded-lg border border-gray-300 px-4 py-3 min-h-[90px] text-sm text-gray-700 leading-relaxed">
+            <div className="w-full !rounded-[8px] border border-[#00253E] px-4 py-3 min-h-[90px] text-[#00253E] font-normal leading-[110%] text-lg md:text-xl">
               {stakeholder?.painPoint ?? "—"}
             </div>
           </div>
@@ -97,11 +101,10 @@ export default function TriggerPage() {
           {/* Benefits */}
           <div>
             <div className="flex items-center gap-1.5 mb-2">
-              <span className="text-base">🖊️</span>
-              <span className="text-sm font-semibold text-gray-700">Benefits</span>
-              <Info size={14} className="text-gray-400" />
+              <Image src={penIcon} alt="Pen Icon" width={24} height={24} />
+              <span className="text-lg md:text-xl font-normal text-[#00253E]">Benefits</span>
             </div>
-            <div className="w-full rounded-lg border border-gray-300 px-4 py-3 min-h-[90px] text-sm text-gray-700 leading-relaxed">
+            <div className="w-full !rounded-[8px] border border-[#00253E] px-4 py-3 min-h-[90px] text-[#00253E] font-normal leading-[110%] text-lg md:text-xl">
               {stakeholder?.benefits ?? "—"}
             </div>
           </div>
@@ -117,11 +120,10 @@ export default function TriggerPage() {
           {/* Objections / Concerns */}
           <div>
             <div className="flex items-center gap-1.5 mb-2">
-              <span className="text-base">🖊️</span>
-              <span className="text-sm font-semibold text-gray-700">Objections / Concerns</span>
-              <Info size={14} className="text-gray-400" />
+              <Image src={penIcon} alt="Pen Icon" width={24} height={24} />
+              <span className="text-lg md:text-xl font-normal text-[#00253E]">Objections / Concerns</span>
             </div>
-            <div className="w-full rounded-lg border border-gray-300 px-4 py-3 min-h-[90px] text-sm text-gray-700 leading-relaxed">
+            <div className="w-full !rounded-[8px] border border-[#00253E] px-4 py-3 min-h-[90px] text-[#00253E] font-normal leading-[110%] text-lg md:text-xl">
               {stakeholder?.objectionsConcerns ?? "—"}
             </div>
           </div>
@@ -129,11 +131,10 @@ export default function TriggerPage() {
           {/* Objection Handling */}
           <div>
             <div className="flex items-center gap-1.5 mb-2">
-              <span className="text-base">🖊️</span>
-              <span className="text-sm font-semibold text-gray-700">Objection Handling</span>
-              <Info size={14} className="text-gray-400" />
+              <Image src={penIcon} alt="Pen Icon" width={24} height={24} />
+              <span className="text-lg md:text-xl font-normal text-[#00253E]">Objection Handling</span>
             </div>
-            <div className="w-full rounded-lg border border-gray-300 px-4 py-3 min-h-[90px] text-sm text-gray-700 leading-relaxed">
+            <div className="w-full !rounded-[8px] border border-[#00253E] px-4 py-3 min-h-[90px] text-[#00253E] font-normal leading-[110%] text-lg md:text-xl">
               {stakeholder?.objectionHandling ?? "—"}
             </div>
           </div>
@@ -143,7 +144,7 @@ export default function TriggerPage() {
       {/* Go Back */}
       <div className="mt-8">
         <Link
-          href="#"
+          href={`/trainer/darrell-steward-project-list/continue/${stakeholder?.insightEngineId}`}
           className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 transition-colors"
         >
           <span className="w-6 h-6 rounded-full border border-gray-300 flex items-center justify-center">
