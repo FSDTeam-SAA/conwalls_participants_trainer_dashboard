@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { LayoutGrid, List } from "lucide-react";
+import { ChevronRight, LayoutGrid, List } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
@@ -74,11 +74,11 @@ export const categoryStyles: Record<
 // ─── Legend ────────────────────────────────────────────────────────────────────
 function Legend() {
   return (
-    <div className="flex flex-col gap-1.5 pt-0.5">
+    <div className="flex flex-col gap-8">
       {Object.entries(categoryStyles).map(([cat, style]) => (
         <div key={cat} className="flex items-center gap-2">
-          <div className={`w-3.5 h-3.5 rounded-sm ${style.dot}`} />
-          <span className="text-xs text-gray-600">{cat}</span>
+          <div className={`w-6 h-6 rounded-sm ${style.dot}`} />
+          <span className="text-lg md:text-xl lg:text-[22px] text-black font-semibold leading-[110%]">{cat}</span>
         </div>
       ))}
     </div>
@@ -127,42 +127,42 @@ export default function TimeTable() {
     : "—";
 
   return (
-    <div className="min-h-screen bg-white p-5 font-sans">
+    <div className="min-h-screen font-sans">
       {/* Top bar */}
       <div className="flex items-start justify-between mb-4">
-        <div>
-          <p className="text-sm font-semibold text-gray-800">Project List</p>
+        <div className="pt-3">
+          <p className="text-lg md:text-xl lg:text-2xl font-semibold text-[#00253E] leading-normal">Project List</p>
           <p className="text-xs text-gray-500 flex items-center gap-1 mt-0.5">
-            <span>{insightEngine?.projectTitle ?? "New ERP System"}</span>
-            <span>›</span>
-            <span className="text-[#003049] font-medium">Time Table</span>
+            <span className="text-lg md:text-xl font-medium text-[#00253E] leading-[120%]">{insightEngine?.projectTitle ?? "New ERP System"}</span>
+            <ChevronRight size={20} />
+            <span className="text-lg md:text-xl font-medium text-[#00253E] leading-[120%]">Time Table</span>
           </p>
         </div>
 
         <div className="flex items-start gap-5">
           {/* View Toggle */}
-          <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden">
+          <div className="bg-[#EEEEEE] p-2 flex items-center gap-4 rounded-[4px] overflow-hidden">
             <Button
-              variant="ghost"
+              // variant="ghost"
               size="sm"
               onClick={() => setView("grid")}
-              className={`flex items-center gap-1.5 rounded-none text-xs font-medium px-3 py-2 h-auto transition-colors ${
+              className={`flex items-center gap-1.5 text-[#00253E] ${
                 view === "grid"
-                  ? "bg-[#003049] text-white hover:bg-[#003049]"
-                  : "bg-white text-gray-600 hover:bg-gray-50"
+                  ? "bg-white rounded-[8px] p-2"
+                  : "bg-transparent shadow-none border-none"
               }`}
             >
               <LayoutGrid size={13} />
               Grid View
             </Button>
             <Button
-              variant="ghost"
+              // variant="ghost"
               size="sm"
               onClick={() => setView("list")}
-              className={`flex items-center gap-1.5 rounded-none text-xs font-medium px-3 py-2 h-auto transition-colors ${
+              className={`flex items-center gap-1.5 text-[#00253E] ${
                 view === "list"
-                  ? "bg-[#003049] text-white hover:bg-[#003049]"
-                  : "bg-white text-gray-600 hover:bg-gray-50"
+                  ? "bg-white rounded-[8px] p-2"
+                  : "bg-transparent shadow-none border-none"
               }`}
             >
               <List size={13} />
@@ -176,7 +176,7 @@ export default function TimeTable() {
       </div>
 
       {/* Start Date */}
-      <p className="text-xs font-semibold text-gray-700 mb-5">
+      <p className="text-lg md:text-xl lg:text-2xl font-semibold text-[#00253E] leading-normal pb-6">
         Start : {kickOffFormatted}
       </p>
 
