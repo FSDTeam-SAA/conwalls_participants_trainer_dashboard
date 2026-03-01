@@ -176,7 +176,7 @@ export default function SystemForms({
             <Textarea
               {...register('vision')}
               placeholder="What will the further look like?"
-              className="min-h-[100px] border-[#00253E]/20 rounded-[4px] focus-visible:ring-primary shadow-sm text-[16px]"
+              className="min-h-[100px] border-[#00253E]/20 rounded-[4px] focus-visible:ring-primary shadow-sm text-[16px] placeholder:text-[#616161]"
             />
           </div>
 
@@ -192,7 +192,7 @@ export default function SystemForms({
             <Textarea
               {...register('pastGoodOldDays')}
               placeholder="Describe how this were in the past.."
-              className="min-h-[100px] border-[#00253E]/20 rounded-[4px] focus-visible:ring-primary shadow-sm text-[16px]"
+              className="min-h-[100px] border-[#00253E]/20 rounded-[4px] focus-visible:ring-primary shadow-sm text-[16px] placeholder:text-[#616161]"
             />
           </div>
 
@@ -208,7 +208,7 @@ export default function SystemForms({
             <Textarea
               {...register('obstacleProblem')}
               placeholder="what problem are you Facing?"
-              className="min-h-[100px] border-[#00253E]/20 rounded-[4px] focus-visible:ring-primary shadow-sm text-[16px]"
+              className="min-h-[100px] border-[#00253E]/20 rounded-[4px] focus-visible:ring-primary shadow-sm text-[16px] placeholder:text-[#616161]"
             />
           </div>
 
@@ -224,7 +224,7 @@ export default function SystemForms({
             <Textarea
               {...register('riskOfInaction')}
               placeholder="What happens if we don't change?"
-              className="min-h-[100px] border-[#00253E]/20 rounded-[4px] focus-visible:ring-primary shadow-sm text-[16px]"
+              className="min-h-[100px] border-[#00253E]/20 rounded-[4px] focus-visible:ring-primary shadow-sm text-[16px] placeholder:text-[#616161]"
             />
           </div>
 
@@ -240,7 +240,7 @@ export default function SystemForms({
             <Textarea
               {...register('solutionIdea')}
               placeholder="what's the solutions?"
-              className="min-h-[100px] border-[#00253E]/20 rounded-[4px] focus-visible:ring-primary shadow-sm text-[16px]"
+              className="min-h-[100px] border-[#00253E]/20 rounded-[4px] focus-visible:ring-primary shadow-sm text-[16px] placeholder:text-[#616161]"
             />
           </div>
         </div>

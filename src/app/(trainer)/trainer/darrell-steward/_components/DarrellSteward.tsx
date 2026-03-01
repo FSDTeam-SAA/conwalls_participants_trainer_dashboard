@@ -95,7 +95,7 @@ export default function DarrellSteward() {
         {isLoading ? (
           <p className="text-sm text-gray-400">Loading...</p>
         ) : projects.length === 0 ? (
-          <p className="text-sm text-gray-400">No projects found.</p>
+          <p className="text-base text-gray-400 pt-10 text-center">No projects found.</p>
         ) : (
           projects?.map((project) => (
             <Link  key={project._id} href={`/trainer/darrell-steward-project-list/${project._id}`}>

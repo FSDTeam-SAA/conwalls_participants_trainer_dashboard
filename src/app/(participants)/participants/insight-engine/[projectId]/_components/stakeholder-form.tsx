@@ -79,7 +79,7 @@ export default function StakeholderForm({
                     <Input
                         {...register('name', { required: true })}
                         placeholder="e.g. Accounting, IT Department, Sales team"
-                        className="h-[48px] border-[#00253E]/20 text-[16px] rounded-[4px] focus-visible:ring-primary shadow-sm"
+                        className="h-[48px] border-[#00253E]/20 text-[16px] rounded-[4px] focus-visible:ring-primary shadow-sm placeholder:text-[#616161]"
                     />
                 </div>
 
