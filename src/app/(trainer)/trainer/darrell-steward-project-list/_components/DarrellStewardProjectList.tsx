@@ -8,6 +8,7 @@ import { useParams } from "next/navigation";
 import penIcon from "../../../../../../public/assets/images/pen.png"
 // import infoIcon from "../../../../../../public/assets/images/info.png"
 import Image from "next/image";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface ProjectData {
   _id: string;
@@ -79,17 +80,6 @@ export default function DarrellStewardProjectList() {
 
   return (
     <div className="min-h-screen pb-24 font-sans relative">
-      {/* Page Header */}
-      {/* <div className="mb-1">
-        <h1 className="text-xl font-bold text-gray-800">Project List</h1>
-        <p className="text-sm text-gray-500 mt-0.5 flex items-center gap-1">
-          <span className="text-gray-600 font-medium">
-            {project?.participantName ?? "—"}
-          </span>
-          <ChevronRight size={14} className="text-gray-400" />
-          <span className="text-gray-600">{project?.projectTitle ?? "—"}</span>
-        </p>
-      </div> */}
 
        {/* Page Header */}
       <div className="mb-6">
@@ -115,7 +105,11 @@ export default function DarrellStewardProjectList() {
 
       {/* Form Fields */}
       {isLoading ? (
-        <p className="text-sm text-gray-400">Loading...</p>
+        <div className="space-y-4">
+                    {[...Array(4)].map((_, i) => (
+                      <Skeleton key={i} className="h-[90px] w-full rounded-[8px] bg-[#00253E]/30" />
+                    ))}
+                  </div>
       ) : (
         <div className="flex flex-col gap-5">
           {fields.map((field) => (
@@ -145,10 +139,10 @@ export default function DarrellStewardProjectList() {
       {/* Go Back */}
         <Link
           href={`/trainer/darrell-steward/${participantsId}`}
-          className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 transition-colors"
+          className="inline-flex items-center gap-2 text-base text-[#00253E] font-medium underline leading-[110%]"
         >
-          <span className="w-6 h-6 rounded-full border border-gray-300 flex items-center justify-center">
-            <ChevronLeft size={13} />
+          <span className="w-8 h-8 rounded-full border border-[#00253E] flex items-center justify-center">
+            <ChevronLeft size={32} />
           </span>
           Go Back
         </Link>

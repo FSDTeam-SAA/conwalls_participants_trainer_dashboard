@@ -19,7 +19,7 @@ import { useState } from "react";
 // import { Checkbox } from "@/components/ui/checkbox";
 // import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import { signIn, useSession } from "next-auth/react";
+import { getSession, signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { toast } from "sonner";
@@ -60,53 +60,95 @@ const LoginForm = () => {
   
 
   // 2. Define a submit handler.
+  // async function onSubmit(values: z.infer<typeof formSchema>) {
+  //   try {
+  //     setIsLoading(true);
+
+  //     const res = await signIn("credentials", {
+  //       email: values?.email,
+  //       password: values?.password,
+  //       role: values?.role,
+  //       // language: values?.language,
+  //       redirect: false,
+  //     });
+
+  //     // if (res?.error) {
+  //     //   throw new Error(res.error);
+  //     // }
+
+  //     if (res?.error) {
+  //       // if (res.error === "ADMIN_ONLY") {
+  //       //   toast.error("Only admin can access this admin dashboard");
+  //       //   return;
+  //       // }
+
+  //       if (res.error === "INVALID_CREDENTIALS") {
+  //         toast.error("Email or Password wrong");
+  //         return;
+  //       }
+
+  //       toast.error("Login failed");
+  //       return;
+  //     }
+
+      
+  //     toast.success("Login successful!");
+  //     if (session?.data?.user?.role === "PARTICIPANT") {
+  //       router.push("/participants");
+  //     } else if (session?.data?.user?.role === "TRAINER") {
+  //       router.push("/trainer/participants");
+  //     } else {
+  //       router.push("/login");
+  //     }
+  //   } catch (error) {
+  //     console.error("Login failed:", error);
+  //     toast.error("Login failed. Please try again.");
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // }
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    try {
-      setIsLoading(true);
+  try {
+    setIsLoading(true);
 
-      const res = await signIn("credentials", {
-        email: values?.email,
-        password: values?.password,
-        role: values?.role,
-        // language: values?.language,
-        redirect: false,
-      });
+    const res = await signIn("credentials", {
+      email: values.email,
+      password: values.password,
+      role: values.role,
+      redirect: false,
+    });
 
-      // if (res?.error) {
-      //   throw new Error(res.error);
-      // }
-
-      if (res?.error) {
-        // if (res.error === "ADMIN_ONLY") {
-        //   toast.error("Only admin can access this admin dashboard");
-        //   return;
-        // }
-
-        if (res.error === "INVALID_CREDENTIALS") {
-          toast.error("Email or Password wrong");
-          return;
-        }
-
-        toast.error("Login failed");
+    if (res?.error) {
+      if (res.error === "INVALID_CREDENTIALS") {
+        toast.error("Email or Password wrong");
         return;
       }
 
-      
-      toast.success("Login successful!");
-      if (session?.data?.user?.role === "PARTICIPANT") {
-        router.push("/participants");
-      } else if (session?.data?.user?.role === "TRAINER") {
-        router.push("/trainer/participants");
-      } else {
-        router.push("/login");
-      }
-    } catch (error) {
-      console.error("Login failed:", error);
-      toast.error("Login failed. Please try again.");
-    } finally {
-      setIsLoading(false);
+      toast.error("Login failed");
+      return;
     }
+
+    // 🔥 Important: wait for updated session
+    const updatedSession = await getSession();
+
+    toast.success("Login successful!");
+
+    if (updatedSession?.user?.role === "PARTICIPANT") {
+      router.push("/participants");
+    } else if (updatedSession?.user?.role === "TRAINER") {
+      router.push("/trainer/participants");
+    } else {
+      router.push("/");
+    }
+
+  } catch (error) {
+    console.error("Login failed:", error);
+    toast.error("Login failed. Please try again.");
+  } finally {
+    setIsLoading(false);
   }
+}
   return (
     <div>
       <div className="w-full md:w-[479px] bg-white rounded-[16px] border-[2px] border-[#E7E7E7] shadow-[0px_0px_10px_0px_#0000001A] p-6">

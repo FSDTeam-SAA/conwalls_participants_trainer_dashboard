@@ -59,7 +59,8 @@ export function AddParticipantsModal() {
       if (!res.ok) throw new Error("Failed to add participant");
       return res.json();
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      console.log(data)
       queryClient.invalidateQueries({ queryKey: ["participants"] });
       setFormData({ fullName: "", email: "", phone: "", password: "", role: "" });
       setOpen(false);

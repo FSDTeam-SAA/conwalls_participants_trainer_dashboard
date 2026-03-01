@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import penIcon from "../../../../../../../public/assets/images/pen.png"
 import Image from "next/image";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface Stakeholder {
   _id: string;
@@ -76,13 +77,17 @@ export default function TriggerPage() {
       </div>
 
       {isLoading ? (
-        <p className="text-sm text-gray-400">Loading...</p>
+         <div className="space-y-4">
+                    {[...Array(4)].map((_, i) => (
+                      <Skeleton key={i} className="h-[90px] w-full rounded-[8px] bg-[#00253E]/30" />
+                    ))}
+                  </div>
       ) : (
         <div className="flex flex-col gap-5">
           {/* Role */}
           <div>
-            <p className="text-sm font-semibold text-gray-700 mb-2">Role</p>
-            <div className="inline-block border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-700 min-w-[160px]">
+            <p className="text-lg md:text-xl font-normal text-[#00253E] mb-2">Role</p>
+            <div className="h-[56px] min-w-[280px] inline-block border border-[#00253E] rounded-[8px] px-4 py-2  text-xl md:text-2xl text-[#00253E] leading-[110%] font-normal ">
               {stakeholder?.roleType ?? "—"}
             </div>
           </div>
@@ -111,8 +116,8 @@ export default function TriggerPage() {
 
           {/* Trigger Evaluations */}
           <div>
-            <p className="text-sm font-semibold text-gray-700 mb-2">Trigger Evaluations</p>
-            <div className="inline-block border border-gray-300 rounded-lg px-4 py-1.5 text-sm text-gray-700">
+            <p className="text-lg md:text-xl font-normal text-[#00253E] mb-2">Trigger Evaluations</p>
+            <div className="h-[56px] min-w-[280px] inline-block border border-[#00253E] rounded-[8px] px-4 py-2  text-xl md:text-2xl text-[#00253E] leading-[110%] font-normal ">
               {formatTriggerEvaluation(stakeholder?.triggerEvaluation ?? "")}
             </div>
           </div>
@@ -145,10 +150,10 @@ export default function TriggerPage() {
       <div className="mt-8">
         <Link
           href={`/trainer/darrell-steward-project-list/continue/${stakeholder?.insightEngineId}`}
-          className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 transition-colors"
+         className="inline-flex items-center gap-2 text-base text-[#00253E] font-medium underline leading-[110%]"
         >
-          <span className="w-6 h-6 rounded-full border border-gray-300 flex items-center justify-center">
-            <ChevronLeft size={13} />
+          <span className="w-8 h-8 rounded-full border border-[#00253E] flex items-center justify-center">
+            <ChevronLeft size={32} />
           </span>
           Go Back
         </Link>

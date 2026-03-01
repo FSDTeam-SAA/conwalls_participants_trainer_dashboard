@@ -8,6 +8,7 @@ import { useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import ListView from "./ListView";
 import GridView from "./GridView";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 export interface Measure {
@@ -182,7 +183,11 @@ export default function TimeTable() {
 
       {/* Content */}
       {isLoading ? (
-        <div className="text-sm text-gray-400 py-8 text-center">Loading...</div>
+        <div className="space-y-4 mt-4">
+                            {[...Array(4)].map((_, i) => (
+                              <Skeleton key={i} className="h-[90px] w-full rounded-[8px] bg-[#00253E]/30" />
+                            ))}
+                          </div>
       ) : view === "list" ? (
         <ListView stakeholders={stakeholders} />
       ) : (

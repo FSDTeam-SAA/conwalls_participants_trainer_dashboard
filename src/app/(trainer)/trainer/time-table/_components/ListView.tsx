@@ -77,8 +77,8 @@ export default function ListView({ stakeholders }: ListViewProps) {
           </div>
 
           {/* Change Ambassador */}
-          <div className="bg-[#F2F2F2] px-4 py-6 rounded-[16px] mt-6 border">
-            <p className="text-xl md:text-2xl lg:text-3xl text-black font-semibold leading-[110%] mt-3">
+          <div className="h-[75px] bg-[#F2F2F2] px-4  rounded-[16px] mt-6 border">
+            <p className="text-xl md:text-2xl lg:text-3xl text-black font-semibold leading-[110%] mt-4">
               Change Ambassador :{" "}
               <span className="text-[#00253E] font-semibold text-lg md:text-xl leading-[110%]">
                 {stakeholder.name}

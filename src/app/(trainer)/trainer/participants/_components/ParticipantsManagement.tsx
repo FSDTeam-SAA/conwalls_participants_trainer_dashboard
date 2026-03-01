@@ -100,7 +100,7 @@ export default function ParticipantsManagement() {
       <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
         <Table>
           <TableHeader>
-            <TableRow className="bg-[#f0f7e6] hover:bg-[#f0f7e6] border-none">
+            <TableRow className="bg-gradient-to-b from-[#F6FFDA] via-[#F1FFC5] to-[#FFFFFF] border-none">
               <TableHead className="text-gray-600 font-semibold py-4 px-6 w-[220px]">
                 User name
               </TableHead>

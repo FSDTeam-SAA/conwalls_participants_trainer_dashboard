@@ -199,6 +199,7 @@ export function EditParticipantModal({ id }: Props) {
             <div className="flex flex-col gap-1.5">
               <Label className="text-sm font-medium text-gray-700">Role</Label>
               <Input
+                disabled
                 value={formData.role}
                 onChange={(e) =>
                   setFormData({ ...formData, role: e.target.value })

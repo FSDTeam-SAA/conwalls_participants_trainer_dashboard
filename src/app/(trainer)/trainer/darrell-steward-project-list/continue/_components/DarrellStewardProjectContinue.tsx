@@ -1,7 +1,8 @@
 "use client";
 
+import { Skeleton } from "@/components/ui/skeleton";
 import { useQuery } from "@tanstack/react-query";
-import { ChevronLeft, ChevronRight, User, Plus } from "lucide-react";
+import { ChevronLeft, ChevronRight, User, AlarmClockPlus, CopyMinus } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -47,49 +48,53 @@ export default function DarrellStewardProjectContinue() {
   const stakeholders = stakeholderData?.data ?? [];
 
   return (
-    <div className="min-h-screen bg-white p-6 font-sans">
+    <div className="min-h-screen ">
       {/* Page Header */}
       <div className="mb-5">
-        <h1 className="text-xl font-bold text-gray-800">Project List</h1>
-        <p className="text-sm text-gray-500 mt-0.5 flex items-center gap-1">
-          <span className="text-gray-600">New ERP-System</span>
-          <ChevronRight size={14} className="text-gray-400" />
-          <span className="text-gray-600">Stakeholder</span>
+        <h1 className="text-2xl font-semibold leading-[110%] text-[#00253E]">Project List</h1>
+        <p className="flex items-center gap-2 mt-1">
+          <span className="text-lg md:text-xl text-[#00253E] font-medium leading-[120%]">New ERP-System</span>
+          <ChevronRight size={24} className="text-[#6B6B6B]" />
+          <span className="text-lg md:text-xl text-[#00253E] font-medium leading-[120%]">Stakeholder</span>
         </p>
       </div>
 
       {/* Stakeholder List */}
       <div className="flex flex-col divide-y divide-gray-100 border-b border-gray-100">
         {isLoading ? (
-          <p className="text-sm text-gray-400 py-4">Loading...</p>
+          <div className="space-y-4">
+                    {[...Array(4)].map((_, i) => (
+                      <Skeleton key={i} className="h-[90px] w-full rounded-[8px] bg-[#00253E]/30" />
+                    ))}
+                  </div>
         ) : stakeholders.length === 0 ? (
           <p className="text-sm text-gray-400 py-4">No stakeholders found.</p>
         ) : (
           stakeholders.map((stakeholder) => (
             <div
               key={stakeholder._id}
-              className="flex items-center justify-between py-4"
+              className="flex items-center justify-between py-5 border-b border-[#A0A19F]"
             >
               {/* Left — avatar + name */}
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-md bg-[#e8f5e0] flex items-center justify-center">
-                  <User size={16} className="text-[#6abf4b]" />
+              <div className="flex items-center gap-4">
+                <div className="w-8 h-8 rounded-[8px] bg-[#BADA55] flex items-center justify-center p-1">
+                  <User size={24} className="text-[#00253E]" />
                 </div>
-                <span className="text-sm font-medium text-gray-800">
-                  {stakeholder.name}
+                <span className="text-lg md:text-xl lg:text-2xl font-semibold text-[#00253E] leading-[110%]">
+                  {stakeholder?.name}
                 </span>
               </div>
 
               {/* Right — Trigger + Measures */}
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-8">
                 {/* Trigger */}
                 <Link
                   href={`/trainer/darrell-steward-project-list/trigger/${stakeholder._id}`}
                 >
-                  <button className="flex items-center gap-1.5 text-xs font-semibold text-gray-700 bg-white border border-gray-200 rounded-md px-3 py-1.5 hover:bg-gray-50 transition-colors">
+                  <button className="flex items-center gap-3 text-lg md:text-xl lg:text-2xl font-semibold text-[#00253E] leading-[110%]">
                     Trigger
-                    <span className="w-5 h-5 rounded-md bg-[#c5e84a] flex items-center justify-center">
-                      <Plus size={12} className="text-[#3a5a00]" />
+                    <span className="w-8 h-8 rounded-[8px] bg-[#BADA55] flex items-center justify-center p-1">
+                      <AlarmClockPlus size={24} className="text-[#00253E]" />
                     </span>
                   </button>
                 </Link>
@@ -105,20 +110,10 @@ export default function DarrellStewardProjectContinue() {
                     },
                   }}
                 >
-                  <button className="flex items-center gap-1.5 text-xs font-semibold text-gray-700 bg-white border border-gray-200 rounded-md px-3 py-1.5 hover:bg-gray-50 transition-colors">
+                  <button className="flex items-center gap-3 text-lg md:text-xl lg:text-2xl font-semibold text-[#00253E] leading-[110%]">
                     Measures
-                    <span className="w-5 h-5 rounded-md bg-[#c5e84a] flex items-center justify-center">
-                      <svg
-                        width="12"
-                        height="12"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="#3a5a00"
-                        strokeWidth="2.5"
-                      >
-                        <circle cx="12" cy="12" r="10" />
-                        <path d="M12 8v4l3 3" />
-                      </svg>
+                    <span className="w-8 h-8 rounded-[8px] bg-[#BADA55] flex items-center justify-center p-1">
+                      <CopyMinus size={24} className="text-[#00253E]" />
                     </span>
                   </button>
                 </Link>
@@ -132,10 +127,10 @@ export default function DarrellStewardProjectContinue() {
       <div className="mt-6">
         <Link
           href={`/trainer/darrell-steward-project-list/${projectId}`}
-          className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 transition-colors"
+           className="inline-flex items-center gap-2 text-base text-[#00253E] font-medium underline leading-[110%]"
         >
-          <span className="w-6 h-6 rounded-full border border-gray-300 flex items-center justify-center">
-            <ChevronLeft size={13} />
+          <span className="w-8 h-8 rounded-full border border-[#00253E] flex items-center justify-center">
+            <ChevronLeft size={32} />
           </span>
           Go Back
         </Link>

@@ -1,7 +1,8 @@
 "use client";
 
+import { Skeleton } from "@/components/ui/skeleton";
 import { useQuery } from "@tanstack/react-query";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 
@@ -65,13 +66,13 @@ export default function DarrellSteward() {
   return (
     <div className="min-h-screen p-1 font-sans">
       {/* Back Button */}
-      <div className="mb-4">
+      <div className="mb-3">
         <Link
           href="/trainer/participants"
-          className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 transition-colors"
+          className="inline-flex items-center gap-1.5 text-sm md:text-base text-[#00253E] leading-[110%]  underline"
         >
-          <span className="w-6 h-6 rounded-full border border-gray-300 flex items-center justify-center">
-            <ChevronLeft size={13} />
+          <span className="w-7 h-7 rounded-full border border-[#00253E] flex items-center justify-center">
+            <ChevronLeft size={28} />
           </span>
           Go Back to Participants Management
         </Link>
@@ -79,12 +80,12 @@ export default function DarrellSteward() {
 
       {/* Page Header */}
       <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-800">
+          <h1 className="text-2xl font-semibold text-[#00253E] leading-normal">
             Project List
           </h1>
-          <p className="text-sm text-gray-500 mt-1">
-            Dashboard <span className="text-gray-400">&gt;</span>{" "}
-            <span className="text-gray-600 font-medium">
+          <p className="flex items-center gap-2 text-lg md:text-xl text-[#00253E] font-medium leading-[120%] mt-1">
+            Dashboard <ChevronRight className="text-[#6B6B6B]"/>
+            <span className="text-lg md:text-xl text-[#00253E] font-medium leading-[120%]">
               Darrell Steward
             </span>
           </p>
@@ -93,7 +94,11 @@ export default function DarrellSteward() {
       {/* Project Cards */}
       <div className="flex flex-col gap-3">
         {isLoading ? (
-          <p className="text-sm text-gray-400">Loading...</p>
+          <div className="space-y-4">
+            {[...Array(3)].map((_, i) => (
+              <Skeleton key={i} className="h-[90px] w-full rounded-[8px] bg-[#00253E]/30" />
+            ))}
+          </div>
         ) : projects.length === 0 ? (
           <p className="text-base text-gray-400 pt-10 text-center">No projects found.</p>
         ) : (
@@ -101,7 +106,7 @@ export default function DarrellSteward() {
             <Link  key={project._id} href={`/trainer/darrell-steward-project-list/${project._id}`}>
               <div
                
-                className="w-full rounded-xl px-6 py-4 bg-[#003049] text-white"
+                className="w-full rounded-xl px-6 py-4 bg-[#003049] text-white border border-[#BADA55]"
               >
                 <p className="text-[24px] font-bold">
                   {project.projectTitle}

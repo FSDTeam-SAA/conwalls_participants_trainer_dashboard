@@ -12,7 +12,7 @@ const TOTAL_WEEKS = 16;
 export default function GridView({ stakeholders }: GridViewProps) {
   return (
     <div className="space-y-8">
-      {stakeholders.map((stakeholder) => (
+      {stakeholders?.map((stakeholder) => (
         <div key={stakeholder._id}>
           {/* Group Header */}
           <div className="flex items-center justify-between mb-8">
@@ -31,7 +31,7 @@ export default function GridView({ stakeholders }: GridViewProps) {
           </div>
 
           {/* Gantt Chart */}
-          <div className="border border-gray-100 rounded-xl overflow-hidden bg-[#f7f9fb] p-4">
+          <div className="border border-gray-100 rounded-xl overflow-hidden bg-[#f7f9fb] p-4 ">
             {/* Week ruler */}
             <div
               className="grid mb-4"
