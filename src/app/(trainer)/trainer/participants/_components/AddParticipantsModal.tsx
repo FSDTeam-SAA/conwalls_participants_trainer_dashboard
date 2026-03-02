@@ -15,6 +15,7 @@ import { Label } from "@/components/ui/label";
 import { Eye, EyeOff, Plus, X } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
+import { toast } from "sonner";
 
 export function AddParticipantsModal() {
   const [showPassword, setShowPassword] = useState(false);
@@ -37,36 +38,93 @@ export function AddParticipantsModal() {
   const session = useSession();
     const TOKEN = session?.data?.user?.accessToken ?? "";
 
-  const addParticipantMutation = useMutation({
-    mutationFn: async () => {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/trainer/connect-participant`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${TOKEN}`,
-          },
-          body: JSON.stringify({
-            name: formData.fullName,
-            email: formData.email,
-            phone: formData.phone,
-            password: formData.password,
-            role: formData.role,
-          }),
-        }
-      );
-      if (!res.ok) throw new Error("Failed to add participant");
-      return res.json();
-    },
-    onSuccess: (data) => {
-      console.log(data)
-      queryClient.invalidateQueries({ queryKey: ["participants"] });
-      setFormData({ fullName: "", email: "", phone: "", password: "", role: "" });
-      setOpen(false);
-    //   queryClient.invalidateQueries({ queryKey: ["participants",] });
-    },
-  });
+
+    const addParticipantMutation = useMutation({
+  mutationFn: async () => {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/trainer/connect-participant`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${TOKEN}`,
+        },
+        body: JSON.stringify({
+          name: formData.fullName,
+          email: formData.email,
+          phone: formData.phone,
+          password: formData.password,
+          role: formData.role,
+        }),
+      }
+    );
+
+    const data = await res.json().catch(() => null);
+
+    // ❗if server returned non-2xx
+    if (!res.ok) {
+      throw new Error(data?.message || "Failed to add participant");
+    }
+
+    // ✅ even if 200, but status false => treat as error
+    if (data?.status === false) {
+      throw new Error(data?.message || "Something went wrong!");
+    }
+
+    return data;
+  },
+
+  onSuccess: () => {
+    toast.success("Participant added successfully");
+    queryClient.invalidateQueries({ queryKey: ["participants"] });
+    setFormData({
+      fullName: "",
+      email: "",
+      phone: "",
+      password: "",
+      role: "Participants",
+    });
+    setOpen(false);
+  },
+
+  onError: (err: Error) => {
+    toast.error(err?.message || "Something went wrong!");
+  },
+});
+
+  // const addParticipantMutation = useMutation({
+  //   mutationFn: async () => {
+  //     const res = await fetch(
+  //       `${process.env.NEXT_PUBLIC_BACKEND_URL}/trainer/connect-participant`,
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: `Bearer ${TOKEN}`,
+  //         },
+  //         body: JSON.stringify({
+  //           name: formData.fullName,
+  //           email: formData.email,
+  //           phone: formData.phone,
+  //           password: formData.password,
+  //           role: formData.role,
+  //         }),
+  //       }
+  //     );
+  //     if (!res.ok) throw new Error("Failed to add participant");
+  //     return res.json();
+  //   },
+  //   onSuccess: (data) => {
+  //     if(!data?.status){
+  //       toast.error(data?.message || "Something went wrong!");
+  //       return;
+  //     }
+  //     console.log(data)
+  //     queryClient.invalidateQueries({ queryKey: ["participants"] });
+  //     setFormData({ fullName: "", email: "", phone: "", password: "", role: "" });
+  //     setOpen(false);
+  //   },
+  // });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

@@ -114,9 +114,9 @@ export default function TriggerPage() {
             </div>
           </div>
 
-          {/* Trigger Evaluations */}
+          {/* Trigger Evaluation */}
           <div>
-            <p className="text-lg md:text-xl font-normal text-[#00253E] mb-2">Trigger Evaluations</p>
+            <p className="text-lg md:text-xl font-normal text-[#00253E] mb-2">Trigger Evaluation</p>
             <div className="h-[56px] min-w-[280px] inline-block border border-[#00253E] rounded-[8px] px-4 py-2  text-xl md:text-2xl text-[#00253E] leading-[110%] font-normal ">
               {formatTriggerEvaluation(stakeholder?.triggerEvaluation ?? "")}
             </div>

@@ -270,8 +270,45 @@ export default function SystemForms({
   )
 }
 
+// function HelpIcon({ text }: { text: string }) {
+//   if (!text) return null
+//   return (
+//     <TooltipProvider delayDuration={0}>
+//       <Tooltip>
+//         <TooltipTrigger asChild>
+//           <button type="button" className="outline-none">
+//             <Info className="w-5 h-5 text-[#00253E]/60 hover:text-[#00253E] cursor-pointer" />
+//           </button>
+//         </TooltipTrigger>
+//         <TooltipContent
+//           side="top"
+//           align="start"
+//           className="max-w-[400px] bg-[#00253E] text-white p-3 rounded-[4px] shadow-2xl border-t-4 border-primary animate-in fade-in slide-in-from-bottom-2"
+//         >
+//           <div className="flex gap-3">
+//             <Info className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+//             <p className="text-[14px] leading-relaxed">{text}</p>
+//           </div>
+//         </TooltipContent>
+//       </Tooltip>
+//     </TooltipProvider>
+//   )
+// }
+
+
+
 function HelpIcon({ text }: { text: string }) {
   if (!text) return null
+
+  // Convert "•" text into bullet array (also supports newline)
+  const normalized = text.replace(/\r\n/g, "\n")
+  const parts = normalized
+    .split("•")
+    .map((s) => s.trim())
+    .filter(Boolean)
+
+  const hasBullets = parts.length > 1
+
   return (
     <TooltipProvider delayDuration={0}>
       <Tooltip>
@@ -280,14 +317,43 @@ function HelpIcon({ text }: { text: string }) {
             <Info className="w-5 h-5 text-[#00253E]/60 hover:text-[#00253E] cursor-pointer" />
           </button>
         </TooltipTrigger>
+
         <TooltipContent
           side="top"
           align="start"
-          className="max-w-[400px] bg-[#00253E] text-white p-3 rounded-[4px] shadow-2xl border-t-4 border-primary animate-in fade-in slide-in-from-bottom-2"
+          sideOffset={8}
+          // 🔥 This forces wrapping (Radix sometimes applies nowrap)
+          style={{ whiteSpace: "normal", maxWidth: 400 }}
+          className="bg-[#00253E] text-white p-3 rounded-[4px] shadow-2xl border-t-4 border-primary animate-in fade-in slide-in-from-bottom-2"
         >
           <div className="flex gap-3">
             <Info className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-            <p className="text-[14px] leading-relaxed">{text}</p>
+
+            {hasBullets ? (
+              <div className="text-[14px] leading-relaxed break-words whitespace-normal">
+                {/* first part can be intro line */}
+                <p className="mb-2 break-words whitespace-normal">{parts[0]}</p>
+
+                <ul className="list-disc pl-5 space-y-1">
+                  {parts.slice(1).map((item, idx) => (
+                    <li
+                      key={idx}
+                      className="break-words whitespace-normal"
+                      style={{ wordBreak: "break-word", overflowWrap: "anywhere" }}
+                    >
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : (
+              <p
+                className="text-[14px] leading-relaxed break-words whitespace-pre-wrap"
+                style={{ wordBreak: "break-word", overflowWrap: "anywhere" }}
+              >
+                {text}
+              </p>
+            )}
           </div>
         </TooltipContent>
       </Tooltip>
