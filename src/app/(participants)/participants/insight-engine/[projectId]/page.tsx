@@ -66,8 +66,24 @@ export default function InsightEnginePage() {
     { id: 4, title: 'Timetable', icon: Clock },
   ];
 
+  // Logic to determine which tab should be ACTIVE based on internal state
+  // Step 1: KickOffDateForm -> Active: 1 (Project Title)
+  // Step 2: SystemForms -> Active: 1 (Project Title) - This fixes the first issue
+  // Step 3: StakeholderList (List view) -> Active: 2 (Stakeholder) - This fixes the second issue
+  // Step 3: StakeholderList (Trigger sub-step) -> Active: 3 (Trigger)
+  // Step 3: StakeholderList (Measures sub-step) -> Active: 3 (Measures)
+  // Step 4: Timetable -> Active: 4 (Timetable)
 
-
+  let activeTabId = step;
+  if (step === 2) {
+    activeTabId = 1; // Highlight Project Tab during System Forms
+  } else if (step === 3) {
+    if (activeSubStep === 'Trigger' || activeSubStep === 'Measures') {
+      activeTabId = 3; // Highlight Measures/Trigger during sub-steps
+    } else {
+      activeTabId = 2; // Highlight Stakeholder during List view
+    }
+  }
 
   let displaySteps = STEPS;
   if (activeSubStep) {
@@ -85,11 +101,11 @@ export default function InsightEnginePage() {
   return (
     <div className=" mx-auto py-6 px-4 w-full">
       <StepNavigation
-        currentStep={step}
+        currentStep={activeTabId}
         steps={displaySteps}
       />
 
-      {step === 1 &&  (
+      {step === 1 && (
         <KickOffDateForm
           projectTitle={projectTitle}
           initialDate={kickOffDate}
