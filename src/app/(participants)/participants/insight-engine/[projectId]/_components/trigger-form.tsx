@@ -50,8 +50,11 @@ export default function TriggerForm({ stakeholder, onBack }: TriggerFormProps) {
   // Use the same helpText fetching logic based on global language/cookie if needed
   const { data: systemSettings } = useSystemSettings();
 
+  console.log(systemSettings)
+
   const getHelpText = (name: string) => {
     const helptexts = systemSettings?.helpTexts || [];
+
     const help = helptexts.find(
       (h: { name: string; values?: { en?: string } }) => h.name === name,
     );
@@ -138,6 +141,12 @@ export default function TriggerForm({ stakeholder, onBack }: TriggerFormProps) {
 
         {/* Pain Point */}
         <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <label className="text-[20px] font-medium text-[#00253E]">
+              Pain point
+            </label>
+            <HelpIcon text={getHelpText("Pain point")} />
+          </div>
           <Textarea
             {...register("painPoint")}
             placeholder="What's their Pain point?"
@@ -162,7 +171,7 @@ export default function TriggerForm({ stakeholder, onBack }: TriggerFormProps) {
 
         <div className="space-y-3 pt-4">
           <label className="text-[20px] font-medium text-[#00253E]">
-            Trigger Evaluations
+            Trigger Evaluation
           </label>
           <RadioGroup
             className="flex gap-6 pt-2"
@@ -200,11 +209,18 @@ export default function TriggerForm({ stakeholder, onBack }: TriggerFormProps) {
 
         {/* Objections */}
         <div className="space-y-3 pt-4">
-          <div className="flex items-center gap-2">
+          {/* <div className="flex items-center gap-2">
             <label className="text-[20px] font-medium text-[#00253E]">
               Objections / Concerns
             </label>
             <HelpIcon text={getHelpText("Objections / Concerns")} />
+          </div> */}
+
+          <div className="flex items-center gap-2">
+            <label className="text-[20px] font-medium text-[#00253E]">
+              Objections / Concerns
+            </label>
+            <HelpIcon text={getHelpText("Objections/Concerns")} />
           </div>
           <Textarea
             {...register("objectionsConcerns")}
@@ -267,8 +283,47 @@ export default function TriggerForm({ stakeholder, onBack }: TriggerFormProps) {
   );
 }
 
+// function HelpIcon({ text }: { text: string }) {
+//   if (!text) return null;
+//   return (
+//     <TooltipProvider delayDuration={0}>
+//       <Tooltip>
+//         <TooltipTrigger asChild>
+//           <button type="button" className="outline-none">
+//             <Info className="w-5 h-5 text-[#00253E]/60 hover:text-[#00253E] cursor-pointer" />
+//           </button>
+//         </TooltipTrigger>
+//         <TooltipContent
+//           side="top"
+//           align="start"
+//           className="max-w-[400px] bg-[#00253E] text-white p-3 rounded-[4px] shadow-2xl border-t-4 border-primary animate-in fade-in slide-in-from-bottom-2"
+//         >
+//           <div className="flex gap-3">
+//             <Info className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+//             <p className="text-[14px] leading-relaxed">{text}</p>
+//           </div>
+//         </TooltipContent>
+//       </Tooltip>
+//     </TooltipProvider>
+//   );
+// }
+
+
+
 function HelpIcon({ text }: { text: string }) {
   if (!text) return null;
+
+  // Handle both bullets "•" and line breaks "\n"
+  const normalized = text.replace(/\r\n/g, "\n").trim();
+
+  // Split by bullet symbol
+  const parts = normalized
+    .split("•")
+    .map((s) => s.trim())
+    .filter(Boolean);
+
+  const hasBullets = parts.length > 1;
+
   return (
     <TooltipProvider delayDuration={0}>
       <Tooltip>
@@ -277,14 +332,45 @@ function HelpIcon({ text }: { text: string }) {
             <Info className="w-5 h-5 text-[#00253E]/60 hover:text-[#00253E] cursor-pointer" />
           </button>
         </TooltipTrigger>
+
         <TooltipContent
           side="top"
           align="start"
+          sideOffset={8}
+          // ✅ Force wrap (Radix tooltip uses nowrap by default sometimes)
+          style={{ whiteSpace: "normal" }}
           className="max-w-[400px] bg-[#00253E] text-white p-3 rounded-[4px] shadow-2xl border-t-4 border-primary animate-in fade-in slide-in-from-bottom-2"
         >
           <div className="flex gap-3">
             <Info className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-            <p className="text-[14px] leading-relaxed">{text}</p>
+
+            {hasBullets ? (
+              <div className="text-[14px] leading-relaxed whitespace-normal break-words">
+                {/* Intro text before first bullet */}
+                <p className="mb-2 whitespace-normal break-words">
+                  {parts[0]}
+                </p>
+
+                <ul className="list-disc pl-5 space-y-1">
+                  {parts.slice(1).map((item, idx) => (
+                    <li
+                      key={idx}
+                      className="whitespace-normal break-words"
+                      style={{ overflowWrap: "anywhere", wordBreak: "break-word" }}
+                    >
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : (
+              <p
+                className="text-[14px] leading-relaxed whitespace-pre-wrap break-words"
+                style={{ overflowWrap: "anywhere", wordBreak: "break-word" }}
+              >
+                {normalized}
+              </p>
+            )}
           </div>
         </TooltipContent>
       </Tooltip>
