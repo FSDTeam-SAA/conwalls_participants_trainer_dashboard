@@ -40,10 +40,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </Suspense>
 
             {/* Load Google Translate script after components are ready */}
-            <Script
+            {/* <Script
               src="//translate.google.com/translate_a/element.js?cb=TranslateInit"
               strategy="lazyOnload"
-            />
+            /> */}
 
             {children}
 
