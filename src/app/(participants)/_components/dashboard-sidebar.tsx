@@ -66,7 +66,7 @@ export function DashboardSidebar() {
                               width={24}
                               height={24}
                             />
-                            <span>{item.title}</span>
+                            <span className="notranslate">{item.title}</span>
                           </Link>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
