@@ -31,7 +31,7 @@ export default function KickOffDateForm({ onNext, projectTitle, initialDate }: K
     return (
         <div className="w-full space-y-6">
             <div className="space-y-2">
-                <h1 className="text-[32px] font-semibold text-[#00253E] leading-tight">
+                <h1 className="text-[32px] notranslate font-semibold text-[#00253E] leading-tight">
                     {projectTitle}
                 </h1>
                 <div className="flex items-center gap-2 text-[#00253E]">

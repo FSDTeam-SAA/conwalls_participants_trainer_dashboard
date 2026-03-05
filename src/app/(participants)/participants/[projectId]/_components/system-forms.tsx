@@ -148,7 +148,7 @@ export default function SystemForms({
   return (
     <div className="w-full space-y-8 pb-10">
       <div className="space-y-2">
-        <h1 className="text-[32px] font-semibold text-[#00253E]">
+        <h1 className="text-[32px] notranslate font-semibold text-[#00253E]">
           {projectTitle}
         </h1>
         <div className="flex items-center gap-2 text-[#00253E]/80">
@@ -323,8 +323,8 @@ function HelpIcon({ text }: { text: string }) {
           align="start"
           sideOffset={8}
           // 🔥 This forces wrapping (Radix sometimes applies nowrap)
-          style={{ whiteSpace: "normal", maxWidth: 400 }}
-          className="bg-[#00253E] text-white p-3 rounded-[4px] shadow-2xl border-t-4 border-primary animate-in fade-in slide-in-from-bottom-2"
+          style={{ whiteSpace: "normal" }}
+          className="max-w-2xl md:max-w-3xl lg:max-w-4xl xl:max-w-5xl 2xl:max-w-6xl bg-[#00253E] text-white p-3 rounded-[4px] shadow-2xl border-t-4 border-primary animate-in fade-in slide-in-from-bottom-2"
         >
           <div className="flex gap-3">
             <Info className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />

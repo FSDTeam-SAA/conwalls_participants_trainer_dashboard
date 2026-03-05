@@ -339,7 +339,7 @@ function HelpIcon({ text }: { text: string }) {
           sideOffset={8}
           // ✅ Force wrap (Radix tooltip uses nowrap by default sometimes)
           style={{ whiteSpace: "normal" }}
-          className="max-w-[400px] bg-[#00253E] text-white p-3 rounded-[4px] shadow-2xl border-t-4 border-primary animate-in fade-in slide-in-from-bottom-2"
+          className="max-w-2xl md:max-w-3xl lg:max-w-4xl xl:max-w-5xl 2xl:max-w-6xl bg-[#00253E] text-white p-3 rounded-[4px] shadow-2xl border-t-4 border-primary animate-in fade-in slide-in-from-bottom-2"
         >
           <div className="flex gap-3">
             <Info className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
