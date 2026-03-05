@@ -218,7 +218,7 @@ export default function StakeholderList({ projectId, onBack, onNext, onSubStepCh
                                             setTriggerStakeholder(sh)
                                             onSubStepChange?.('Trigger')
                                         }}
-                                        className="flex items-center gap-2 text-[16px] font-medium text-[#00253E] hover:text-primary transition-colors"
+                                        className="flex items-center gap-2 notranslate text-[16px] font-medium text-[#00253E] hover:text-primary transition-colors"
                                     >
                                         Trigger
                                         <div className="w-6 h-6 rounded-full bg-primary/20 text-primary flex items-center justify-center">
@@ -231,7 +231,7 @@ export default function StakeholderList({ projectId, onBack, onNext, onSubStepCh
                                             setMeasuresStakeholder(sh)
                                             onSubStepChange?.('Measures')
                                         }}
-                                        className="flex items-center gap-2 text-[16px] font-medium text-[#00253E] hover:text-primary transition-colors"
+                                        className="flex items-center gap-2 notranslate text-[16px] font-medium text-[#00253E] hover:text-primary transition-colors"
                                     >
                                         Measures
                                         <div className="w-6 h-6 rounded-full bg-primary/20 text-primary flex items-center justify-center">

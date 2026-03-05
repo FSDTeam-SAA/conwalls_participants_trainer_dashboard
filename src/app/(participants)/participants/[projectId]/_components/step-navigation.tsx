@@ -33,7 +33,7 @@ export default function StepNavigation({ currentStep, steps, onStepClick }: Step
                             )}
                         >
                             <step.icon className="w-4 h-4" />
-                            <span className="text-sm md:text-base whitespace-nowrap">{step.title}</span>
+                            <span className="text-sm md:text-base whitespace-nowrap notranslate">{step.title}</span>
                         </button>
                         {index < steps.length - 1 && (
                             <div className="w-[1px] h-4 bg-gray-300 mx-1 hidden" />
