@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-'use client'
+"use client";
 
-import React, { useState, useEffect } from 'react'
-import { useForm } from 'react-hook-form'
+import React, { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
 import {
   Info,
   ChevronLeft,
@@ -13,38 +13,40 @@ import {
   AlertTriangle,
   ShieldAlert,
   Lightbulb,
-} from 'lucide-react'
-import { useMutation } from '@tanstack/react-query'
-import { useSystemSettings } from '@/hooks/use-system-settings'
-import { useSession } from 'next-auth/react'
-import { parseCookies } from 'nookies'
-import { Button } from '@/components/ui/button'
-import { Textarea } from '@/components/ui/textarea'
-import { toast } from 'sonner'
-import { useRouter } from 'next/navigation'
+} from "lucide-react";
+import { useMutation } from "@tanstack/react-query";
+import { useSystemSettings } from "@/hooks/use-system-settings";
+import { useSession } from "next-auth/react";
+import { parseCookies } from "nookies";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@/components/ui/tooltip'
+} from "@/components/ui/tooltip";
 
 interface SystemFormsProps {
-  projectId: string
-  kickOffDate: Date
-  onBack: () => void
-  onNext: () => void
-  projectTitle: string
-  initialData?: SystemFormValues
+  projectId: string;
+  kickOffDate: Date;
+  onBack: () => void;
+  onNext: () => void;
+  projectTitle: string;
+  initialData?: SystemFormValues;
 }
 
 type SystemFormValues = {
-  vision: string
-  pastGoodOldDays: string
-  obstacleProblem: string
-  riskOfInaction: string
-  solutionIdea: string
-}
+  vision: string;
+  pastGoodOldDays: string;
+  obstacleProblem: string;
+  riskOfInaction: string;
+  solutionIdea: string;
+};
+
+const COOKIE_NAME = "googtrans";
 
 export default function SystemForms({
   projectId,
@@ -54,23 +56,23 @@ export default function SystemForms({
   onNext,
   initialData,
 }: SystemFormsProps) {
-  const session = useSession()
-  const token = (session?.data?.user as { accessToken?: string })?.accessToken
-  const router = useRouter()
-  const [language, setLanguage] = useState<'en' | 'de'>('en')
-
- 
+  const cookie = parseCookies()[COOKIE_NAME];
+  const lang = cookie?.split("/")?.[2] || "en";
+  const session = useSession();
+  const token = (session?.data?.user as { accessToken?: string })?.accessToken;
+  const router = useRouter();
+  const [language, setLanguage] = useState<"en" | "de">("en");
 
   useEffect(() => {
-    const cookies = parseCookies()
-    const googtrans = cookies.googtrans
+    const cookies = parseCookies();
+    const googtrans = cookies.googtrans;
     if (googtrans) {
-      const lang = googtrans.split('/')[2]
-      if (lang === 'de' || lang === 'en') {
-        setLanguage(lang as 'en' | 'de')
+      const lang = googtrans.split("/")[2];
+      if (lang === "de" || lang === "en") {
+        setLanguage(lang as "en" | "de");
       }
     }
-  }, [])
+  }, []);
 
   const {
     register,
@@ -78,8 +80,8 @@ export default function SystemForms({
     reset,
     formState: { isSubmitting },
   } = useForm<SystemFormValues>({
-    defaultValues: initialData
-  })
+    defaultValues: initialData,
+  });
 
   // Pre-fill form when initialData changes
   useEffect(() => {
@@ -93,17 +95,17 @@ export default function SystemForms({
   const submitMutation = useMutation({
     mutationFn: async (values: SystemFormValues) => {
       const participantName =
-        localStorage.getItem('userName') ||
+        localStorage.getItem("userName") ||
         session.data?.user?.name ||
-        'Anonymous'
-      const organization = 'Tech Solutions Ltd, Bangladesh'
+        "Anonymous";
+      const organization = "Tech Solutions Ltd, Bangladesh";
 
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/insight-engine/${projectId}`,
         {
-          method: 'PUT',
+          method: "PUT",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
@@ -121,29 +123,29 @@ export default function SystemForms({
             },
           }),
         },
-      )
+      );
 
-      if (!res.ok) throw new Error('Failed to submit form')
-      return res.json()
+      if (!res.ok) throw new Error("Failed to submit form");
+      return res.json();
     },
     onSuccess: () => {
-      toast.success('System forms submitted successfully')
-      onNext()
+      toast.success("System forms submitted successfully");
+      onNext();
     },
-    onError: error => {
-      toast.error(error.message || 'Something went wrong')
+    onError: (error) => {
+      toast.error(error.message || "Something went wrong");
     },
-  })
+  });
 
   const getHelpText = (name: string) => {
     const helptexts = systemSettings?.helpTexts || [];
     const help = helptexts.find((h: any) => h.name === name);
-    return help?.values?.[language] || help?.values?.en || '';
+    return help?.values?.[language] || help?.values?.en || "";
   };
 
   const onSubmit = (values: SystemFormValues) => {
-    submitMutation.mutate(values)
-  }
+    submitMutation.mutate(values);
+  };
 
   return (
     <div className="w-full space-y-8 pb-10">
@@ -154,9 +156,9 @@ export default function SystemForms({
         <div className="flex items-center gap-2 text-[#00253E]/80">
           <FileText className="w-5 h-5" />
           <span className="notranslate text-[18px] font-medium">
-            Kick off :{' '}
+            Kick off :{" "}
             {new Intl.DateTimeFormat(
-              language === 'de' ? 'de-DE' : 'en-GB',
+              language === "de" ? "de-DE" : "en-GB",
             ).format(kickOffDate)}
           </span>
         </div>
@@ -171,10 +173,10 @@ export default function SystemForms({
               <label className="text-[20px] font-medium text-[#00253E]">
                 Vision
               </label>
-              <HelpIcon text={getHelpText('Vision')} />
+              <HelpIcon text={getHelpText("Vision")} />
             </div>
             <Textarea
-              {...register('vision')}
+              {...register("vision")}
               placeholder="What will the further look like?"
               className="min-h-[100px] border-[#00253E]/20 rounded-[4px] focus-visible:ring-primary shadow-sm text-[16px] placeholder:text-[#616161]"
             />
@@ -185,12 +187,13 @@ export default function SystemForms({
             <div className="flex items-center gap-2">
               <LucideHistory className="w-5 h-5 text-[#00253E]/60" />
               <label className="text-[20px] font-medium text-[#00253E]">
-                The past (good old days) 
+                
+                {lang === "de" ? "Vergangenheit" : "The past (good old days)"}
               </label>
-              <HelpIcon text={getHelpText('The past (good old days)')} />
+              <HelpIcon text={getHelpText("The past (good old days)")} />
             </div>
             <Textarea
-              {...register('pastGoodOldDays')}
+              {...register("pastGoodOldDays")}
               placeholder="Describe how this were in the past.."
               className="min-h-[100px] border-[#00253E]/20 rounded-[4px] focus-visible:ring-primary shadow-sm text-[16px] placeholder:text-[#616161]"
             />
@@ -201,12 +204,13 @@ export default function SystemForms({
             <div className="flex items-center gap-2">
               <AlertTriangle className="w-5 h-5 text-[#00253E]/60" />
               <label className="text-[20px] font-medium text-[#00253E]">
-                Obstacle / Problem
+                
+                {lang === "de" ? "Hindernis / Problem" : "Obstacle / Problem"}
               </label>
-              <HelpIcon text={getHelpText('Obstacle / Problem')} />
+              <HelpIcon text={getHelpText("Obstacle / Problem")} />
             </div>
             <Textarea
-              {...register('obstacleProblem')}
+              {...register("obstacleProblem")}
               placeholder="what problem are you Facing?"
               className="min-h-[100px] border-[#00253E]/20 rounded-[4px] focus-visible:ring-primary shadow-sm text-[16px] placeholder:text-[#616161]"
             />
@@ -217,12 +221,13 @@ export default function SystemForms({
             <div className="flex items-center gap-2">
               <ShieldAlert className="w-5 h-5 text-[#00253E]/60" />
               <label className="text-[20px] font-medium text-[#00253E]">
-                Risk of inaction / Consequences
+                
+                {lang === "de" ? "Risiko / Konsequenzen" : "Risk of inaction / Consequences"}
               </label>
-              <HelpIcon text={getHelpText('Risk of inaction / Consequences')} />
+              <HelpIcon text={getHelpText("Risk of inaction / Consequences")} />
             </div>
             <Textarea
-              {...register('riskOfInaction')}
+              {...register("riskOfInaction")}
               placeholder="What happens if we don't change?"
               className="min-h-[100px] border-[#00253E]/20 rounded-[4px] focus-visible:ring-primary shadow-sm text-[16px] placeholder:text-[#616161]"
             />
@@ -233,12 +238,13 @@ export default function SystemForms({
             <div className="flex items-center gap-2">
               <Lightbulb className="w-5 h-5 text-[#00253E]/60" />
               <label className="text-[20px] font-medium text-[#00253E]">
-                Solution / Idea
+                
+                {lang === "de" ? "Idee / Lösung" : "Solution / Idea"}
               </label>
-              <HelpIcon text={getHelpText('Solution / Idea')} />
+              <HelpIcon text={getHelpText("Solution / Idea")} />
             </div>
             <Textarea
-              {...register('solutionIdea')}
+              {...register("solutionIdea")}
               placeholder="what's the solutions?"
               className="min-h-[100px] border-[#00253E]/20 rounded-[4px] focus-visible:ring-primary shadow-sm text-[16px] placeholder:text-[#616161]"
             />
@@ -261,13 +267,20 @@ export default function SystemForms({
             disabled={submitMutation.isPending}
             className="bg-primary hover:bg-primary/90 text-[#00253E] px-12 h-[48px] rounded-[8px] flex items-center gap-2 font-semibold transition-all duration-200 active:scale-95"
           >
-            {submitMutation.isPending ? 'Submitting...' : 'Continue'}
+
+             {submitMutation.isPending
+                    ? lang === "de"
+                      ? "Wird hinzugefügt..."
+                      : "Adding..."
+                    : lang === "de"
+                      ? "weiter"
+                      : "Continue"}
             <ChevronsRight className="w-5 h-5" />
           </Button>
         </div>
       </form>
     </div>
-  )
+  );
 }
 
 // function HelpIcon({ text }: { text: string }) {
@@ -295,19 +308,17 @@ export default function SystemForms({
 //   )
 // }
 
-
-
 function HelpIcon({ text }: { text: string }) {
-  if (!text) return null
+  if (!text) return null;
 
   // Convert "•" text into bullet array (also supports newline)
-  const normalized = text.replace(/\r\n/g, "\n")
+  const normalized = text.replace(/\r\n/g, "\n");
   const parts = normalized
     .split("•")
     .map((s) => s.trim())
-    .filter(Boolean)
+    .filter(Boolean);
 
-  const hasBullets = parts.length > 1
+  const hasBullets = parts.length > 1;
 
   return (
     <TooltipProvider delayDuration={0}>
@@ -339,7 +350,10 @@ function HelpIcon({ text }: { text: string }) {
                     <li
                       key={idx}
                       className="break-words whitespace-normal"
-                      style={{ wordBreak: "break-word", overflowWrap: "anywhere" }}
+                      style={{
+                        wordBreak: "break-word",
+                        overflowWrap: "anywhere",
+                      }}
                     >
                       {item}
                     </li>
@@ -358,5 +372,5 @@ function HelpIcon({ text }: { text: string }) {
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
-  )
+  );
 }
