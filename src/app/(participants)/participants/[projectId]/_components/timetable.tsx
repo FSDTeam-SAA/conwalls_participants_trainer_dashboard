@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 import { Stakeholder } from './stakeholder-types'
 import { Measure } from './measure-types'
+import { parseCookies } from 'nookies'
 
 interface TimetableProps {
   projectId: string
@@ -21,12 +22,16 @@ interface TimetableProps {
   onBack?: () => void
 }
 
+const COOKIE_NAME = "googtrans";
+
 export default function Timetable({
   projectId,
   projectTitle,
   kickOffDate,
   onBack,
 }: TimetableProps) {
+    const cookie = parseCookies()[COOKIE_NAME];
+      const lang = cookie?.split("/")?.[2] || "en";
   const session = useSession()
   const token = (session?.data?.user as { accessToken?: string })?.accessToken
 
@@ -295,15 +300,15 @@ export default function Timetable({
               className="flex items-center gap-1 text-[14px] text-gray-500 hover:text-[#00253E] transition-colors mb-2 print:hidden"
             >
               <ChevronLeft className="w-4 h-4" />
-              Go Back
+              {lang === "de" ? "Zurück" : "Go Back"}
             </button>
             <h2 className="text-[22px] font-bold text-[#00253E]">
-              Project List
+               {lang === "de" ? "Projektliste" : "Project List"}
             </h2>
             <div className="flex items-center gap-2 text-[15px] text-gray-500">
-              <span>{projectTitle || 'New ERP System'}</span>
+              <span className='notranslate'>{projectTitle || 'New ERP System'}</span>
               <span className="text-gray-400">&gt;</span>
-              <span className="text-[#00253E] font-medium">Time Table</span>
+              <span className="text-[#00253E] font-medium">{lang === "de" ? "Timetable" : "Time Table"}</span>
             </div>
           </div>
 
@@ -311,40 +316,45 @@ export default function Timetable({
             <div className="flex bg-gray-100 p-1.5 rounded-lg h-[48px] w-[260px] print:hidden">
               <button
                 onClick={() => setViewMode('grid')}
-                className={`flex-1 rounded-md text-[14px] font-bold transition-colors flex items-center justify-center gap-2 ${
+                className={`flex-1 rounded-md text-[14px] font-bold transition-colors px-2 flex items-center justify-center gap-2 ${
                   viewMode === 'grid'
                     ? 'bg-white shadow-sm text-[#00253E]'
                     : 'text-gray-500 hover:text-[#00253E]'
                 }`}
               >
                 <Grid className="w-5 h-5" />
+                {lang === "de" ? "Rasteransicht" : "Grid View"}
                 Grid View
               </button>
               <button
                 onClick={() => setViewMode('list')}
-                className={`flex-1 rounded-md text-[14px] font-bold transition-colors flex items-center justify-center gap-2 ${
+                className={`flex-1 rounded-md text-[14px] font-bold px-2 transition-colors flex items-center justify-center gap-2 ${
                   viewMode === 'list'
                     ? 'bg-white shadow-sm text-[#00253E]'
                     : 'text-gray-500 hover:text-[#00253E]'
                 }`}
               >
                 <List className="w-5 h-5" />
-                List View
+                
+                 {lang === "de" ? "Listenansicht" : "List View"}
               </button>
             </div>
 
             <div className="flex flex-col gap-4 text-[15px] font-bold pt-1">
               <div className="flex items-center gap-4 text-[#00253E]">
                 <span className="w-[20px] h-[20px] bg-[#B5CC2E] rounded-sm"></span>
-                Communication
+                
+                 {lang === "de" ? "Kommunikation" : "Communication"}
               </div>
               <div className="flex items-center gap-4 text-[#00253E]">
                 <span className="w-[20px] h-[20px] bg-[#00253E] rounded-sm"></span>
-                Involvement
+                
+                 {lang === "de" ? "Einbindung" : "Involvement"}
               </div>
               <div className="flex items-center gap-4 text-[#00253E]">
                 <span className="w-[20px] h-[20px] bg-[#A91D54] rounded-sm"></span>
-                Recognition
+                
+                 {lang === "de" ? "Anerkennung" : "Recognition"}
               </div>
             </div>
           </div>
@@ -396,7 +406,8 @@ export default function Timetable({
                 className="h-[44px] px-6 bg-white border border-[#B5CC2E] rounded text-[14px] font-bold text-gray-700 flex items-center gap-2 hover:bg-gray-50 transition-colors shadow-sm"
               >
                 <Download className="w-5 h-5" />
-                Export PDF
+                
+                 {lang === "de" ? "PDF exportieren" : "Export PDF"}
               </button>
             </div>
           </div>
@@ -413,7 +424,7 @@ export default function Timetable({
                   className="bg-[#F2F2F2] border-l-[4px] border-[#BADA55] rounded-xl p-6 flex flex-row items-center relative overflow-hidden shadow-sm"
                 >
                   <div className="w-[140px] text-[16px] md:text-xl font-semibold text-black">
-                    Week {m.startWeeks}
+                     {lang === "de" ? `Woche ${m.startWeeks}` : `Week ${m.startWeeks}`}
                   </div>
                   <div className="flex flex-col gap-2">
                     <div className="text-[20px] font-bold text-black">

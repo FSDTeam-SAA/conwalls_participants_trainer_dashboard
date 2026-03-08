@@ -9,6 +9,7 @@ import { toast } from 'sonner'
 import { Measure, MeasuresResponse } from './measure-types'
 import { Stakeholder } from './stakeholder-types'
 import MeasureForm from './measure-form'
+import { parseCookies } from 'nookies'
 
 interface MeasureListProps {
   projectId: string
@@ -17,12 +18,16 @@ interface MeasureListProps {
   onOverview?: () => void
 }
 
+
+const COOKIE_NAME = "googtrans";
 export default function MeasureList({
   projectId,
   stakeholder,
   onBack,
   onOverview,
 }: MeasureListProps) {
+   const cookie = parseCookies()[COOKIE_NAME];
+    const lang = cookie?.split("/")?.[2] || "en";
   const session = useSession()
   const token = (session?.data?.user as { accessToken?: string })?.accessToken
   const queryClient = useQueryClient()
@@ -112,13 +117,15 @@ export default function MeasureList({
   return (
     <div className="space-y-6 pb-10">
       <h2 className="text-xl font-semibold text-[#00253E] mb-6">
-        Measures for {stakeholder.name}
+        {lang === "de"
+    ? `Maßnahmen für ${stakeholder.name}`
+    : `Measures for ${stakeholder.name}`}
       </h2>
 
       <div className="space-y-0 border-b border-t border-gray-200 overflow-hidden">
         {/* Table header */}
         <div className="grid grid-cols-[3fr_2fr_1fr_auto] gap-4 p-4 bg-[#00253E] text-white font-medium text-[16px]">
-          <div>Subject</div>
+          <div>   {lang === "de" ? "Maßnahme" : "Subject"}</div>
           <div>Type</div>
           <div>Category</div>
           <div className="w-16"></div>
@@ -179,7 +186,8 @@ export default function MeasureList({
           >
             <span className="flex items-center gap-2">
               <Users className="w-5 h-5 text-[#00253E]/70" />
-              Stakeholder
+              
+              {lang === "de" ? "Zielgruppen" : "Stakeholder"}
             </span>
           </Button>
           {onOverview && (
@@ -199,7 +207,8 @@ export default function MeasureList({
           onClick={() => setIsAdding(true)}
           className="bg-primary hover:bg-primary/90 text-[#00253E] px-8 h-[48px] rounded-[8px] flex items-center gap-2 font-semibold"
         >
-          Add New Measure
+          {lang === "de" ? "weitere Maßnahme hinzufügen" : "Add New Measure"}
+          
           <ChevronsRight className="w-5 h-5" />
         </Button>
       </div>
