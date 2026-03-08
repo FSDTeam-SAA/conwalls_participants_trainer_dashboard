@@ -175,7 +175,9 @@ export default function StakeholderList({ projectId, onBack, onNext, onSubStepCh
                                     </div>
                                     {editingNameId === sh._id ? (
                                         <div className="flex flex-col gap-2">
-                                            <p className="text-sm text-[#00253E] font-medium mb-1">Enter the name of the target person / group</p>
+                                            <p className="text-sm text-[#00253E] font-medium mb-1">
+                                                {lang === "de" ? "Geben Sie den Namen der Zielgruppe ein" : "Enter the name of the target person / group"}
+                                                </p>
                                             <div className="flex items-center gap-2">
                                                 <Input
                                                     value={editNameValue}
@@ -266,7 +268,8 @@ export default function StakeholderList({ projectId, onBack, onNext, onSubStepCh
                     className="bg-primary hover:bg-primary/90 text-[#00253E] px-8 h-[48px] rounded-[8px] flex items-center gap-2 font-semibold"
                 >
                     <Plus className="w-5 h-5" />
-                    Add (further Stakeholder)
+                    
+                    {lang === "de" ? "weitere Zielgruppen hinzufügen" : "Add (further Stakeholder)"}
                 </Button>
                 <Button
                     onClick={onNext}

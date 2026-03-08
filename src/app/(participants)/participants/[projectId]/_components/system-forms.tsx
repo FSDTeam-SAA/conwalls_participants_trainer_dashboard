@@ -164,10 +164,10 @@ export default function SystemForms({
         </div>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid gap-8">
           {/* Vision */}
-          <div className="space-y-3">
+          <div className="space-y-2">
             <div className="flex items-center gap-2">
               <FileText className="w-5 h-5 text-[#00253E]/60" />
               <label className="text-[20px] font-medium text-[#00253E]">
@@ -183,7 +183,7 @@ export default function SystemForms({
           </div>
 
           {/* Past */}
-          <div className="space-y-3">
+          <div className="space-y-2">
             <div className="flex items-center gap-2">
               <LucideHistory className="w-5 h-5 text-[#00253E]/60" />
               <label className="text-[20px] font-medium text-[#00253E]">
@@ -200,7 +200,7 @@ export default function SystemForms({
           </div>
 
           {/* Obstacle */}
-          <div className="space-y-3">
+          <div className="space-y-2">
             <div className="flex items-center gap-2">
               <AlertTriangle className="w-5 h-5 text-[#00253E]/60" />
               <label className="text-[20px] font-medium text-[#00253E]">
@@ -217,7 +217,7 @@ export default function SystemForms({
           </div>
 
           {/* Risk */}
-          <div className="space-y-3">
+          <div className="space-y-2">
             <div className="flex items-center gap-2">
               <ShieldAlert className="w-5 h-5 text-[#00253E]/60" />
               <label className="text-[20px] font-medium text-[#00253E]">
@@ -234,7 +234,7 @@ export default function SystemForms({
           </div>
 
           {/* Solution */}
-          <div className="space-y-3">
+          <div className="space-y-2">
             <div className="flex items-center gap-2">
               <Lightbulb className="w-5 h-5 text-[#00253E]/60" />
               <label className="text-[20px] font-medium text-[#00253E]">
