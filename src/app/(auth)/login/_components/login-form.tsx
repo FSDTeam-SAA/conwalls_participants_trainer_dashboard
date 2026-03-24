@@ -168,8 +168,10 @@ const LoginForm = () => {
         <h3 className="text-xl md:text-2xl lg:text-[32px] font-semibold text-[#00253E] text-left leading-[120%] ">
           Sign in to Insight Engine
         </h3>
-        <p className="text-base font-normal text-[#666666] leading-[150%] text-left pt-1 ">
-          Access your change <span className="notranslate">{lang === "de" ? " Kommunikation " : "communication"}</span> workspace
+        <p className="text-base font-normal text-[#666666] leading-[150%] text-left pt-1 notranslate">
+          
+          {lang === "de" ? "Greifen Sie auf ihren Change Communication Arbeitsplatz zu." : "Access your change communication workspace"}
+        
         </p>
         <Form {...form}>
           <form
