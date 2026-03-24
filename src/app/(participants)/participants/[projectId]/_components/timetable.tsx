@@ -150,12 +150,28 @@ export default function Timetable({
     clone.style.margin = '0'
     clone.style.overflow = 'visible'
     clone.style.maxWidth = 'none'
+    clone.style.boxSizing = 'border-box'
 
     const exportBtn = clone.querySelector('[data-export-btn="true"]')
     if (exportBtn) {
       ;(exportBtn as HTMLDivElement).style.visibility = 'hidden'
       ;(exportBtn as HTMLDivElement).style.pointerEvents = 'none'
     }
+
+    const pdfProjectHeader = document.createElement('div')
+    pdfProjectHeader.style.display = 'block'
+    pdfProjectHeader.style.margin = mode === 'grid' ? '0 0 24px' : '0 0 20px'
+    pdfProjectHeader.style.padding = '0 0 16px'
+    pdfProjectHeader.style.borderBottom = '1px solid #d7dde3'
+
+    const pdfProjectTitle = document.createElement('span')
+    pdfProjectTitle.textContent = projectTitle || 'Untitled Project'
+    pdfProjectTitle.style.fontSize = mode === 'grid' ? '24px' : '22px'
+    pdfProjectTitle.style.fontWeight = '800'
+    pdfProjectTitle.style.lineHeight = '1.2'
+    pdfProjectTitle.style.color = '#00253E'
+    pdfProjectHeader.appendChild(pdfProjectTitle)
+    clone.insertBefore(pdfProjectHeader, clone.firstChild)
 
     const header = clone.querySelector(
       '[data-header-row="true"]',
@@ -246,6 +262,8 @@ export default function Timetable({
 
       if (gridShell) {
         gridShell.style.overflow = 'visible'
+        gridShell.style.width = 'fit-content'
+        gridShell.style.minWidth = '100%'
       }
 
       if (gridViewport) {
@@ -338,13 +356,13 @@ export default function Timetable({
           month: '2-digit',
           year: 'numeric',
         })
-        .replace(/\//g, ' - ')
-    : '08 - 02 - 2026'
+        .replace(/\//g, '.')
+    : '08.02.2026'
 
   return (
-    <div className="space-y-10 pb-10 w-full max-w-full mx-auto font-sans">
+    <div className="space-y-10 pb-10 w-full max-w-full mx-auto overflow-x-hidden font-sans">
       <div className="flex flex-col gap-6 pb-4">
-        <div className="flex items-start justify-between">
+        <div className="flex flex-col gap-6 xl:flex-row xl:items-start xl:justify-between">
           <div className="flex flex-col gap-1">
             <button
               onClick={onBack || (() => window.history.back())}
@@ -356,7 +374,7 @@ export default function Timetable({
             <h2 className="text-[22px] font-bold text-[#00253E]">
               {lang === 'de' ? 'Projektliste' : 'Project List'}
             </h2>
-            <div className="flex items-center gap-2 text-[15px] text-gray-500">
+            <div className="flex flex-wrap items-center gap-2 text-[15px] text-gray-500">
               <span className="notranslate">
                 {projectTitle || 'New ERP System'}
               </span>
@@ -367,8 +385,8 @@ export default function Timetable({
             </div>
           </div>
 
-          <div className="flex gap-10">
-            <div className="flex bg-gray-100 p-1.5 rounded-lg h-[48px] w-[260px] print:hidden">
+          <div className="flex w-full flex-col gap-6 lg:flex-row lg:items-start lg:justify-end xl:w-auto">
+            <div className="flex bg-gray-100 p-1.5 rounded-lg h-auto min-h-[48px] w-full sm:w-[260px] print:hidden">
               <button
                 onClick={() => setViewMode('grid')}
                 className={`flex-1 rounded-md text-[14px] font-bold transition-colors px-2 flex items-center justify-center gap-2 ${
@@ -394,7 +412,7 @@ export default function Timetable({
               </button>
             </div>
 
-            <div className="flex flex-col gap-4 text-[15px] font-bold pt-1">
+            <div className="grid gap-4 text-[15px] font-bold pt-1 sm:grid-cols-2 lg:grid-cols-1 xl:min-w-[220px]">
               <div className="flex items-center gap-4 text-[#00253E] notranslate">
                 <span className="w-[20px] h-[20px] bg-[#B5CC2E] rounded-sm"></span>
 
@@ -425,21 +443,21 @@ export default function Timetable({
           ref={el => {
             sectionRefs.current.set(sh._id, el)
           }}
-          className="mb-12 block print:break-inside-avoid"
+          className="mb-12 block w-full max-w-full overflow-hidden print:break-inside-avoid"
         >
           <div
             data-header-row="true"
-            className="flex items-center justify-between mb-6"
+            className="mb-6 flex min-w-0 flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
           >
-            <div className="flex items-center">
+            <div className="flex min-w-0 items-center">
               <div
                 data-pdf-stakeholder-badge="true"
-                className="h-[44px] px-6 bg-white border border-x-[4px] border-[#B5CC2E] rounded-[8px] flex items-center gap-3 shadow-sm"
+                className="flex min-h-[44px] min-w-0 items-center gap-3 rounded-[8px] border border-x-[4px] border-[#B5CC2E] bg-white px-4 py-2 shadow-sm sm:px-6"
               >
                 <div data-pdf-stakeholder-icon="true">
                   <User className="w-5 h-5 text-[#B5CC2E]" />
                 </div>
-                <span className="text-[16px] font-bold text-[#00253E]">
+                <span className="truncate text-[16px] font-bold text-[#00253E]">
                   {sh.name}
                 </span>
               </div>
@@ -460,7 +478,6 @@ export default function Timetable({
                 className="h-[44px] px-6 bg-white border border-[#B5CC2E] rounded text-[14px] font-bold text-gray-700 flex items-center gap-2 hover:bg-gray-50 transition-colors shadow-sm"
               >
                 <Download className="w-5 h-5" />
-                
                 {lang === 'de' ? 'PDF exportieren' : 'Export PDF'}
               </button>
             </div>
@@ -507,9 +524,9 @@ export default function Timetable({
               ))}
 
               <div className="bg-[#F8F9FA] border border-gray-100 rounded-xl p-6 mt-2 flex items-center text-[20px] font-bold text-[#00253E] shadow-sm">
-                <span className="mr-3">Change Ambassador :</span>
-                <span className="text-[#00253E] font-medium text-[16px]">
-                  Conwalls_gmbh
+                {/* <span className="mr-3">Change Ambassador :</span> */}
+                <span className="text-[#3e4042] font-medium text-[16px] notranslate">
+                  Created with Insight engine by Conwalls
                 </span>
               </div>
             </div>
@@ -528,8 +545,13 @@ export default function Timetable({
               const timelineStartBuffer = Math.max(2, maxWeeksPre + 2)
               const timelineEndBuffer = Math.max(2, maxWeeksPost + 2)
               const totalWeeks = timelineStartBuffer + timelineEndBuffer
-              const timelineWidth = Math.max(980, totalWeeks * 70)
-              const splitLeft = `${(timelineStartBuffer / totalWeeks) * 100}%`
+              const weekWidth = 56
+              const timelineWidth = Math.max(640, totalWeeks * weekWidth)
+              const canvasSidePadding = 140
+              const canvasWidth = timelineWidth + canvasSidePadding * 2
+              const splitLeftPx =
+                canvasSidePadding +
+                (timelineStartBuffer / totalWeeks) * timelineWidth
               const preCount = sortedMeasures.filter(
                 m => m.timing === 'pre',
               ).length
@@ -546,8 +568,8 @@ export default function Timetable({
                 Math.ceil(preCount / 2),
                 Math.ceil(postCount / 2),
               )
-              const rowGap = 42
-              const cardHeight = 58
+              const rowGap = 40
+              const cardHeight = 56
               const topBase = 12
               const timelineTop = 182 + Math.max(0, upperRows - 1) * rowGap
               const bottomBase = timelineTop + 92
@@ -560,53 +582,68 @@ export default function Timetable({
               return (
                 <div
                   data-pdf-grid-shell="true"
-                  className="relative rounded-xl border border-gray-50 bg-white px-6 py-6 shadow-sm"
+                  className="relative w-full max-w-full overflow-hidden rounded-xl border border-gray-50 bg-white px-2 py-4 shadow-sm sm:px-4 lg:px-6 lg:py-6"
                 >
                   <div
                     data-pdf-grid-viewport="true"
-                    className="overflow-x-hidden overflow-y-visible print:overflow-visible"
+                    className="w-full max-w-full overflow-x-auto overflow-y-hidden pb-4 print:overflow-visible [overscroll-behavior-x:contain] [-webkit-overflow-scrolling:touch]"
                   >
                     <div
                       data-pdf-grid-canvas="true"
-                      className="relative mx-auto min-w-full print:min-w-0"
-                      style={{ height: `${canvasHeight}px`, width: `${timelineWidth}px` }}
+                      className="relative inline-block print:min-w-0"
+                      style={{ height: `${canvasHeight}px`, width: `${canvasWidth}px` }}
                     >
                       <div
-                        className="absolute left-0 right-0 h-[48px] overflow-hidden border border-[#d7dde3]"
-                        style={{ top: `${timelineTop}px` }}
+                        className="absolute h-[48px] overflow-hidden border border-[#d7dde3]"
+                        style={{
+                          left: `${canvasSidePadding}px`,
+                          top: `${timelineTop}px`,
+                          width: `${timelineWidth}px`,
+                        }}
                       >
                         <div
                           className="absolute inset-y-0 left-0 bg-[#DDB3C1]"
-                          style={{ width: splitLeft }}
+                          style={{
+                            width: `${(timelineStartBuffer / totalWeeks) * timelineWidth}px`,
+                          }}
                         ></div>
                         <div
                           className="absolute inset-y-0 right-0 bg-[#9EB7CB]"
-                          style={{ width: `calc(100% - ${splitLeft})` }}
+                          style={{
+                            width: `${(timelineEndBuffer / totalWeeks) * timelineWidth}px`,
+                          }}
                         ></div>
                       </div>
 
                       <div
-                        className="absolute left-0 right-0 h-[78px]"
-                        style={{ top: `${timelineTop - 32}px` }}
+                        className="absolute h-[78px]"
+                        style={{
+                          left: `${canvasSidePadding}px`,
+                          top: `${timelineTop - 32}px`,
+                          width: `${timelineWidth}px`,
+                        }}
                       >
                         {Array.from({ length: totalWeeks + 1 }).map((_, i) => (
                           <div
                             key={i}
                             className="absolute top-0 h-[50px] w-px bg-[#23445f]/65"
-                            style={{ left: `${(i / totalWeeks) * 100}%` }}
+                            style={{ left: `${(i / totalWeeks) * timelineWidth}px` }}
                           ></div>
                         ))}
                       </div>
 
                       <div
                         className="absolute z-30 flex -translate-x-1/2 flex-col items-center"
-                        style={{ left: splitLeft, top: `${timelineTop - 73}px` }}
+                        style={{
+                          left: `${splitLeftPx}px`,
+                          top: `${timelineTop - 73}px`,
+                        }}
                       >
                         <div className="h-[56px] w-[3px] bg-[#A91D54]"></div>
                         <div className="mt-[-1px] flex flex-col items-center bg-white px-2 text-center">
-                          <div className="flex items-center gap-1 text-[24px] font-black leading-none text-[#A91D54]">
-                            <span className="h-[13px] w-[13px] rounded-full bg-[#A91D54]"></span>
-                            <span className="text-[20px] text-[#00253E]">
+                          <div className="flex items-center gap-1 text-[20px] font-black leading-none text-[#A91D54] sm:text-[24px]">
+                            <span className="h-[11px] w-[11px] rounded-full bg-[#A91D54] sm:h-[13px] sm:w-[13px]"></span>
+                            <span className="text-[16px] text-[#00253E] sm:text-[20px]">
                               Start
                             </span>
                           </div>
@@ -622,7 +659,9 @@ export default function Timetable({
                         const weekPos = isPre
                           ? timelineStartBuffer - (m.startWeeks || 0)
                           : timelineStartBuffer + (m.startWeeks || 0)
-                        const xPos = `${(weekPos / totalWeeks) * 100}%`
+                        const xPos =
+                          canvasSidePadding +
+                          (weekPos / totalWeeks) * timelineWidth
 
                         const orderWithinSide = sortedMeasures
                           .slice(0, idx + 1)
@@ -656,7 +695,7 @@ export default function Timetable({
                             key={m._id}
                             className="absolute z-20 -translate-x-1/2"
                             style={{
-                              left: xPos,
+                              left: `${xPos}px`,
                               top: `${yPos}px`,
                             }}
                           >
@@ -669,25 +708,25 @@ export default function Timetable({
                               }}
                             ></div>
 
-                            <div className="flex min-w-[180px] max-w-[210px] gap-3 bg-white px-1 py-1 text-[#00253E]">
+                            <div className="flex min-w-[150px] max-w-[170px] gap-2 bg-white px-1 py-1 text-[#00253E] sm:min-w-[180px] sm:max-w-[200px] sm:gap-3">
                               <div
-                                className="mt-1 h-[18px] w-[18px] flex-shrink-0 rounded-none"
+                                className="mt-1 h-[16px] w-[16px] flex-shrink-0 rounded-none sm:h-[18px] sm:w-[18px]"
                                 style={{
                                   backgroundColor: getCategoryColor(m.category),
                                 }}
                               ></div>
                               <div className="flex flex-col leading-tight">
-                                <span className="text-[15px] font-extrabold">
+                                <span className="text-[13px] font-extrabold sm:text-[15px]">
                                   {m.type}
                                 </span>
-                                <span className="mt-0.5 text-[12px] font-semibold text-[#00253E]">
+                                <span className="mt-0.5 text-[11px] font-semibold text-[#00253E] sm:text-[12px]">
                                   {m.name}
                                 </span>
-                                <span className="mt-1 text-[11px] font-bold text-[#00253E]">
+                                <span className="mt-1 text-[10px] font-bold text-[#00253E] sm:text-[11px]">
                                   {m.startWeeks}{' '}
                                   {m.startWeeks === 1 ? 'Week' : 'Weeks'}
                                 </span>
-                                <span className="mt-0.5 text-[11px] font-bold text-[#00253E]/80">
+                                <span className="mt-0.5 text-[10px] font-bold text-[#00253E]/80 sm:text-[11px]">
                                   {formatMeasureDate(m)}
                                 </span>
                               </div>
