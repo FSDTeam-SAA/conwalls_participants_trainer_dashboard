@@ -20,10 +20,16 @@ import {
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import ClaudePagination from "@/components/ui/claude-pagination";
+import { parseCookies } from "nookies";
+
+const COOKIE_NAME = "googtrans";
 
 const ProjectList = () => {
   const session = useSession();
   const token = (session?.data?.user as { accessToken?: string })?.accessToken;
+
+    const cookie = parseCookies()[COOKIE_NAME];
+    const lang = cookie?.split("/")?.[2] || "de";
 
   console.log("token", token);
 
@@ -80,14 +86,16 @@ const ProjectList = () => {
     <div>
       {/* header part  */}
       <div className="w-full flex items-center justify-between pb-6">
-        <h4 className="text-2xl font-semibold leading-normal text-[#00253E]">
-          Project List
+        <h4 className="text-2xl font-semibold leading-normal text-[#00253E] notranslate">
+          
+          {lang === "de" ? "Projekt Liste" : "Project List"}
         </h4>
         <Link href="/participants/add-new-project">
-          <button className="h-[56px] flex items-center gap-2 bg-primary font-medium leading-normal text-[#00253E] px-8 py-4 rounded-[8px] transition-all duration-200 active:scale-95 hover:scale-[1.02]">
+          <button className="h-[56px] flex items-center gap-2 bg-primary font-medium leading-normal text-[#00253E] px-8 py-4 rounded-[8px] transition-all duration-200 active:scale-95 hover:scale-[1.02] notranslate">
 
             <Plus className="h-4 w-4" />
-            Add New Project
+            
+             {lang === "de" ? "Neues Projekt hinzufügen" : "Add New Project"}
           </button>
         </Link>
       </div>
