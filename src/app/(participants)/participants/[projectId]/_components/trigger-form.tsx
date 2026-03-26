@@ -409,13 +409,6 @@ function HelpIcon({ text }: { text: string }) {
 
   const normalized = text.replace(/\r\n/g, "\n").trim();
 
-  const parts = normalized
-    .split("•")
-    .map((s) => s.trim())
-    .filter(Boolean);
-
-  const hasBullets = parts.length > 1;
-
   return (
     <TooltipProvider delayDuration={0}>
       <Tooltip>
@@ -433,39 +426,17 @@ function HelpIcon({ text }: { text: string }) {
           side="top"
           align="start"
           sideOffset={8}
-          style={{ whiteSpace: "normal" }}
+          style={{ whiteSpace: "pre-wrap" }}
           className="max-w-xl lg:max-w-2xl xl:max-w-3xl 2xl:max-w-4xl bg-[#00253E] text-white p-3 rounded-[4px] shadow-2xl border-t-4 border-primary animate-in fade-in slide-in-from-bottom-2"
         >
           <div className="flex gap-3">
             <Info className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-
-            {hasBullets ? (
-              <div className="text-[14px] leading-relaxed whitespace-normal break-words">
-                <p className="mb-2 whitespace-normal break-words">{parts[0]}</p>
-
-                <ul className="list-disc pl-5 space-y-1">
-                  {parts.slice(1).map((item, idx) => (
-                    <li
-                      key={idx}
-                      className="whitespace-normal break-words pb-2"
-                      style={{
-                        overflowWrap: "anywhere",
-                        wordBreak: "break-word",
-                      }}
-                    >
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ) : (
-              <p
-                className="text-[14px] leading-relaxed whitespace-pre-wrap break-words"
-                style={{ overflowWrap: "anywhere", wordBreak: "break-word" }}
-              >
-                {normalized}
-              </p>
-            )}
+            <p
+              className="text-[14px] leading-relaxed whitespace-pre-wrap break-words"
+              style={{ overflowWrap: "anywhere", wordBreak: "break-word" }}
+            >
+              {normalized}
+            </p>
           </div>
         </TooltipContent>
       </Tooltip>

@@ -5,6 +5,7 @@ import { Download, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { type Stakeholder, type Measure } from "./TimeTable";
 import type { Html2PdfOptions } from "html2pdf.js";
+import { getLocalizedMeasureCategory } from "@/lib/measure-localization";
 
 interface ListViewProps {
   stakeholders: Stakeholder[];
@@ -13,6 +14,7 @@ interface ListViewProps {
 
 export default function ListView({ stakeholders, kickOffDate }: ListViewProps) {
   const sectionRefs = useRef<Map<string, HTMLDivElement | null>>(new Map());
+  const language = "en" as const;
 
   const getSortedMeasures = (measures: Stakeholder["measures"] = []) =>
     [...measures].sort((a, b) => {
@@ -315,7 +317,7 @@ export default function ListView({ stakeholders, kickOffDate }: ListViewProps) {
                         measure?.category,
                       )}`}
                     >
-                      {measure.category}
+                      {getLocalizedMeasureCategory(measure, language)}
                     </span>
                   </div>
                 </div>
