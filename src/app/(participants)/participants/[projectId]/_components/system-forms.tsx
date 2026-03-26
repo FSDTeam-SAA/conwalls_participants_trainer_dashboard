@@ -168,7 +168,7 @@ export default function SystemForms({
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid gap-4">
           {/* Vision */}
-          <div className="space-y-2">
+          <div className="space-y-3">
             <div className="flex items-center gap-2">
               <Image src={penIcon} alt="Pen Icon" width={22} height={22} />
               <label className="text-[20px] font-medium text-[#00253E]">
@@ -184,7 +184,7 @@ export default function SystemForms({
           </div>
 
           {/* Past */}
-          <div className="space-y-2">
+          <div className="space-y-3">
             <div className="flex items-center gap-2">
                <Image src={penIcon} alt="Pen Icon" width={22} height={22} />
               <label className="text-[20px] font-medium text-[#00253E]">
@@ -201,7 +201,7 @@ export default function SystemForms({
           </div>
 
           {/* Obstacle */}
-          <div className="space-y-2">
+          <div className="space-y-3">
             <div className="flex items-center gap-2">
                <Image src={penIcon} alt="Pen Icon" width={22} height={22} />
               <label className="text-[20px] font-medium text-[#00253E]">
@@ -218,7 +218,7 @@ export default function SystemForms({
           </div>
 
           {/* Risk */}
-          <div className="space-y-2">
+          <div className="space-y-3">
             <div className="flex items-center gap-2">
                <Image src={penIcon} alt="Pen Icon" width={22} height={22} />
               <label className="text-[20px] font-medium text-[#00253E]">
@@ -235,7 +235,7 @@ export default function SystemForms({
           </div>
 
           {/* Solution */}
-          <div className="space-y-2">
+          <div className="space-y-3">
             <div className="flex items-center gap-2">
                <Image src={penIcon} alt="Pen Icon" width={22} height={22} />
               <label className="text-[20px] font-medium text-[#00253E]">
@@ -287,14 +287,7 @@ export default function SystemForms({
 function HelpIcon({ text }: { text: string }) {
   if (!text) return null;
 
-  // Convert "•" text into bullet array (also supports newline)
-  const normalized = text.replace(/\r\n/g, "\n");
-  const parts = normalized
-    .split("•")
-    .map((s) => s.trim())
-    .filter(Boolean);
-
-  const hasBullets = parts.length > 1;
+  const normalized = text.replace(/\r\n/g, "\n").trim();
 
   return (
     <TooltipProvider delayDuration={0}>
@@ -309,41 +302,17 @@ function HelpIcon({ text }: { text: string }) {
           side="top"
           align="start"
           sideOffset={8}
-          // 🔥 This forces wrapping (Radix sometimes applies nowrap)
-          style={{ whiteSpace: "normal" }}
+          style={{ whiteSpace: "pre-wrap" }}
           className="max-w-xl lg:max-w-2xl xl:max-w-3xl 2xl:max-w-4xl bg-[#00253E] text-white p-3 rounded-[4px] shadow-2xl border-t-4 border-primary animate-in fade-in slide-in-from-bottom-2"
         >
           <div className="flex gap-3">
             <Info className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-
-            {hasBullets ? (
-              <div className="text-[14px] leading-relaxed break-words whitespace-normal">
-                {/* first part can be intro line */}
-                <p className="mb-2 break-words whitespace-normal">{parts[0]}</p>
-
-                <ul className="list-disc pl-5 space-y-1">
-                  {parts.slice(1).map((item, idx) => (
-                    <li
-                      key={idx}
-                      className="break-words whitespace-normal"
-                      style={{
-                        wordBreak: "break-word",
-                        overflowWrap: "anywhere",
-                      }}
-                    >
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ) : (
-              <p
-                className="text-[14px] leading-relaxed break-words whitespace-pre-wrap"
-                style={{ wordBreak: "break-word", overflowWrap: "anywhere" }}
-              >
-                {text}
-              </p>
-            )}
+            <p
+              className="text-[14px] leading-relaxed whitespace-pre-wrap break-words"
+              style={{ overflowWrap: "anywhere", wordBreak: "break-word" }}
+            >
+              {normalized}
+            </p>
           </div>
         </TooltipContent>
       </Tooltip>

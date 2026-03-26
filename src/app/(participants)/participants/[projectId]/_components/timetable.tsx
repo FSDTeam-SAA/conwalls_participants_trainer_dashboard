@@ -132,6 +132,32 @@ export default function Timetable({
     return formatDisplayDate(baseDate);
   };
 
+  const stylePdfFooter = (footer: HTMLDivElement | null) => {
+    if (!footer) return;
+
+    footer.style.display = "flex";
+    footer.style.alignItems = "center";
+    footer.style.width = "100%";
+    footer.style.minHeight = "76px";
+    footer.style.marginTop = "24px";
+    footer.style.padding = "24px";
+    footer.style.border = "1px solid #f0f1f3";
+    footer.style.borderRadius = "16px";
+    footer.style.backgroundColor = "#F8F9FA";
+    footer.style.boxShadow = "0 1px 2px rgba(0,0,0,0.04)";
+    footer.style.boxSizing = "border-box";
+
+    const footerText = footer.querySelector("span");
+    if (footerText instanceof HTMLSpanElement) {
+      footerText.style.display = "inline-block";
+      footerText.style.whiteSpace = "nowrap";
+      footerText.style.fontSize = "16px";
+      footerText.style.fontWeight = "500";
+      footerText.style.lineHeight = "1.2";
+      footerText.style.color = "#3e4042";
+    }
+  };
+
   const exportStakeholderPdf = async (
     stakeholderId: string,
     fileName: string,
@@ -236,6 +262,11 @@ export default function Timetable({
         gridCanvas.style.maxWidth = "none";
         gridCanvas.style.overflow = "visible";
       }
+
+      const exportFooter = clone.querySelector(
+        '[data-export-footer="true"]',
+      ) as HTMLDivElement | null;
+      stylePdfFooter(exportFooter);
 
       clone.style.width = `${clone.scrollWidth}px`;
 
@@ -436,6 +467,23 @@ export default function Timetable({
       }
     });
 
+    const exportFooter = clone.querySelector(
+      '[data-export-footer="true"]',
+    ) as HTMLDivElement | null;
+    if (exportFooter) {
+      stylePdfFooter(exportFooter);
+    } else {
+      const footer = document.createElement("div");
+      footer.setAttribute("data-export-footer", "true");
+
+      const footerText = document.createElement("span");
+      footerText.textContent = "Created with Insight engine by Conwalls";
+      footer.appendChild(footerText);
+
+      clone.appendChild(footer);
+      stylePdfFooter(footer);
+    }
+
     const fullWidth =
       element.scrollWidth ||
       element.offsetWidth ||
@@ -635,14 +683,14 @@ export default function Timetable({
                 }}
               >
                 <div className="h-[56px] w-[3px] bg-[#A91D54]"></div>
-                <div className="mt-[-1px] flex flex-col items-center bg-white px-2 text-center">
+                <div className="mt-[-1px] flex min-w-[110px] flex-col items-center bg-white px-2 text-center">
                   <div className="flex items-center gap-1 text-[24px] font-black leading-none text-[#A91D54]">
                     <span className="h-[13px] w-[13px] rounded-full bg-[#A91D54]"></span>
-                    <span className="text-[20px] text-[#00253E]">
+                    <span className="whitespace-nowrap text-[20px] text-[#00253E]">
                       {lang === "de" ? "Kick off" : "Start"}
                     </span>
                   </div>
-                  <span className="mt-1 whitespace-nowrap text-[12px] font-bold text-[#00253E]">
+                  <span className="mt-1 whitespace-nowrap text-center text-[12px] font-bold text-[#00253E]">
                     {formattedStartDate}
                   </span>
                 </div>
@@ -737,8 +785,11 @@ export default function Timetable({
             </div>
           </div>
 
-          <div className="mt-6 flex items-center rounded-xl border border-gray-100 bg-[#F8F9FA] p-6 text-[20px] font-bold text-[#00253E] shadow-sm">
-            <span className="notranslate text-[16px] font-medium text-[#3e4042]">
+          <div
+            data-export-footer="true"
+            className="mt-6 flex w-full items-center rounded-xl border border-gray-100 bg-[#F8F9FA] p-6 text-[20px] font-bold text-[#00253E] shadow-sm"
+          >
+            <span className="notranslate whitespace-nowrap text-[16px] font-medium text-[#3e4042]">
               Created with Insight engine by Conwalls
             </span>
           </div>
@@ -923,8 +974,11 @@ export default function Timetable({
                   </div>
                 ))}
 
-                <div className="bg-[#F8F9FA] border border-gray-100 rounded-xl p-6 mt-2 flex items-center text-[20px] font-bold text-[#00253E] shadow-sm">
-                  <span className="text-[#3e4042] font-medium text-[16px] notranslate">
+                <div
+                  data-export-footer="true"
+                  className="mt-2 flex w-full items-center rounded-xl border border-gray-100 bg-[#F8F9FA] p-6 text-[20px] font-bold text-[#00253E] shadow-sm"
+                >
+                  <span className="notranslate whitespace-nowrap text-[16px] font-medium text-[#3e4042]">
                     Created with Insight engine by Conwalls
                   </span>
                 </div>
@@ -1048,15 +1102,15 @@ export default function Timetable({
                             }}
                           >
                             <div className="h-[56px] w-[3px] bg-[#A91D54]"></div>
-                            <div className="mt-[-1px] flex flex-col items-center bg-white px-2 text-center">
+                            <div className="mt-[-1px] flex min-w-[110px] flex-col items-center bg-white px-2 text-center">
                               <div className="flex items-center gap-1 text-[20px] font-black leading-none text-[#A91D54] sm:text-[24px]">
                                 <span className="h-[11px] w-[11px] rounded-full bg-[#A91D54] sm:h-[13px] sm:w-[13px]"></span>
-                                <span className="text-[16px] text-[#00253E] sm:text-[20px]">
+                                <span className="whitespace-nowrap text-[16px] text-[#00253E] sm:text-[20px]">
                                   
                                   {lang === "de" ? "Kick off" : "Start"}
                                 </span>
                               </div>
-                              <span className="mt-1 text-[12px] font-bold text-[#00253E]">
+                              <span className="mt-1 whitespace-nowrap text-center text-[12px] font-bold text-[#00253E]">
                                 {formattedStartDate}
                               </span>
                             </div>
@@ -1165,8 +1219,11 @@ export default function Timetable({
                       </div>
                     </div>
 
-                    <div className="flex items-center rounded-xl border border-gray-100 bg-[#F8F9FA] p-6 text-[20px] font-bold text-[#00253E] shadow-sm">
-                      <span className="notranslate text-[16px] font-medium text-[#3e4042]">
+                    <div
+                      data-export-footer="true"
+                      className="flex w-full items-center rounded-xl border border-gray-100 bg-[#F8F9FA] p-6 text-[20px] font-bold text-[#00253E] shadow-sm"
+                    >
+                      <span className="notranslate whitespace-nowrap text-[16px] font-medium text-[#3e4042]">
                         Created with Insight engine by Conwalls
                       </span>
                     </div>
