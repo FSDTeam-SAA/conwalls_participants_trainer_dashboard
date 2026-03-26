@@ -201,7 +201,7 @@ export default function SystemForms({
               {...register("pastGoodOldDays")}
               placeholder={
                 lang === "de"
-                  ? "Beschreiben Sie, wie es frueher war."
+                  ? "Beschreiben Sie, wie es früher war."
                   : "Describe how this was in the past."
               }
               className="w-full !rounded-[8px] border border-[#00253E] px-4 py-3 min-h-[90px] text-[#00253E] font-normal leading-[110%] text-lg md:text-xl"
