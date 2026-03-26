@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { toast } from 'sonner'
 import { useSystemSettings } from '@/hooks/use-system-settings'
+import { parseCookies } from 'nookies'
 
 interface StakeholderFormProps {
     projectId: string
@@ -20,6 +21,8 @@ type FormValues = {
     name: string
 }
 
+const COOKIE_NAME = "googtrans";
+
 export default function StakeholderForm({
     projectId,
     onCancel,
@@ -28,6 +31,9 @@ export default function StakeholderForm({
     const session = useSession()
     const token = (session?.data?.user as { accessToken?: string })?.accessToken
     const queryClient = useQueryClient()
+
+      const cookie = parseCookies()[COOKIE_NAME];
+      const lang = cookie?.split("/")?.[2] || "de";
 
     const { register, handleSubmit } = useForm<FormValues>()
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -50,7 +56,11 @@ export default function StakeholderForm({
             return res.json()
         },
         onSuccess: () => {
-            toast.success('Stakeholder created successfully')
+            toast.success(
+                lang === 'de'
+                    ? 'Stakeholder erfolgreich erstellt'
+                    : 'Stakeholder created successfully'
+            )
             queryClient.invalidateQueries({ queryKey: ['stakeholders', projectId] })
             onSuccess()
         },
@@ -72,13 +82,19 @@ export default function StakeholderForm({
                 <div className="space-y-3">
                     <div className="flex items-center gap-2">
                         <Users className="w-5 h-5 text-[#00253E]/60" />
-                        <label className="text-[20px] font-medium text-[#00253E]">
-                            Enter the name of the target person / group
+                        <label className="text-[20px] font-medium text-[#00253E] notranslate">
+                            {lang === 'de'
+                                ? 'Geben Sie den Namen der Zielperson / Zielgruppe ein'
+                                : 'Enter the name of the target person / group'}
                         </label>
                     </div>
                     <Input
                         {...register('name', { required: true })}
-                        placeholder="e.g. Accounting, IT Department, Sales team"
+                        placeholder={
+                            lang === 'de'
+                                ? 'z. B. Buchhaltung, IT-Abteilung, Vertriebsteam'
+                                : 'e.g. Accounting, IT Department, Sales team'
+                        }
                         className="h-[48px] border-[#00253E] text-[16px] rounded-[4px] focus-visible:ring-primary shadow-sm placeholder:text-[#616161]"
                     />
                 </div>
@@ -88,18 +104,24 @@ export default function StakeholderForm({
                         type="button"
                         variant="outline"
                         onClick={onCancel}
-                        className="h-[48px] px-8 rounded-[8px] flex items-center gap-2 font-medium border-primary text-[#00253E] hover:bg-gray-50 bg-white"
+                        className="h-[48px] px-8 rounded-[8px] flex items-center gap-2 font-medium border-primary text-[#00253E] hover:bg-gray-50 bg-white notranslate"
                     >
                         <ChevronLeft className="w-5 h-5" />
-                        Back
+                        {lang === 'de' ? 'Zuruck' : 'Back'}
                     </Button>
 
                     <Button
                         type="submit"
                         disabled={submitMutation.isPending}
-                        className="bg-primary hover:bg-primary/90 text-[#00253E] px-8 h-[48px] rounded-[8px] flex items-center gap-2 font-semibold transition-all duration-200"
+                        className="bg-primary hover:bg-primary/90 text-[#00253E] px-8 h-[48px] rounded-[8px] flex items-center gap-2 font-semibold transition-all duration-200 notranslate"
                     >
-                        {submitMutation.isPending ? 'Adding...' : 'Add'}
+                        {submitMutation.isPending
+                            ? lang === 'de'
+                                ? 'Wird hinzugefugt...'
+                                : 'Adding...'
+                            : lang === 'de'
+                                ? 'Hinzufugen'
+                                : 'Add'}
                         <ChevronsRight className="w-5 h-5" />
                     </Button>
                 </div>
