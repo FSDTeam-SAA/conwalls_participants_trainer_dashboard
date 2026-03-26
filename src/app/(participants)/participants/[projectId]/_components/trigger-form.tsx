@@ -62,6 +62,8 @@ export default function TriggerForm({ stakeholder, onBack }: TriggerFormProps) {
 
   const { data: systemSettings } = useSystemSettings();
 
+  console.log(systemSettings)
+
   const { register, handleSubmit, setValue, watch } =
     useForm<TriggerFormValues>({
       defaultValues: {
@@ -222,10 +224,11 @@ export default function TriggerForm({ stakeholder, onBack }: TriggerFormProps) {
         {/* Trigger Evaluation */}
         <div className="space-y-3 notranslate" translate="no">
           <div className="flex items-center gap-2">
-            <label className="text-[20px] font-medium text-[#00253E]">
-              <span>
+            <label className="text-[20px] font-medium text-[#00253E] notranslate">
+              {/* <span>
                 {lang === "de" ? "Trigger-Bewertung" : "Trigger Evaluations"}
-              </span>
+              </span> */}
+              Trigger Evaluations
             </label>
             <HelpIcon text={getStakeholderHelpText("Trigger Evaluations")} />
           </div>
@@ -243,9 +246,10 @@ export default function TriggerForm({ stakeholder, onBack }: TriggerFormProps) {
               />
               <label
                 htmlFor="low"
-                className="text-[18px] font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                className="text-[18px] font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 notranslate"
               >
-                <span>{lang === "de" ? "Niedrige Punkte" : "Low points"}</span>
+                Low points
+                {/* <span>{lang === "de" ? "Niedrige Punkte" : "Low points"}</span> */}
               </label>
             </div>
 
@@ -257,9 +261,10 @@ export default function TriggerForm({ stakeholder, onBack }: TriggerFormProps) {
               />
               <label
                 htmlFor="high"
-                className="text-[18px] font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                className="text-[18px] font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 notranslate"
               >
-                <span>{lang === "de" ? "Hohe Punkte" : "High points"}</span>
+                High points
+                {/* <span>{lang === "de" ? "Hohe Punkte" : "High points"}</span> */}
               </label>
             </div>
           </RadioGroup>
@@ -296,7 +301,7 @@ export default function TriggerForm({ stakeholder, onBack }: TriggerFormProps) {
             <Image src={penIcon} alt="Pen Icon" width={22} height={22} />
             <label className="text-[20px] font-medium text-[#00253E]">
               <span>
-                {lang === "de" ? "Einspruchsbearbeitung" : "Objection Handling"}
+                {lang === "de" ? "Einwandsbehandlung" : "Objection Handling"}
               </span>
             </label>
             <HelpIcon text={getStakeholderHelpText("Objection Handling")} />
