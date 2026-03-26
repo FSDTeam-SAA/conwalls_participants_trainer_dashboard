@@ -178,7 +178,11 @@ export default function SystemForms({
             </div>
             <Textarea
               {...register("vision")}
-              placeholder="What will the further look like?"
+              placeholder={
+                lang === "de"
+                  ? "Wie wird die Zukunft aussehen?"
+                  : "What will the future look like?"
+              }
               className="w-full !rounded-[8px] border border-[#00253E] px-4 py-3 min-h-[90px] text-[#00253E] font-normal leading-[110%] text-lg md:text-xl"
             />
           </div>
@@ -195,7 +199,11 @@ export default function SystemForms({
             </div>
             <Textarea
               {...register("pastGoodOldDays")}
-              placeholder="Describe how this were in the past.."
+              placeholder={
+                lang === "de"
+                  ? "Beschreiben Sie, wie es fruher war."
+                  : "Describe how this was in the past."
+              }
               className="w-full !rounded-[8px] border border-[#00253E] px-4 py-3 min-h-[90px] text-[#00253E] font-normal leading-[110%] text-lg md:text-xl"
             />
           </div>
@@ -212,7 +220,11 @@ export default function SystemForms({
             </div>
             <Textarea
               {...register("obstacleProblem")}
-              placeholder="what problem are you Facing?"
+              placeholder={
+                lang === "de"
+                  ? "Welches Problem haben Sie?"
+                  : "What problem are you facing?"
+              }
               className="w-full !rounded-[8px] border border-[#00253E] px-4 py-3 min-h-[90px] text-[#00253E] font-normal leading-[110%] text-lg md:text-xl"
             />
           </div>
@@ -229,7 +241,11 @@ export default function SystemForms({
             </div>
             <Textarea
               {...register("riskOfInaction")}
-              placeholder="What happens if we don't change?"
+              placeholder={
+                lang === "de"
+                  ? "Was passiert, wenn wir nichts andern?"
+                  : "What happens if we do not change?"
+              }
               className="w-full !rounded-[8px] border border-[#00253E] px-4 py-3 min-h-[90px] text-[#00253E] font-normal leading-[110%] text-lg md:text-xl"
             />
           </div>
@@ -246,7 +262,11 @@ export default function SystemForms({
             </div>
             <Textarea
               {...register("solutionIdea")}
-              placeholder="what's the solutions?"
+              placeholder={
+                lang === "de"
+                  ? "Was ist die Losung?"
+                  : "What is the solution?"
+              }
               className="w-full !rounded-[8px] border border-[#00253E] px-4 py-3 min-h-[90px] text-[#00253E] font-normal leading-[110%] text-lg md:text-xl"
             />
           </div>
