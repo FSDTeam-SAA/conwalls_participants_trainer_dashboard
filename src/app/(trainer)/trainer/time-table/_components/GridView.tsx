@@ -5,6 +5,7 @@ import { Download, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Html2PdfOptions } from "html2pdf.js";
 import { type Stakeholder, type Measure } from "./TimeTable";
+import { getLocalizedMeasureType } from "@/lib/measure-localization";
 
 interface GridViewProps {
   stakeholders: Stakeholder[];
@@ -269,7 +270,7 @@ export default function GridView({ stakeholders, kickOffDate }: GridViewProps) {
                       ></div>
                       <div className="flex flex-col leading-tight">
                         <span className="text-[15px] font-extrabold">
-                          {m.type}
+                          {getLocalizedMeasureType(m, language)}
                         </span>
                         <span className="mt-0.5 text-[12px] font-semibold text-[#00253E]">
                           {m.name}
@@ -482,7 +483,7 @@ export default function GridView({ stakeholders, kickOffDate }: GridViewProps) {
                             ></div>
                             <div className="flex flex-col leading-tight">
                               <span className="text-[15px] font-extrabold">
-                                {m.type}
+                                {getLocalizedMeasureType(m, language)}
                               </span>
                               <span className="mt-0.5 text-[12px] font-semibold text-[#00253E]">
                                 {m.name}
@@ -510,3 +511,4 @@ export default function GridView({ stakeholders, kickOffDate }: GridViewProps) {
     </div>
   );
 }
+  const language = "en" as const;

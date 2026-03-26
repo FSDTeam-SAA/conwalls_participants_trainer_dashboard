@@ -8,6 +8,11 @@ import type { Html2PdfOptions } from "html2pdf.js";
 import { Stakeholder } from "./stakeholder-types";
 import { Measure } from "./measure-types";
 import { parseCookies } from "nookies";
+import { useSystemSettings } from "@/hooks/use-system-settings";
+import {
+  getLocalizedMeasureCategory,
+  getLocalizedMeasureType,
+} from "@/lib/measure-localization";
 
 interface TimetableProps {
   projectId: string;
@@ -28,6 +33,7 @@ export default function Timetable({
   const lang = cookie?.split("/")?.[2] || "de";
   const session = useSession();
   const token = (session?.data?.user as { accessToken?: string })?.accessToken;
+  const { data: systemSettings } = useSystemSettings();
 
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const sectionRefs = useRef<Map<string, HTMLDivElement | null>>(new Map());
@@ -134,8 +140,8 @@ export default function Timetable({
     if (typeof window === "undefined") return;
 
     if (mode === "grid") {
-      const exportElement = exportSectionRefs.current.get(stakeholderId);
-      if (!exportElement) return;
+      const element = sectionRefs.current.get(stakeholderId);
+      if (!element) return;
 
       const fonts = (
         document as unknown as { fonts?: { ready: Promise<void> } }
@@ -144,8 +150,116 @@ export default function Timetable({
 
       const { default: html2pdf } = await import("html2pdf.js");
 
-      const fullWidth = exportElement.scrollWidth;
-      const fullHeight = exportElement.scrollHeight;
+      const clone = element.cloneNode(true) as HTMLDivElement;
+      clone.style.background = "#ffffff";
+      clone.style.padding = "24px";
+      clone.style.margin = "0";
+      clone.style.overflow = "visible";
+      clone.style.maxWidth = "none";
+      clone.style.boxSizing = "border-box";
+      clone.style.width = `${element.scrollWidth || element.offsetWidth}px`;
+
+      const exportBtn = clone.querySelector('[data-export-btn="true"]');
+      if (exportBtn) {
+        (exportBtn as HTMLDivElement).style.display = "none";
+      }
+
+      const pdfProjectHeader = document.createElement("div");
+      pdfProjectHeader.style.display = "block";
+      pdfProjectHeader.style.margin = "0 0 20px";
+      pdfProjectHeader.style.padding = "0 0 16px";
+      pdfProjectHeader.style.borderBottom = "1px solid #d7dde3";
+
+      const pdfProjectTitle = document.createElement("span");
+      pdfProjectTitle.textContent = projectTitle || "Untitled Project";
+      pdfProjectTitle.style.fontSize = "22px";
+      pdfProjectTitle.style.fontWeight = "800";
+      pdfProjectTitle.style.lineHeight = "1.2";
+      pdfProjectTitle.style.color = "#00253E";
+      pdfProjectHeader.appendChild(pdfProjectTitle);
+      clone.insertBefore(pdfProjectHeader, clone.firstChild);
+
+      const stakeholderBadge = clone.querySelector(
+        '[data-pdf-stakeholder-badge="true"]',
+      ) as HTMLDivElement | null;
+      if (stakeholderBadge) {
+        stakeholderBadge.style.width = "fit-content";
+        stakeholderBadge.style.maxWidth = "none";
+        stakeholderBadge.style.overflow = "visible";
+        stakeholderBadge.style.flexShrink = "0";
+      }
+
+      const stakeholderBadgeText = stakeholderBadge?.querySelector(
+        "span",
+      ) as HTMLSpanElement | null;
+      if (stakeholderBadgeText) {
+        stakeholderBadgeText.style.whiteSpace = "nowrap";
+        stakeholderBadgeText.style.overflow = "visible";
+        stakeholderBadgeText.style.textOverflow = "clip";
+        stakeholderBadgeText.style.display = "inline-block";
+        stakeholderBadgeText.style.maxWidth = "none";
+      }
+
+      const gridShell = clone.querySelector(
+        '[data-pdf-grid-shell="true"]',
+      ) as HTMLDivElement | null;
+      if (gridShell) {
+        gridShell.style.overflow = "visible";
+        gridShell.style.width = "fit-content";
+        gridShell.style.maxWidth = "none";
+      }
+
+      const gridViewport = clone.querySelector(
+        '[data-pdf-grid-viewport="true"]',
+      ) as HTMLDivElement | null;
+      if (gridViewport) {
+        gridViewport.style.overflow = "visible";
+        gridViewport.style.width = "fit-content";
+        gridViewport.style.maxWidth = "none";
+        gridViewport.style.paddingBottom = "0";
+      }
+
+      const gridCanvas = clone.querySelector(
+        '[data-pdf-grid-canvas="true"]',
+      ) as HTMLDivElement | null;
+      if (gridCanvas) {
+        const sourceCanvas = element.querySelector(
+          '[data-pdf-grid-canvas="true"]',
+        ) as HTMLDivElement | null;
+        const canvasWidth =
+          sourceCanvas?.scrollWidth ||
+          sourceCanvas?.offsetWidth ||
+          gridCanvas.scrollWidth ||
+          gridCanvas.offsetWidth;
+
+        gridCanvas.style.width = `${canvasWidth}px`;
+        gridCanvas.style.maxWidth = "none";
+        gridCanvas.style.overflow = "visible";
+      }
+
+      clone.style.width = `${clone.scrollWidth}px`;
+
+      const wrapper = document.createElement("div");
+      wrapper.style.position = "fixed";
+      wrapper.style.left = "-100000px";
+      wrapper.style.top = "0";
+      wrapper.style.background = "#ffffff";
+      wrapper.style.width = `${clone.scrollWidth}px`;
+      wrapper.style.overflow = "visible";
+      wrapper.appendChild(clone);
+      document.body.appendChild(wrapper);
+
+      const fullWidth =
+        clone.scrollWidth ||
+        element.scrollWidth ||
+        element.offsetWidth ||
+        element.getBoundingClientRect().width;
+      const fullHeight =
+        clone.scrollHeight ||
+        element.scrollHeight ||
+        element.offsetHeight ||
+        element.getBoundingClientRect().height;
+      const pdfPadding = 24;
 
       const opt = {
         margin: 0,
@@ -155,25 +269,32 @@ export default function Timetable({
           scale: 2,
           useCORS: true,
           backgroundColor: "#ffffff",
-          width: fullWidth,
-          height: fullHeight,
-          windowWidth: fullWidth,
-          windowHeight: fullHeight,
+          width: fullWidth + pdfPadding * 2,
+          height: fullHeight + pdfPadding * 2,
+          windowWidth: fullWidth + pdfPadding * 2,
+          windowHeight: fullHeight + pdfPadding * 2,
           scrollX: 0,
           scrollY: 0,
         },
         jsPDF: {
           unit: "px" as const,
-          format: [Math.ceil(fullWidth / 2), Math.ceil(fullHeight / 2)],
+          format: [
+            Math.ceil(fullWidth + pdfPadding * 2),
+            Math.ceil(fullHeight + pdfPadding * 2),
+          ],
           orientation: "landscape" as const,
         },
         pagebreak: { mode: ["avoid-all"] as const },
       };
 
-      await html2pdf()
-        .set(opt as unknown as Html2PdfOptions)
-        .from(exportElement)
-        .save();
+      try {
+        await html2pdf()
+          .set(opt as unknown as Html2PdfOptions)
+          .from(clone)
+          .save();
+      } finally {
+        document.body.removeChild(wrapper);
+      }
       return;
     }
 
@@ -590,7 +711,7 @@ export default function Timetable({
                       ></div>
                       <div className="flex flex-col leading-tight">
                         <span className="text-[15px] font-extrabold">
-                          {m.type}
+                          {getLocalizedMeasureType(m, lang === "de" ? "de" : "en", systemSettings)}
                         </span>
                         <span className="mt-0.5 text-[12px] font-semibold text-[#00253E]">
                           {m.name}
@@ -614,6 +735,12 @@ export default function Timetable({
                 );
               })}
             </div>
+          </div>
+
+          <div className="mt-6 flex items-center rounded-xl border border-gray-100 bg-[#F8F9FA] p-6 text-[20px] font-bold text-[#00253E] shadow-sm">
+            <span className="notranslate text-[16px] font-medium text-[#3e4042]">
+              Created with Insight engine by Conwalls
+            </span>
           </div>
         </div>
       </div>
@@ -763,7 +890,12 @@ export default function Timetable({
                     </div>
                     <div className="flex flex-col gap-2">
                       <div className="text-[20px] font-bold text-black">
-                        {m.type} - {m.name}
+                          {getLocalizedMeasureType(
+                            m,
+                            lang === "de" ? "de" : "en",
+                            systemSettings,
+                          )}{" "}
+                          - {m.name}
                       </div>
                       <div className="text-[13px] font-semibold text-[#00253E]/70">
                         {formatMeasureDate(m)}
@@ -778,7 +910,13 @@ export default function Timetable({
                             color: getCategoryTextColor(m.category),
                           }}
                         >
-                          {m.category?.toUpperCase() || "N/A"}
+                          {(
+                            getLocalizedMeasureCategory(
+                              m,
+                              lang === "de" ? "de" : "en",
+                              systemSettings,
+                            ) || "N/A"
+                          ).toUpperCase()}
                         </span>
                       </div>
                     </div>
@@ -841,23 +979,24 @@ export default function Timetable({
                   20;
 
                 return (
-                  <div
-                    data-pdf-grid-shell="true"
-                    className="relative w-full max-w-full overflow-hidden rounded-xl border border-gray-50 bg-white px-2 py-4 shadow-sm print:overflow-visible sm:px-4 lg:px-6 lg:py-6"
-                  >
+                  <div className="space-y-6">
                     <div
-                      data-pdf-grid-viewport="true"
-                      className="w-full max-w-full overflow-x-auto overflow-y-hidden pb-4 print:overflow-visible [overscroll-behavior-x:contain] [-webkit-overflow-scrolling:touch]"
+                      data-pdf-grid-shell="true"
+                      className="relative w-full max-w-full overflow-hidden rounded-xl border border-gray-50 bg-white px-2 py-4 shadow-sm print:overflow-visible sm:px-4 lg:px-6 lg:py-6"
                     >
-                      <div className="min-w-max">
-                        <div
-                          data-pdf-grid-canvas="true"
-                          className="relative print:min-w-0"
-                          style={{
-                            height: `${canvasHeight}px`,
-                            width: `${canvasWidth}px`,
-                          }}
-                        >
+                      <div
+                        data-pdf-grid-viewport="true"
+                        className="w-full max-w-full overflow-x-auto overflow-y-hidden pb-4 print:overflow-visible [overscroll-behavior-x:contain] [-webkit-overflow-scrolling:touch]"
+                      >
+                        <div className="min-w-max">
+                          <div
+                            data-pdf-grid-canvas="true"
+                            className="relative print:min-w-0"
+                            style={{
+                              height: `${canvasHeight}px`,
+                              width: `${canvasWidth}px`,
+                            }}
+                          >
                           <div
                             className="absolute h-[48px] overflow-hidden border border-[#d7dde3]"
                             style={{
@@ -924,101 +1063,112 @@ export default function Timetable({
                             <div className="h-[120px] w-[3px] bg-[#A91D54]"></div>
                           </div>
 
-                          {sortedMeasures.map((m, idx) => {
-                            const isPre = m.timing === "pre";
-                            const weekPos = isPre
-                              ? timelineStartBuffer - (m.startWeeks || 0)
-                              : timelineStartBuffer + (m.startWeeks || 0);
-                            const xPos =
-                              canvasSidePadding +
-                              (weekPos / totalWeeks) * timelineWidth;
+                            {sortedMeasures.map((m, idx) => {
+                              const isPre = m.timing === "pre";
+                              const weekPos = isPre
+                                ? timelineStartBuffer - (m.startWeeks || 0)
+                                : timelineStartBuffer + (m.startWeeks || 0);
+                              const xPos =
+                                canvasSidePadding +
+                                (weekPos / totalWeeks) * timelineWidth;
 
-                            const orderWithinSide =
-                              sortedMeasures
+                              const orderWithinSide =
+                                sortedMeasures
+                                  .slice(0, idx + 1)
+                                  .filter((item) => item.timing === m.timing)
+                                  .length - 1;
+                              const isNearStart = (m.startWeeks || 0) <= 2;
+                              const nearStartCountWithinSide = sortedMeasures
                                 .slice(0, idx + 1)
-                                .filter((item) => item.timing === m.timing)
-                                .length - 1;
-                            const isNearStart = (m.startWeeks || 0) <= 2;
-                            const nearStartCountWithinSide = sortedMeasures
-                              .slice(0, idx + 1)
-                              .filter(
-                                (item) =>
-                                  item.timing === m.timing &&
-                                  (item.startWeeks || 0) <= 2,
-                              ).length;
-                            const adjustedOrder = isPre
-                              ? orderWithinSide
-                              : Math.max(
-                                  0,
-                                  orderWithinSide - nearStartCountWithinSide,
-                                );
-                            const isAbove = isPre
-                              ? orderWithinSide % 2 === 0
-                              : isNearStart
-                                ? false
-                                : adjustedOrder % 2 === 0;
-                            const rowOffset = Math.floor(orderWithinSide / 2);
-                            const yPos = isAbove
-                              ? topBase + rowOffset * rowGap
-                              : bottomBase + rowOffset * rowGap;
-                            const connectorHeight = isAbove
-                              ? timelineTop - (yPos + cardHeight)
-                              : yPos - (timelineTop + 48);
+                                .filter(
+                                  (item) =>
+                                    item.timing === m.timing &&
+                                    (item.startWeeks || 0) <= 2,
+                                ).length;
+                              const adjustedOrder = isPre
+                                ? orderWithinSide
+                                : Math.max(
+                                    0,
+                                    orderWithinSide - nearStartCountWithinSide,
+                                  );
+                              const isAbove = isPre
+                                ? orderWithinSide % 2 === 0
+                                : isNearStart
+                                  ? false
+                                  : adjustedOrder % 2 === 0;
+                              const rowOffset = Math.floor(orderWithinSide / 2);
+                              const yPos = isAbove
+                                ? topBase + rowOffset * rowGap
+                                : bottomBase + rowOffset * rowGap;
+                              const connectorHeight = isAbove
+                                ? timelineTop - (yPos + cardHeight)
+                                : yPos - (timelineTop + 48);
 
-                            return (
-                              <div
-                                key={m._id}
-                                className="absolute z-20 -translate-x-1/2"
-                                style={{
-                                  left: `${xPos}px`,
-                                  top: `${yPos}px`,
-                                }}
-                              >
+                              return (
                                 <div
-                                  className={`absolute left-1/2 w-px -translate-x-1/2 bg-[#5C7286]/80 ${
-                                    isAbove ? "top-full" : "bottom-full"
-                                  }`}
+                                  key={m._id}
+                                  className="absolute z-20 -translate-x-1/2"
                                   style={{
-                                    height: `${Math.max(connectorHeight, 24)}px`,
+                                    left: `${xPos}px`,
+                                    top: `${yPos}px`,
                                   }}
-                                ></div>
-
-                                <div className="flex min-w-[150px] max-w-[170px] gap-2 bg-white px-1 py-1 text-[#00253E] sm:min-w-[180px] sm:max-w-[200px] sm:gap-3">
+                                >
                                   <div
-                                    className="mt-1 h-[16px] w-[16px] flex-shrink-0 rounded-none sm:h-[18px] sm:w-[18px]"
+                                    className={`absolute left-1/2 w-px -translate-x-1/2 bg-[#5C7286]/80 ${
+                                      isAbove ? "top-full" : "bottom-full"
+                                    }`}
                                     style={{
-                                      backgroundColor: getCategoryColor(
-                                        m.category,
-                                      ),
+                                      height: `${Math.max(connectorHeight, 24)}px`,
                                     }}
                                   ></div>
-                                  <div className="flex flex-col leading-tight">
-                                    <span className="text-[13px] font-extrabold sm:text-[15px]">
-                                      {m.type}
-                                    </span>
-                                    <span className="mt-0.5 text-[11px] font-semibold text-[#00253E] sm:text-[12px]">
-                                      {m.name}
-                                    </span>
-                                    <span className="mt-1 text-[10px] font-bold text-[#00253E] sm:text-[11px]">
-                                      {m.startWeeks}{" "}
-                                      {lang === "de"
-                                        ? m.startWeeks === 1
-                                          ? "Woche"
-                                          : "Wochen"
-                                        : m.startWeeks === 1
-                                          ? "Week"
-                                          : "Weeks"}
-                                    </span>
-                                    <span className="mt-0.5 text-[10px] font-bold text-[#00253E]/80 sm:text-[11px]">
-                                      {formatMeasureDate(m)}
-                                    </span>
+
+                                  <div className="flex min-w-[150px] max-w-[170px] gap-2 bg-white px-1 py-1 text-[#00253E] sm:min-w-[180px] sm:max-w-[200px] sm:gap-3">
+                                    <div
+                                      className="mt-1 h-[16px] w-[16px] flex-shrink-0 rounded-none sm:h-[18px] sm:w-[18px]"
+                                      style={{
+                                        backgroundColor: getCategoryColor(
+                                          m.category,
+                                        ),
+                                      }}
+                                    ></div>
+                                    <div className="flex flex-col leading-tight">
+                                      <span className="text-[13px] font-extrabold sm:text-[15px]">
+                                        {getLocalizedMeasureType(
+                                          m,
+                                          lang === "de" ? "de" : "en",
+                                          systemSettings,
+                                        )}
+                                      </span>
+                                      <span className="mt-0.5 text-[11px] font-semibold text-[#00253E] sm:text-[12px]">
+                                        {m.name}
+                                      </span>
+                                      <span className="mt-1 text-[10px] font-bold text-[#00253E] sm:text-[11px]">
+                                        {m.startWeeks}{" "}
+                                        {lang === "de"
+                                          ? m.startWeeks === 1
+                                            ? "Woche"
+                                            : "Wochen"
+                                          : m.startWeeks === 1
+                                            ? "Week"
+                                            : "Weeks"}
+                                      </span>
+                                      <span className="mt-0.5 text-[10px] font-bold text-[#00253E]/80 sm:text-[11px]">
+                                        {formatMeasureDate(m)}
+                                      </span>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                            );
-                          })}
+                              );
+                            })}
+                          </div>
                         </div>
                       </div>
+                    </div>
+
+                    <div className="flex items-center rounded-xl border border-gray-100 bg-[#F8F9FA] p-6 text-[20px] font-bold text-[#00253E] shadow-sm">
+                      <span className="notranslate text-[16px] font-medium text-[#3e4042]">
+                        Created with Insight engine by Conwalls
+                      </span>
                     </div>
                   </div>
                 );

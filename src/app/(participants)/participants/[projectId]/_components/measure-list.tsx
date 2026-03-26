@@ -10,6 +10,11 @@ import { Measure, MeasuresResponse } from './measure-types'
 import { Stakeholder } from './stakeholder-types'
 import MeasureForm from './measure-form'
 import { parseCookies } from 'nookies'
+import { useSystemSettings } from '@/hooks/use-system-settings'
+import {
+  getLocalizedMeasureCategory,
+  getLocalizedMeasureType,
+} from '@/lib/measure-localization'
 
 interface MeasureListProps {
   projectId: string
@@ -31,6 +36,7 @@ export default function MeasureList({
   const session = useSession()
   const token = (session?.data?.user as { accessToken?: string })?.accessToken
   const queryClient = useQueryClient()
+  const { data: systemSettings } = useSystemSettings()
 
   console.log("projectId", projectId)
 console.log("Stakeholder Id", stakeholder?._id)
@@ -129,8 +135,8 @@ console.log("Stakeholder Id", stakeholder?._id)
         {/* Table header */}
         <div className="grid grid-cols-[3fr_2fr_1fr_auto] gap-4 p-4 bg-[#00253E] text-white font-medium text-[16px]">
           <div>   {lang === "de" ? "Maßnahme" : "Subject"}</div>
-          <div>Type</div>
-          <div>Categories</div>
+          <div>{lang === "de" ? "Typ" : "Type"}</div>
+          <div>{lang === "de" ? "Kategorien" : "Categories"}</div>
           <div className="w-16"></div>
         </div>
 
@@ -147,12 +153,18 @@ console.log("Stakeholder Id", stakeholder?._id)
               <div className="font-semibold text-[#00253E] text-[16px] truncate">
                 {m.name}
               </div>
-              <div className="text-gray-600 text-[16px]">{m.type}</div>
+              <div className="text-gray-600 text-[16px]">
+                {getLocalizedMeasureType(m, lang === "de" ? "de" : "en", systemSettings)}
+              </div>
               <div>
                 <span
                   className={`px-4 py-1.5 rounded-full text-[14px] font-medium whitespace-nowrap ${getCategoryBadgeColor(m.category)}`}
                 >
-                  {m.category || 'N/A'}
+                  {getLocalizedMeasureCategory(
+                    m,
+                    lang === "de" ? "de" : "en",
+                    systemSettings,
+                  ) || 'N/A'}
                 </span>
               </div>
               <div className="flex items-center justify-end gap-2 w-16">
