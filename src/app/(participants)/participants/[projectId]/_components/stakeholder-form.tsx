@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { toast } from 'sonner'
 import { useSystemSettings } from '@/hooks/use-system-settings'
-import { parseCookies } from 'nookies'
+import { useClientLanguage } from '@/hooks/use-client-language'
 
 interface StakeholderFormProps {
     projectId: string
@@ -21,8 +21,6 @@ type FormValues = {
     name: string
 }
 
-const COOKIE_NAME = "googtrans";
-
 export default function StakeholderForm({
     projectId,
     onCancel,
@@ -31,9 +29,7 @@ export default function StakeholderForm({
     const session = useSession()
     const token = (session?.data?.user as { accessToken?: string })?.accessToken
     const queryClient = useQueryClient()
-
-      const cookie = parseCookies()[COOKIE_NAME];
-      const lang = cookie?.split("/")?.[2] || "de";
+    const lang = useClientLanguage()
 
     const { register, handleSubmit } = useForm<FormValues>()
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

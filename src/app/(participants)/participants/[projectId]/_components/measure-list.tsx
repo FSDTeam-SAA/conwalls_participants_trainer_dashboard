@@ -9,8 +9,8 @@ import { toast } from 'sonner'
 import { Measure, MeasuresResponse } from './measure-types'
 import { Stakeholder } from './stakeholder-types'
 import MeasureForm from './measure-form'
-import { parseCookies } from 'nookies'
 import { useSystemSettings } from '@/hooks/use-system-settings'
+import { useClientLanguage } from '@/hooks/use-client-language'
 import {
   getLocalizedMeasureCategory,
   getLocalizedMeasureType,
@@ -23,16 +23,13 @@ interface MeasureListProps {
   onOverview?: () => void
 }
 
-
-const COOKIE_NAME = "googtrans";
 export default function MeasureList({
   projectId,
   stakeholder,
   onBack,
   onOverview,
 }: MeasureListProps) {
-   const cookie = parseCookies()[COOKIE_NAME];
-    const lang = cookie?.split("/")?.[2] || "de";
+  const lang = useClientLanguage()
   const session = useSession()
   const token = (session?.data?.user as { accessToken?: string })?.accessToken
   const queryClient = useQueryClient()

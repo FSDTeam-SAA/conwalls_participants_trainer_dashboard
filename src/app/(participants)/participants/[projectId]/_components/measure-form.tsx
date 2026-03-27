@@ -20,9 +20,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { parseCookies } from "nookies";
 import Image from "next/image";
 import Link from "next/link";
+import { useClientLanguage } from "@/hooks/use-client-language";
 
 interface MeasureFormProps {
   projectId: string;
@@ -40,7 +40,6 @@ type MeasureFormValues = {
   timing: string;
 };
 
-const COOKIE_NAME = "googtrans";
 export default function MeasureForm({
   projectId,
   stakeholderId,
@@ -48,24 +47,10 @@ export default function MeasureForm({
   onCancel,
   onSuccess,
 }: MeasureFormProps) {
-  const cookie = parseCookies()[COOKIE_NAME];
-  const lang = cookie?.split("/")?.[2] || "de";
+  const lang = useClientLanguage();
   const session = useSession();
   const token = (session?.data?.user as { accessToken?: string })?.accessToken;
   const queryClient = useQueryClient();
-
-  const [language, setLanguage] = useState<"en" | "de">("de");
-
-  useEffect(() => {
-    const cookies = parseCookies();
-    const googtrans = cookies.googtrans;
-    if (googtrans) {
-      const lang = googtrans.split("/")[2];
-      if (lang === "de" || lang === "en") {
-        setLanguage(lang as "en" | "de");
-      }
-    }
-  }, []);
 
   const { data: systemSettings } = useSystemSettings();
   const categories = systemSettings?.categoryTypes || [];

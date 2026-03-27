@@ -20,16 +20,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import ClaudePagination from "@/components/ui/claude-pagination";
-import { parseCookies } from "nookies";
-
-const COOKIE_NAME = "googtrans";
+import { useClientLanguage } from "@/hooks/use-client-language";
 
 const ProjectList = () => {
   const session = useSession();
   const token = (session?.data?.user as { accessToken?: string })?.accessToken;
-
-    const cookie = parseCookies()[COOKIE_NAME];
-    const lang = cookie?.split("/")?.[2] || "de";
+  const lang = useClientLanguage();
 
   console.log("token", token);
 

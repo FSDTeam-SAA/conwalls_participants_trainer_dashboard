@@ -29,7 +29,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { parseCookies } from "nookies";
+import { useClientLanguage } from "@/hooks/use-client-language";
 
 interface StakeholderListProps {
   projectId: string;
@@ -37,8 +37,6 @@ interface StakeholderListProps {
   onNext: () => void;
   onSubStepChange?: (subStep: "Trigger" | "Measures" | null) => void;
 }
-
-const COOKIE_NAME = "googtrans";
 
 export default function StakeholderList({
   projectId,
@@ -49,8 +47,7 @@ export default function StakeholderList({
   const session = useSession();
   const token = (session?.data?.user as { accessToken?: string })?.accessToken;
   const queryClient = useQueryClient();
-  const cookie = parseCookies()[COOKIE_NAME];
-  const lang = cookie?.split("/")?.[2] || "de";
+  const lang = useClientLanguage();
 
   const [editingNameId, setEditingNameId] = useState<string | null>(null);
   const [editNameValue, setEditNameValue] = useState("");

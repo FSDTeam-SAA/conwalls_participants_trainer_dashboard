@@ -30,7 +30,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import Link from "next/link";
 import Image from "next/image";
 import { RiInformationFill } from "react-icons/ri";
-import { parseCookies } from "nookies";
+import { useClientLanguage } from "@/hooks/use-client-language";
 
 interface TriggerFormProps {
   stakeholder: Stakeholder;
@@ -47,15 +47,11 @@ type TriggerFormValues = {
   callToAction: string;
 };
 
-const COOKIE_NAME = "googtrans";
-
 export default function TriggerForm({ stakeholder, onBack }: TriggerFormProps) {
   const session = useSession();
   const token = (session?.data?.user as { accessToken?: string })?.accessToken;
   const queryClient = useQueryClient();
-
-  const cookie = parseCookies()[COOKIE_NAME];
-  const lang = cookie?.split("/")?.[2] || "de";
+  const lang = useClientLanguage();
 
   const projectId = stakeholder?.insightEngineId;
   const stakeholderId = stakeholder?._id;
