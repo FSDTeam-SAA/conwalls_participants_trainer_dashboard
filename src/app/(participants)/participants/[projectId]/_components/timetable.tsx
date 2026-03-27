@@ -7,8 +7,8 @@ import { Loader2, Download, Grid, List, User, ChevronLeft } from "lucide-react";
 import type { Html2PdfOptions } from "html2pdf.js";
 import { Stakeholder } from "./stakeholder-types";
 import { Measure } from "./measure-types";
-import { parseCookies } from "nookies";
 import { useSystemSettings } from "@/hooks/use-system-settings";
+import { useClientLanguage } from "@/hooks/use-client-language";
 import {
   getLocalizedMeasureCategory,
   getLocalizedMeasureType,
@@ -21,16 +21,13 @@ interface TimetableProps {
   onBack?: () => void;
 }
 
-const COOKIE_NAME = "googtrans";
-
 export default function Timetable({
   projectId,
   projectTitle,
   kickOffDate,
   onBack,
 }: TimetableProps) {
-  const cookie = parseCookies()[COOKIE_NAME];
-  const lang = cookie?.split("/")?.[2] || "de";
+  const lang = useClientLanguage();
   const session = useSession();
   const token = (session?.data?.user as { accessToken?: string })?.accessToken;
   const { data: systemSettings } = useSystemSettings();

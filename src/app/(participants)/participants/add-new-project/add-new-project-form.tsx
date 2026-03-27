@@ -15,19 +15,16 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { ProjectListsApiResponse } from "../_components/project-list-data-type";
 import { useRouter } from "next/navigation";
-import { parseCookies } from "nookies";
 import { toast } from "sonner";
 import Link from "next/link";
+import { useClientLanguage } from "@/hooks/use-client-language";
 
 type ProjectFormValues = {
   projectTitle: string;
 };
 
-const COOKIE_NAME = "googtrans";
-
 export default function AddNewProjectForm() {
-  const cookie = parseCookies()[COOKIE_NAME];
-  const lang = cookie?.split("/")?.[2] || "de";
+  const lang = useClientLanguage();
   const session = useSession();
   const token = (session?.data?.user as { accessToken?: string })?.accessToken;
   const queryClient = useQueryClient();

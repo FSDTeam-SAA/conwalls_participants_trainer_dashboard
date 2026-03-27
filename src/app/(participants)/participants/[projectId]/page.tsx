@@ -11,15 +11,10 @@ import { Loader2 } from 'lucide-react'
 import StepNavigation from './_components/step-navigation'
 import { Scroll, Users, ClipboardList, Clock } from 'lucide-react'
 import Timetable from './_components/timetable'
-import { parseCookies } from 'nookies'
-
-
-
-const COOKIE_NAME = "googtrans";
+import { useClientLanguage } from '@/hooks/use-client-language'
 
 export default function InsightEnginePage() {
-   const cookie = parseCookies()[COOKIE_NAME];
-        const lang = cookie?.split("/")?.[2] || "de";
+  const lang = useClientLanguage()
   const { projectId } = useParams() as { projectId: string }
   const session = useSession()
   const token = (session?.data?.user as { accessToken?: string })?.accessToken
