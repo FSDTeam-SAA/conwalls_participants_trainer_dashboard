@@ -95,7 +95,7 @@ export default function StakeholderForm({
                                 ? 'z. B. Buchhaltung, IT-Abteilung, Vertriebsteam'
                                 : 'e.g. Accounting, IT Department, Sales team'
                         }
-                        className="h-[48px] border-[#00253E] text-[16px] rounded-[4px] focus-visible:ring-primary shadow-sm placeholder:text-[#616161]"
+                        className="h-[48px] border-[#00253E] text-[16px] rounded-[4px] focus-visible:ring-primary shadow-sm placeholder:text-[#9CA3AF]"
                     />
                 </div>
 

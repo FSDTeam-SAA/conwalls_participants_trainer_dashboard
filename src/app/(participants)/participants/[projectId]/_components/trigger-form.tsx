@@ -161,7 +161,7 @@ export default function TriggerForm({ stakeholder, onBack }: TriggerFormProps) {
             value={roleValue}
             onValueChange={(v) => setValue("roleType", v)}
           >
-            <SelectTrigger className="w-[280px] !rounded-[8px] border border-[#00253E] px-4 py-3 min-h-[54px] text-[#00253E] font-normal leading-[110%] text-lg md:text-xl">
+            <SelectTrigger className="w-[280px] !rounded-[8px] border border-[#00253E] px-4 py-3 min-h-[54px] text-[#00253E] data-[placeholder]:text-[#9CA3AF] font-normal leading-[110%] text-lg md:text-xl">
               <SelectValue
                 placeholder={lang === "de" ? "Typ auswählen" : "Select Type"}
               />
@@ -195,7 +195,7 @@ export default function TriggerForm({ stakeholder, onBack }: TriggerFormProps) {
                 ? "Was ist ihr Schmerzpunkt?"
                 : "What's their Pain point?"
             }
-            className="w-full !rounded-[8px] border border-[#00253E] px-4 py-3 min-h-[90px] text-[#00253E] placeholder:text-[#616161] font-normal leading-[110%] text-lg md:text-xl"
+            className="w-full !rounded-[8px] border border-[#00253E] px-4 py-3 min-h-[90px] text-[#00253E] placeholder:text-[#9CA3AF] font-normal leading-[110%] text-lg md:text-xl"
           />
         </div>
 
@@ -217,7 +217,7 @@ export default function TriggerForm({ stakeholder, onBack }: TriggerFormProps) {
                 ? "Welche Vorteile erhalten sie?"
                 : "What benefits they will get"
             }
-            className="w-full !rounded-[8px] border border-[#00253E] px-4 py-3 min-h-[90px] text-[#00253E] placeholder:text-[#616161] font-normal leading-[110%] text-lg md:text-xl"
+            className="w-full !rounded-[8px] border border-[#00253E] px-4 py-3 min-h-[90px] text-[#00253E] placeholder:text-[#9CA3AF] font-normal leading-[110%] text-lg md:text-xl"
           />
         </div>
 
@@ -291,7 +291,7 @@ export default function TriggerForm({ stakeholder, onBack }: TriggerFormProps) {
                 ? "Was sind ihre Bedenken?"
                 : "What are their concerns?"
             }
-            className="w-full !rounded-[8px] border border-[#00253E] px-4 py-3 min-h-[90px] text-[#00253E] placeholder:text-[#616161] font-normal leading-[110%] text-lg md:text-xl"
+            className="w-full !rounded-[8px] border border-[#00253E] px-4 py-3 min-h-[90px] text-[#00253E] placeholder:text-[#9CA3AF] font-normal leading-[110%] text-lg md:text-xl"
           />
         </div>
 
@@ -314,7 +314,7 @@ export default function TriggerForm({ stakeholder, onBack }: TriggerFormProps) {
                 ? "Wie werden Sie auf ihre Bedenken eingehen?"
                 : "How will you address their concerns?"
             }
-            className="w-full !rounded-[8px] border border-[#00253E] px-4 py-3 min-h-[90px] text-[#00253E] placeholder:text-[#616161] font-normal leading-[110%] text-lg md:text-xl"
+            className="w-full !rounded-[8px] border border-[#00253E] px-4 py-3 min-h-[90px] text-[#00253E] placeholder:text-[#9CA3AF] font-normal leading-[110%] text-lg md:text-xl"
           />
         </div>
 
@@ -338,7 +338,7 @@ export default function TriggerForm({ stakeholder, onBack }: TriggerFormProps) {
                 ? "Was ist der nächste Schritt?"
                 : "How will you address their concerns?"
             }
-            className="w-full !rounded-[8px] border border-[#00253E] px-4 py-3 min-h-[90px] text-[#00253E] placeholder:text-[#616161] font-normal leading-[110%] text-lg md:text-xl"
+            className="w-full !rounded-[8px] border border-[#00253E] px-4 py-3 min-h-[90px] text-[#00253E] placeholder:text-[#9CA3AF] font-normal leading-[110%] text-lg md:text-xl"
           />
         </div>
 

@@ -222,7 +222,7 @@ export default function MeasureForm({
               setValue("type", "");
             }}
           >
-            <SelectTrigger className="notranslate w-full !rounded-[8px] border border-[#00253E] px-4 py-3 min-h-[48px] text-[#00253E] font-normal leading-[110%] text-lg md:text-xl placeholder:text-[#616161]">
+            <SelectTrigger className="notranslate w-full !rounded-[8px] border border-[#00253E] px-4 py-3 min-h-[48px] text-[#00253E] data-[placeholder]:text-[#9CA3AF] font-normal leading-[110%] text-lg md:text-xl">
               <SelectValue
                 placeholder={lang === "de" ? "Kategorie" : "Category"}
               />
@@ -243,7 +243,7 @@ export default function MeasureForm({
           </label>
 
           <Select value={typeValue} onValueChange={(v) => setValue("type", v)}>
-            <SelectTrigger className="notranslate w-full !rounded-[8px] border border-[#00253E] px-4 py-3 min-h-[48px] text-[#00253E] font-normal leading-[110%] text-lg md:text-xl placeholder:text-[#616161]">
+            <SelectTrigger className="notranslate w-full !rounded-[8px] border border-[#00253E] px-4 py-3 min-h-[48px] text-[#00253E] data-[placeholder]:text-[#9CA3AF] font-normal leading-[110%] text-lg md:text-xl">
               <SelectValue
                 placeholder={lang === "de" ? "Typ auswählen" : "Select Type"}
               />
@@ -268,7 +268,7 @@ export default function MeasureForm({
           <Input
             {...register("name", { required: true })}
             placeholder="Enter Measures Name"
-            className="w-full !rounded-[8px] border border-[#00253E] px-4 py-3 min-h-[48px] text-[#00253E] font-normal leading-[110%] text-lg md:text-xl placeholder:text-[#616161]"
+            className="w-full !rounded-[8px] border border-[#00253E] px-4 py-3 min-h-[48px] text-[#00253E] font-normal leading-[110%] text-lg md:text-xl placeholder:text-[#9CA3AF]"
           />
         </div>
 
