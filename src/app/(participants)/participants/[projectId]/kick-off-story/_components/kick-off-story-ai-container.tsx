@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
-
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
@@ -15,10 +14,16 @@ import { useSession } from "next-auth/react";
 import { AiApiResponse } from "./kick-off-story-ai-data-type";
 import { ProjectsApiResponse } from "./project-data-type";
 import { StakeholderApiResponse } from "./stakeholder-data-type";
+import { parseCookies } from "nookies";
+
+const COOKIE_NAME = "googtrans";
 
 const KickOffStoryAiContainer = () => {
   const { data: session } = useSession();
   const token = session?.user?.accessToken;
+
+  const cookie = parseCookies()[COOKIE_NAME];
+  const lang = cookie?.split("/")?.[2] || "de";
 
   const [language, setLanguage] = useState<"en" | "de">("de");
 
@@ -28,13 +33,38 @@ const KickOffStoryAiContainer = () => {
   const projectId = searchParams.get("projectId");
   const stakeholderId = searchParams.get("stakeholderId");
 
+  const sectionLabels = {
+    stakeholder: lang === "de" ? "Zielgruppe" : "Stakeholder",
+    project: lang === "de" ? "Projekt" : "Project",
+    vision: "Vision",
+    past: lang === "de" ? "Vergangenheit" : "The past (good old days)",
+    obstacle: lang === "de" ? "Hindernis/Problem" : "Obstacle / Problem",
+    risk:
+      lang === "de"
+        ? "Risiko/Konsequenzen"
+        : "Risk of inaction / Consequences",
+    solution: lang === "de" ? "Idee/Lösung" : "Solution / Idea",
+    role: lang === "de" ? "Rolle" : "Role",
+    trigger:
+      lang === "de" ? "Trigger Evaluations" : "Trigger Evaluations",
+    painPoint: lang === "de" ? "Paint Points" : "Pain Points",
+    benefits: lang === "de" ? "Benefits" : "Benefits",
+    objections:
+      lang === "de" ? "Einwände/Bedenken" : "Objections / Concerns",
+    objectionHandling:
+      lang === "de" ? "Einwandsbehandlung" : "Objection Handling",
+    callToAction: lang === "de" ? "Call to Action" : "Call to Action",
+    back: lang === "de" ? "Zurück" : "Back",
+    copyPrompt: lang === "de" ? "Prompt kopieren" : "Copy Prompt",
+  };
+
   /* ---------------- AI PROMPT ---------------- */
 
   const { data } = useQuery<AiApiResponse>({
     queryKey: ["kickOffStory-ai"],
     queryFn: async () => {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/system-setting/69a155d6581efd8db0fe3bed`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/system-setting/69a155d6581efd8db0fe3bed`,
       );
 
       if (!res.ok) throw new Error("Failed to fetch data");
@@ -46,7 +76,7 @@ const KickOffStoryAiContainer = () => {
   const measureTypes = data?.data?.measureTypes || [];
 
   const filteredMeasureTypes = measureTypes.find(
-    (item) => item.name === selectedType
+    (item) => item.name === selectedType,
   );
 
   /* ---------------- PROJECT DATA ---------------- */
@@ -60,7 +90,7 @@ const KickOffStoryAiContainer = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       if (!res.ok) throw new Error("Failed to fetch project");
@@ -70,8 +100,7 @@ const KickOffStoryAiContainer = () => {
     enabled: !!token && !!projectId,
   });
 
-
-  console.log(projectData)
+  console.log(projectData);
   /* ---------------- STAKEHOLDER DATA ---------------- */
 
   const { data: stakeholderData } = useQuery<StakeholderApiResponse>({
@@ -83,7 +112,7 @@ const KickOffStoryAiContainer = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       if (!res.ok) throw new Error("Failed to fetch stakeholder");
@@ -93,7 +122,7 @@ const KickOffStoryAiContainer = () => {
     enabled: !!token && !!stakeholderId,
   });
 
-  console.log(stakeholderData)
+  console.log(stakeholderData);
 
   /* ---------------- COPY PROMPT ---------------- */
 
@@ -108,46 +137,46 @@ const KickOffStoryAiContainer = () => {
 ${filteredMeasureTypes?.name}
 ${aiPrompt}
 
-Stakeholder:
+${sectionLabels.stakeholder}:
 ${stakeholder?.name}
 
-Project:
+${sectionLabels.project}:
 ${project?.projectTitle}
 
-Vision
+${sectionLabels.vision}
 ${systemForms?.vision}
 
-The past (good old days)
+${sectionLabels.past}
 ${systemForms?.pastGoodOldDays}
 
-Obstacle / Problem
+${sectionLabels.obstacle}
 ${systemForms?.obstacleProblem}
 
-Risk of inaction / Consequences
+${sectionLabels.risk}
 ${systemForms?.riskOfInaction}
 
-Solution / Idea
+${sectionLabels.solution}
 ${systemForms?.solutionIdea}
 
-Role
+${sectionLabels.role}
 ${stakeholder?.roleType}
 
-Trigger Evaluations
+${sectionLabels.trigger}
 ${stakeholder?.triggerEvaluation}
 
-Pain Point
+${sectionLabels.painPoint}
 ${stakeholder?.painPoint}
 
-Benefits
+${sectionLabels.benefits}
 ${stakeholder?.benefits}
 
-Objections / Concerns
+${sectionLabels.objections}
 ${stakeholder?.objectionsConcerns}
 
-Objection Handling
+${sectionLabels.objectionHandling}
 ${stakeholder?.objectionHandling}
 
-Call to Action
+${sectionLabels.callToAction}
 ${stakeholder?.callToAction}
 `;
 
@@ -173,9 +202,7 @@ ${stakeholder?.callToAction}
             Kick Off Story
           </h1>
 
-          <p className="text-lg text-[#00253E] mt-2">
-            Final Prompt
-          </p>
+          <p className="text-lg text-[#00253E] mt-2">Final Prompt</p>
         </div>
 
         {/* LANGUAGE SWITCH */}
@@ -184,9 +211,7 @@ ${stakeholder?.callToAction}
           <button
             onClick={() => setLanguage("en")}
             className={`px-3 py-1 rounded ${
-              language === "en"
-                ? "bg-green-500 text-white"
-                : "bg-gray-200"
+              language === "en" ? "bg-green-500 text-white" : "bg-gray-200"
             }`}
           >
             EN
@@ -195,9 +220,7 @@ ${stakeholder?.callToAction}
           <button
             onClick={() => setLanguage("de")}
             className={`px-3 py-1 rounded ${
-              language === "de"
-                ? "bg-green-500 text-white"
-                : "bg-gray-200"
+              language === "de" ? "bg-green-500 text-white" : "bg-gray-200"
             }`}
           >
             DE
@@ -208,7 +231,6 @@ ${stakeholder?.callToAction}
       {/* PROMPT BOX */}
 
       <div className="bg-[#EDEDED] border-l-4 border-[#BADA55] rounded-xl p-8 space-y-3 text-sm leading-7">
-
         {/* AI PROMPT FIRST */}
 
         <div>
@@ -224,7 +246,9 @@ ${stakeholder?.callToAction}
         {/* Stakeholder */}
 
         <div>
-          <p className="font-semibold">Stakeholder :</p>
+          <p className="font-semibold notranslate">
+            {sectionLabels.stakeholder} :
+          </p>
           <p className="text-pink-600">
             {stakeholderData?.data?.name || "N/A"}
           </p>
@@ -233,7 +257,7 @@ ${stakeholder?.callToAction}
         {/* Project */}
 
         <div>
-          <p className="font-semibold">Project :</p>
+          <p className="font-semibold">{sectionLabels.project} :</p>
           <p className="text-pink-600">
             {projectData?.data?.projectTitle || "N/A"}
           </p>
@@ -242,106 +266,84 @@ ${stakeholder?.callToAction}
         {/* Vision */}
 
         <div>
-          <p className="font-semibold">Vision</p>
+          <p className="font-semibold">{sectionLabels.vision}</p>
           <p className="text-pink-600">
             {projectData?.data?.systemForms?.vision || "N/A"}
           </p>
         </div>
 
         <div>
-          <p className="font-semibold">
-            The past (good old days)
-          </p>
+          <p className="font-semibold">{sectionLabels.past}</p>
           <p className="text-pink-600">
             {projectData?.data?.systemForms?.pastGoodOldDays || "N/A"}
           </p>
         </div>
 
         <div>
-          <p className="font-semibold">
-            Obstacle / Problem
-          </p>
+          <p className="font-semibold">{sectionLabels.obstacle}</p>
           <p className="text-pink-600">
             {projectData?.data?.systemForms?.obstacleProblem || "N/A"}
           </p>
         </div>
 
         <div>
-          <p className="font-semibold">
-            Risk of inaction / Consequences
-          </p>
+          <p className="font-semibold">{sectionLabels.risk}</p>
           <p className="text-pink-600">
             {projectData?.data?.systemForms?.riskOfInaction || "N/A"}
           </p>
         </div>
 
         <div>
-          <p className="font-semibold">
-            Solution / Idea
-          </p>
+          <p className="font-semibold">{sectionLabels.solution}</p>
           <p className="text-pink-600">
             {projectData?.data?.systemForms?.solutionIdea || "N/A"}
           </p>
         </div>
 
         <div>
-          <p className="font-semibold">
-            Role
-          </p>
+          <p className="font-semibold">{sectionLabels.role}</p>
           <p className="text-pink-600">
             {stakeholderData?.data?.roleType || "N/A"}
           </p>
         </div>
 
         <div>
-          <p className="font-semibold">
-            Trigger Evaluations
-          </p>
+          <p className="font-semibold">{sectionLabels.trigger}</p>
           <p className="text-pink-600">
             {stakeholderData?.data?.triggerEvaluation || "N/A"}
           </p>
         </div>
 
         <div>
-          <p className="font-semibold">
-            Pain Point
-          </p>
+          <p className="font-semibold">{sectionLabels.painPoint}</p>
           <p className="text-pink-600">
             {stakeholderData?.data?.painPoint || "N/A"}
           </p>
         </div>
 
         <div>
-          <p className="font-semibold">
-            Benefits
-          </p>
+          <p className="font-semibold">{sectionLabels.benefits}</p>
           <p className="text-pink-600">
             {stakeholderData?.data?.benefits || "N/A"}
           </p>
         </div>
 
         <div>
-          <p className="font-semibold">
-            Objections / Concerns
-          </p>
+          <p className="font-semibold">{sectionLabels.objections}</p>
           <p className="text-pink-600">
             {stakeholderData?.data?.objectionsConcerns || "N/A"}
           </p>
         </div>
 
         <div>
-          <p className="font-semibold">
-            Objection Handling
-          </p>
+          <p className="font-semibold">{sectionLabels.objectionHandling}</p>
           <p className="text-pink-600">
             {stakeholderData?.data?.objectionHandling || "N/A"}
           </p>
         </div>
 
         <div>
-          <p className="font-semibold">
-            Call to Action
-          </p>
+          <p className="font-semibold">{sectionLabels.callToAction}</p>
           <p className="text-pink-600">
             {stakeholderData?.data?.callToAction || "N/A"}
           </p>
@@ -356,7 +358,7 @@ ${stakeholder?.callToAction}
           className="flex items-center gap-2 border border-[#BADA55] px-6 py-3 rounded font-medium leading-normal"
         >
           <ChevronsLeft size={18} />
-          Back
+          {sectionLabels.back}
         </button>
 
         <button
@@ -364,7 +366,7 @@ ${stakeholder?.callToAction}
           className="flex items-center gap-2 bg-primary text-[#00253E] font-semibold leading-normal px-6 py-3 rounded"
         >
           <Copy size={18} />
-          Copy Prompt
+          {sectionLabels.copyPrompt}
         </button>
       </div>
     </div>
