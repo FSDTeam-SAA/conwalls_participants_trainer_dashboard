@@ -13,6 +13,9 @@ import { Language, SystemSettingsResponse } from "./trigger-ai-data-type";
 import { useSearchParams } from "next/navigation";
 import { ProjectsApiResponse } from "../../../[projectId]/kick-off-story/_components/project-data-type";
 import { StakeholderApiResponse } from "../../../[projectId]/kick-off-story/_components/stakeholder-data-type";
+import { parseCookies } from "nookies";
+
+const COOKIE_NAME = "googtrans";
 
 const TriggerAiContainer = () => {
   const searchParams = useSearchParams();
@@ -22,6 +25,23 @@ const TriggerAiContainer = () => {
   const [language, setLanguage] = useState<Language>("de");
   const { data: session } = useSession();
   const accessToken = session?.user?.accessToken;
+  const cookie = parseCookies()[COOKIE_NAME];
+  const lang = cookie?.split("/")?.[2] || "de";
+
+  const sectionLabels = {
+    stakeholder: lang === "de" ? "Zielgruppe" : "Stakeholder",
+    project: lang === "de" ? "Projekt" : "Project",
+    vision: "Vision",
+    past: lang === "de" ? "Vergangenheit" : "The past (good old days)",
+    obstacle: lang === "de" ? "Hindernis/Problem" : "Obstacle / Problem",
+    risk:
+      lang === "de"
+        ? "Risiko/Konsequenzen"
+        : "Risk of inaction / Consequences",
+    solution: lang === "de" ? "idee/Lösung" : "Solution / Idea",
+    back: lang === "de" ? "Zurück" : "Back",
+    copyPrompt: lang === "de" ? "Prompt kopieren" : "Copy Prompt",
+  };
 
   /* ---------------- SYSTEM SETTINGS ---------------- */
 
@@ -108,25 +128,25 @@ const TriggerAiContainer = () => {
     const textToCopy = `
 ${plainPrompt}
 
-Stakeholder:
+${sectionLabels.stakeholder}:
 ${stakeholder?.name || "N/A"}
 
-Project:
+${sectionLabels.project}:
 ${project?.projectTitle || "N/A"}
 
-Vision
+${sectionLabels.vision}
 ${project?.systemForms?.vision || "N/A"}
 
-The past (good old days)
+${sectionLabels.past}
 ${project?.systemForms?.pastGoodOldDays || "N/A"}
 
-Obstacle / Problem
+${sectionLabels.obstacle}
 ${project?.systemForms?.obstacleProblem || "N/A"}
 
-Risk of inaction / Consequences
+${sectionLabels.risk}
 ${project?.systemForms?.riskOfInaction || "N/A"}
 
-Solution / Idea
+${sectionLabels.solution}
 ${project?.systemForms?.solutionIdea || "N/A"}
 `.trim();
 
@@ -208,45 +228,47 @@ ${project?.systemForms?.solutionIdea || "N/A"}
             </div>
 
             <div>
-              <p className="font-semibold">Stakeholder :</p>
+              <p className="font-semibold notranslate">
+                {sectionLabels.stakeholder} :
+              </p>
               <p className="text-pink-600">{stakeholder?.name || "N/A"}</p>
             </div>
 
             <div>
-              <p className="font-semibold">Project :</p>
+              <p className="font-semibold">{sectionLabels.project} :</p>
               <p className="text-pink-600">{project?.projectTitle || "N/A"}</p>
             </div>
 
             <div>
-              <p className="font-semibold">Vision</p>
+              <p className="font-semibold">{sectionLabels.vision}</p>
               <p className="text-pink-600">
                 {project?.systemForms?.vision || "N/A"}
               </p>
             </div>
 
             <div>
-              <p className="font-semibold">The past (good old days)</p>
+              <p className="font-semibold">{sectionLabels.past}</p>
               <p className="text-pink-600">
                 {project?.systemForms?.pastGoodOldDays || "N/A"}
               </p>
             </div>
 
             <div>
-              <p className="font-semibold">Obstacle / Problem</p>
+              <p className="font-semibold">{sectionLabels.obstacle}</p>
               <p className="text-pink-600">
                 {project?.systemForms?.obstacleProblem || "N/A"}
               </p>
             </div>
 
             <div>
-              <p className="font-semibold">Risk of inaction / Consequences</p>
+              <p className="font-semibold">{sectionLabels.risk}</p>
               <p className="text-pink-600">
                 {project?.systemForms?.riskOfInaction || "N/A"}
               </p>
             </div>
 
             <div>
-              <p className="font-semibold">Solution / Idea</p>
+              <p className="font-semibold">{sectionLabels.solution}</p>
               <p className="text-pink-600">
                 {project?.systemForms?.solutionIdea || "N/A"}
               </p>
@@ -262,7 +284,7 @@ ${project?.systemForms?.solutionIdea || "N/A"}
           className="flex items-center gap-2 border border-[#BADA55] px-6 py-3 font-medium leading-normal rounded"
         >
           <ChevronsLeft size={18} />
-          Back
+          {sectionLabels.back}
         </button>
 
         <button
@@ -270,7 +292,7 @@ ${project?.systemForms?.solutionIdea || "N/A"}
           className="flex items-center gap-2 bg-primary text-[#00253E] font-semibold leading-normal px-6 py-3 rounded"
         >
           <Copy size={18} />
-          Copy Prompt
+          {sectionLabels.copyPrompt}
         </button>
       </div>
     </div>
