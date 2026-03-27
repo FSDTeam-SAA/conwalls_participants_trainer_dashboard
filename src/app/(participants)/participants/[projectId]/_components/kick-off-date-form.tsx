@@ -11,7 +11,7 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
-import { parseCookies } from "nookies";
+import { useClientLanguage } from "@/hooks/use-client-language";
 
 interface KickOffDateFormProps {
     onNext: (date: Date) => void;
@@ -19,11 +19,8 @@ interface KickOffDateFormProps {
     initialDate?: Date;
 }
 
-const COOKIE_NAME = "googtrans";
-
 export default function KickOffDateForm({ onNext, projectTitle, initialDate }: KickOffDateFormProps) {
-      const cookie = parseCookies()[COOKIE_NAME];
-      const lang = cookie?.split("/")?.[2] || "de";
+    const lang = useClientLanguage();
     const [date, setDate] = useState<Date | undefined>(initialDate);
 
     const handleSubmit = (e: React.FormEvent) => {

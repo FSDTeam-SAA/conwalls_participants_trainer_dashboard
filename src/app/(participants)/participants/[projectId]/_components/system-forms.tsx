@@ -7,18 +7,17 @@ import { RiInformationFill } from "react-icons/ri";
 import { useForm } from "react-hook-form";
 import {
   Info,
-  ChevronLeft,
   ChevronsRight,
   CalendarDays,
   ChevronsLeft,
 } from "lucide-react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSystemSettings } from "@/hooks/use-system-settings";
 import { useSession } from "next-auth/react";
-import { parseCookies } from "nookies";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
+import { useClientLanguage } from "@/hooks/use-client-language";
 // import { useRouter } from "next/navigation";
 import {
   Tooltip,
@@ -47,8 +46,6 @@ type SystemFormValues = {
   solutionIdea: string;
 };
 
-const COOKIE_NAME = "googtrans";
-
 export default function SystemForms({
   projectId,
   kickOffDate,
@@ -57,23 +54,11 @@ export default function SystemForms({
   onNext,
   initialData,
 }: SystemFormsProps) {
-  const cookie = parseCookies()[COOKIE_NAME];
-  const lang = cookie?.split("/")?.[2] || "de";
+  const queryClient = useQueryClient();
+  const lang = useClientLanguage();
   const session = useSession();
   const token = (session?.data?.user as { accessToken?: string })?.accessToken;
   // const router = useRouter();
-  const [language, setLanguage] = useState<"en" | "de">("de");
-
-  useEffect(() => {
-    const cookies = parseCookies();
-    const googtrans = cookies.googtrans;
-    if (googtrans) {
-      const lang = googtrans.split("/")[2];
-      if (lang === "de" || lang === "en") {
-        setLanguage(lang as "en" | "de");
-      }
-    }
-  }, []);
 
   const {
     register,
@@ -129,7 +114,10 @@ export default function SystemForms({
       if (!res.ok) throw new Error("Failed to submit form");
       return res.json();
     },
-    onSuccess: () => {
+    onSuccess: (updatedProject) => {
+      queryClient.setQueryData(["project", projectId], updatedProject);
+      queryClient.invalidateQueries({ queryKey: ["project", projectId] });
+      queryClient.invalidateQueries({ queryKey: ["insight-engine-list"] });
       toast.success("System forms submitted successfully");
       onNext();
     },
@@ -141,7 +129,7 @@ export default function SystemForms({
   const getHelpText = (name: string) => {
     const helptexts = systemSettings?.helpTexts || [];
     const help = helptexts.find((h: any) => h.name === name);
-    return help?.values?.[language] || help?.values?.en || "";
+    return help?.values?.[lang] || help?.values?.en || "";
   };
 
   const onSubmit = (values: SystemFormValues) => {
@@ -159,7 +147,7 @@ export default function SystemForms({
           <span className="notranslate text-[18px] font-medium">
             Kick off :{" "}
             {new Intl.DateTimeFormat(
-              language === "de" ? "de-DE" : "en-GB",
+              lang === "de" ? "de-DE" : "en-GB",
             ).format(kickOffDate)}
           </span>
         </div>
@@ -183,7 +171,7 @@ export default function SystemForms({
                   ? "Wie wird die Zukunft aussehen?"
                   : "What will the future look like?"
               }
-              className="w-full !rounded-[8px] border border-[#00253E] px-4 py-3 min-h-[90px] text-[#00253E] font-normal leading-[110%] text-lg md:text-xl"
+              className="w-full !rounded-[8px] border border-[#00253E] px-4 py-3 min-h-[90px] text-[#00253E] placeholder:text-[#9CA3AF] font-normal leading-[110%] text-lg md:text-xl"
             />
           </div>
 
@@ -204,7 +192,7 @@ export default function SystemForms({
                   ? "Beschreiben Sie, wie es früher war."
                   : "Describe how this was in the past."
               }
-              className="w-full !rounded-[8px] border border-[#00253E] px-4 py-3 min-h-[90px] text-[#00253E] font-normal leading-[110%] text-lg md:text-xl"
+              className="w-full !rounded-[8px] border border-[#00253E] px-4 py-3 min-h-[90px] text-[#00253E] placeholder:text-[#9CA3AF] font-normal leading-[110%] text-lg md:text-xl"
             />
           </div>
 
@@ -225,7 +213,7 @@ export default function SystemForms({
                   ? "Welches Problem haben Sie?"
                   : "What problem are you facing?"
               }
-              className="w-full !rounded-[8px] border border-[#00253E] px-4 py-3 min-h-[90px] text-[#00253E] font-normal leading-[110%] text-lg md:text-xl"
+              className="w-full !rounded-[8px] border border-[#00253E] px-4 py-3 min-h-[90px] text-[#00253E] placeholder:text-[#9CA3AF] font-normal leading-[110%] text-lg md:text-xl"
             />
           </div>
 
@@ -246,7 +234,7 @@ export default function SystemForms({
                   ? "Was passiert, wenn wir nichts ändern"
                   : "What happens if we do not change?"
               }
-              className="w-full !rounded-[8px] border border-[#00253E] px-4 py-3 min-h-[90px] text-[#00253E] font-normal leading-[110%] text-lg md:text-xl"
+              className="w-full !rounded-[8px] border border-[#00253E] px-4 py-3 min-h-[90px] text-[#00253E] placeholder:text-[#9CA3AF] font-normal leading-[110%] text-lg md:text-xl"
             />
           </div>
 
@@ -267,7 +255,7 @@ export default function SystemForms({
                   ? "Was ist die Lösung"
                   : "What is the solution?"
               }
-              className="w-full !rounded-[8px] border border-[#00253E] px-4 py-3 min-h-[90px] text-[#00253E] font-normal leading-[110%] text-lg md:text-xl"
+              className="w-full !rounded-[8px] border border-[#00253E] px-4 py-3 min-h-[90px] text-[#00253E] placeholder:text-[#9CA3AF] font-normal leading-[110%] text-lg md:text-xl"
             />
           </div>
         </div>
