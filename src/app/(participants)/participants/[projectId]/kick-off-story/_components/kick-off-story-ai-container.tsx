@@ -64,7 +64,7 @@ const KickOffStoryAiContainer = () => {
     queryKey: ["kickOffStory-ai"],
     queryFn: async () => {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/system-setting/69a155d6581efd8db0fe3bed`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/system-setting/6a996dda07cb4ea670c51742`,
       );
 
       if (!res.ok) throw new Error("Failed to fetch data");

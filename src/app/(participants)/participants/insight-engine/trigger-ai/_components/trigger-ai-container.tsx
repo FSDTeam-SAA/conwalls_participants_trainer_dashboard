@@ -113,6 +113,13 @@ const TriggerAiContainer = () => {
   const project = projectData?.data;
   const stakeholder = stakeholderData?.data;
 
+
+  console.log("triggerAiPrompts", triggerAiPrompts);
+  console.log("systemSettingsItem", systemSettingsItem);
+  console.log("project", project);
+  console.log("stakeholder", stakeholder);
+  
+
   const isLoading = isLoadingSettings;
   const isError = isSettingsError;
 
@@ -204,7 +211,7 @@ ${project?.systemForms?.solutionIdea || "N/A"}
       </div>
 
       {/* PROMPT BOX */}
-      {triggerAiPrompts.map((prompt, index) => {
+      {triggerAiPrompts?.map((prompt, index) => {
         const htmlContent = prompt.values?.[language] || "";
 
         if (!htmlContent.trim()) return null;
